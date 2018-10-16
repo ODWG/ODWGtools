@@ -1,0 +1,13 @@
+Package: wqptools
+Title: WQP Toolbox
+Version: 0.0.0.9000
+Authors@R: person("Michael", "Koohafkan", email = "Michael.Koohafkan@water.ca.gov", role = c("aut", "cre"))
+Description: A collection of tools for the Water Quality Portal.
+Depends: R (>= 3.5.1)
+Imports: stats, dplyr
+Suggests: dbscan, isofor
+License: GPL (>= 3)
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.0
+Roxygen: list(markdown = TRUE)

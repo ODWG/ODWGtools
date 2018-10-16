@@ -1,0 +1,118 @@
+---
+title: "Outlier Analysis"
+output: html_document
+---
+
+This document compares the outlier detection methods against a sample 
+dataset.
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+devtools::load_all()
+data(bdl)
+```
+
+```{r}
+# add some groupings
+test = bdl %>%
+  mutate(
+    MONTH = format(DATE, "%b"),
+    YEAR = format(DATE, "%Y"),
+    DAYMON = format(DATE, "%b-%d")
+  )
+```
+
+# ungrouped outlier detection
+
+```{r}
+testnone = test %>%
+  mutate(
+    tukey = tukey_outliers(VALUE, QAQC_FLAG == "G"),
+    zscore = zscore_outliers(VALUE, QAQC_FLAG == "G"),
+    tscore = tscore_outliers(VALUE, QAQC_FLAG == "G"),
+    chisq = chisq_outliers(VALUE, QAQC_FLAG == "G"),
+    mad = mad_outliers(VALUE, QAQC_FLAG == "G"),
+    isofor = isofor_outliers(VALUE, QAQC_FLAG == "G"),
+    lof = lof_outliers(VALUE, QAQC_FLAG == "G")
+  ) %>%
+  ungroup() %>%
+  select(-MONTH, - YEAR, - DAYMON)
+```
+
+# Year, Month, and day groupings
+
+```{r}
+# group by year
+testyear = test %>%
+  group_by(YEAR) %>%
+  mutate(
+    tukey = tukey_outliers(VALUE, QAQC_FLAG == "G"),
+    zscore = zscore_outliers(VALUE, QAQC_FLAG == "G"),
+    tscore = tscore_outliers(VALUE, QAQC_FLAG == "G"),
+    chisq = chisq_outliers(VALUE, QAQC_FLAG == "G"),
+    mad = mad_outliers(VALUE, QAQC_FLAG == "G"),
+    isofor = isofor_outliers(VALUE, QAQC_FLAG == "G"),
+    lof = lof_outliers(VALUE, QAQC_FLAG == "G")
+  ) %>%
+  ungroup() %>%
+  select(-MONTH, - YEAR, - DAYMON)
+
+# group by month
+testmon = test %>%
+  group_by(MONTH) %>%
+  mutate(
+    tukey = tukey_outliers(VALUE, QAQC_FLAG =="G"),
+    zscore = zscore_outliers(VALUE, QAQC_FLAG == "G"),
+    tscore = tscore_outliers(VALUE, QAQC_FLAG == "G"),
+    chisq = chisq_outliers(VALUE, QAQC_FLAG == "G"),
+    mad = mad_outliers(VALUE, QAQC_FLAG == "G"),
+    isofor = isofor_outliers(VALUE, QAQC_FLAG == "G"),
+    lof = lof_outliers(VALUE, QAQC_FLAG == "G")
+  ) %>%
+  ungroup() %>%
+  select(-MONTH, -YEAR,-DAYMON)
+
+# group by month-day
+testdaymon = test %>%
+  group_by(DAYMON) %>%
+  mutate(
+    tukey = tukey_outliers(VALUE, QAQC_FLAG == "G"),
+    zscore = zscore_outliers(VALUE, QAQC_FLAG == "G"),
+    tscore = tscore_outliers(VALUE, QAQC_FLAG == "G"),
+    chisq = chisq_outliers(VALUE, QAQC_FLAG == "G"),
+    mad = mad_outliers(VALUE, QAQC_FLAG == "G"),
+    isofor = isofor_outliers(VALUE, QAQC_FLAG == "G"),
+    lof = lof_outliers(VALUE, QAQC_FLAG == "G")
+  ) %>%
+  ungroup() %>%
+  select(-MONTH, - YEAR, - DAYMON)
+
+
+```
+
+```{r}
+testmon %>%
+  na.omit() %>%
+  gather(test, tag, - DATE, - VALUE, - QAQC_FLAG) %>%
+  mutate(
+    is.outlier = tag == "not outlier",
+    is.bad = QAQC_FLAG %in% c("B", "X")
+  ) %>%
+  ggplot() +
+    aes(x = is.bad, y = is.outlier) +
+    geom_jitter() + facet_wrap(~test)
+```
+
+
+```{r}
+ggplot(test) +
+  aes(x = DATE, y = VALUE, color = QAQC_FLAG, shape = tukey) +
+  scale_x_datetime(NULL) +
+  geom_point()
+
+
+
+```
