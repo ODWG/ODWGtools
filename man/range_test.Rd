@@ -4,7 +4,7 @@
 \alias{range_test}
 \title{Range Test}
 \usage{
-range_test(x, sensor.range = c(0, 50000), user.range = c(5, 45000))
+range_test(x, sensor.range, user.range)
 }
 \arguments{
 \item{x}{A vector of values.}
@@ -23,4 +23,9 @@ An integer vector of test flags.
 Perform a range test. See
 https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
 for more information.
+}
+\examples{
+fake.data = c(rnorm(3, 10), rep(c(-5, 30), each =  3), rep(c(5, 20), each = 3))
+range_test(fake.data, c(0, 25), c(7, 15))
+
 }

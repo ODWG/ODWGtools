@@ -4,13 +4,19 @@
 \alias{gap_test}
 \title{Gap Test}
 \usage{
-gap_test(x, inc = "15 mins", con = c("near", "less than",
+gap_test(x, inc = "15 mins", con = c("is", "less than",
   "greater than"))
 }
 \arguments{
 \item{x}{A vector of timestamps.}
 
-\item{inc}{a character string defining the expected time increment.}
+\item{inc}{A character string defining the expected time increment.}
+
+\item{con}{A character string specifying the required condition. "is"
+specifies that the interval between observations must be exactly the
+supplied increment. "less than" or "greater than" specify that the
+interval must be at most or at least the specified increment,
+respectively.}
 }
 \value{
 An integer vector of test flags.
@@ -19,4 +25,15 @@ An integer vector of test flags.
 Perform a data gap test. See
 https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
 for more information.
+}
+\examples{
+# Application to 15-minute data:
+fake.timestamps = c(
+  seq(as.POSIXct("2018-01-01"), by = "15 mins", length.out = 5),
+  rep(as.POSIXct("2018-01-01 01:00:00"), 3), 
+  as.POSIXct("2018-01-01 04:00:00")
+)
+gap_test(fake.timestamps, inc = "16 mins", con = "less than")
+gap_test(fake.timestamps, inc = "15 mins", con = "is")
+
 }
