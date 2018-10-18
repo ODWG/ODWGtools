@@ -17,8 +17,8 @@
 #'   typical values are 1.5 for "mild" outliers and 3.0 for "extreme"
 #'   outliers.
 #'   
-#' @import stats
 #' @importFrom dplyr if_else between case_when
+#' @importFrom stats quantile 
 #' @export
 tukey_outliers = function(x, mask= !is.na(x), threshold = c(1.5, 3)) {
   lowerq = quantile(x[mask])[2]
@@ -43,8 +43,8 @@ tukey_outliers = function(x, mask= !is.na(x), threshold = c(1.5, 3)) {
 #'   Default values are 0.9 for "mild" outliers and 0.95 for "extreme"
 #'   outliers.
 #'
-#' @import stats
 #' @importFrom dplyr if_else between case_when
+#' @importFrom stats qnorm sd
 #' @export
 zscore_outliers = function(x, mask = !is.na(x), threshold = c(0.9, 0.95)) {
   score = (x - mean(x[mask])) / sd(x[mask])
@@ -67,8 +67,8 @@ zscore_outliers = function(x, mask = !is.na(x), threshold = c(0.9, 0.95)) {
 #'   Default values are 0.9 for "mild" outliers and 0.95 for "extreme"
 #'   outliers.
 #'
-#' @import stats
 #' @importFrom dplyr if_else between case_when
+#' @importFrom stats qt sd 
 #' @export
 tscore_outliers = function(x, mask = !is.na(x), threshold = c(0.9, 0.95)) {
   n = length(x)
@@ -93,8 +93,8 @@ tscore_outliers = function(x, mask = !is.na(x), threshold = c(0.9, 0.95)) {
 #'   Default values are 0.9 for "mild" outliers and 0.95 for "extreme"
 #'   outliers.
 #'
-#' @import stats
 #' @importFrom dplyr if_else between case_when
+#' @importFrom stats qchisq var
 #' @export
 chisq_outliers = function(x, mask = !is.na(x), threshold = c(0.9, 0.95)) {
   score = (x - mean(x[mask])) ^ 2 / var(x[mask])
@@ -117,8 +117,8 @@ chisq_outliers = function(x, mask = !is.na(x), threshold = c(0.9, 0.95)) {
 #'   Default values are 1.5 for "mild" outliers and 3.0 for "extreme"
 #'   outliers.
 #'
-#' @import stats
 #' @importFrom dplyr if_else between case_when
+#' @importFrom stats median 
 #' @export
 mad_outliers = function(x, mask = !is.na(x), threshold = c(1.5, 3)) {
   xx = x[mask]
@@ -153,8 +153,8 @@ mad_outliers = function(x, mask = !is.na(x), threshold = c(1.5, 3)) {
 #'   Default values are 0.8 for "mild" outliers and 0.9 for "extreme"
 #'   outliers.
 #'
-#' @import stats
 #' @importFrom dplyr if_else between case_when
+#' @importFrom stats predict
 #' @export
 isofor_outliers = function(x, mask = !is.na(x), threshold = c(0.8, 0.9), ...) {
   if (!requireNamespace('isofor'))
@@ -184,7 +184,6 @@ isofor_outliers = function(x, mask = !is.na(x), threshold = c(0.8, 0.9), ...) {
 #'   than 1 indicate outliers. Default values are 1.5 for "mild" outliers 
 #'   and 2.0 for "extreme" outliers.
 #'
-#' @import stats
 #' @importFrom dplyr if_else between case_when
 #' @export
 lof_outliers = function(x, mask = !is.na(x), threshold = c(1.5, 2), ...) {
