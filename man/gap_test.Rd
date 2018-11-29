@@ -4,8 +4,7 @@
 \alias{gap_test}
 \title{Gap Test}
 \usage{
-gap_test(x, inc = "15 mins", con = c("is", "less than",
-  "greater than"))
+gap_test(x, inc, con = c("is", "less than", "greater than"))
 }
 \arguments{
 \item{x}{A vector of timestamps.}

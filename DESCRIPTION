@@ -3,13 +3,22 @@ Title: WQP Toolbox
 Version: 0.0.0.9000
 Authors@R: person("Michael", "Koohafkan", email = "Michael.Koohafkan@water.ca.gov", role = c("aut", "cre"))
 Description: A collection of tools for the Water Quality Portal.
-Depends: R (>= 3.5.0)
-Imports: stats, dplyr, RcppRoll
-Suggests: dbscan, isofor, knitr, ggplot2
+Depends: R (>= 3.5)
+Imports: 
+    stats,
+    dplyr (>= 0.7),
+    RcppRoll (>= 0.3),
+    lubridate (>= 1.7)
+Suggests: 
+    ggplot2 (>= 3.1),
+    dbscan (>= 1.1), 
+    knitr (>= 1.20), 
+    isofor
 Remotes: github::Zelazny7/isofor
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 VignetteBuilder: knitr
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 Roxygen: list(markdown = TRUE)
+VignetteBuilder: knitr

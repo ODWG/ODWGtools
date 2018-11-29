@@ -25,7 +25,7 @@
 #'
 #' @importFrom dplyr near case_when
 #' @export 
-gap_test = function(x, inc = "15 mins", con = c("is", "less than", "greater than")) {
+gap_test = function(x, inc, con = c("is", "less than", "greater than")) {
   if (!any(class(x) %in% c("Date", 'POSIXt')))
     stop('argument "x" must be of class "Date" or "POSIXt"')
   con = match.arg(con, c("is", "less than", "greater than"))
@@ -197,6 +197,7 @@ multivariate_test = function(x, y, n.dev, n.prior) {
     TRUE ~ 1L
   )
 }
+
 
 attenuated_test = function(x, var.threshold, n.prior) {
 
