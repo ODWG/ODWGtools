@@ -1,5 +1,7 @@
 # WQPtools
 
+[![Build Status](https://travis-ci.org/mkoohafkan/wqptools.svg)](https://travis-ci.org/mkoohafkan/wqptools)
+
 ## Installation instructions
 
 1. Install the R package `devtools`:
