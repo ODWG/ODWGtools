@@ -94,7 +94,7 @@ range_test = function(x, sensor.range, user.range) {
 #' @export
 spike_test = function(x, spike.threshold) {
   case_when(
-   is.na(x) ~ NA_integer_,
+   is.na(x) | is.na(lag(x)) | is.na(lead(x)) ~ NA_integer_,
    abs(x - 0.5 * (lag(x) + lead(x))) > spike.threshold[2] ~ 4L,
    abs(x - 0.5 * (lag(x) + lead(x))) > spike.threshold[1] ~ 3L,
    TRUE ~ 1L
