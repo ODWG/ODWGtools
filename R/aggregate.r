@@ -18,6 +18,7 @@
 #' aggregate_tests(flags[,1], flags[,2], flags[,3], by = "majority")
 #'
 #' @importFrom purrr pmap_int map_chr
+#' @importFrom dplyr if_else
 #' @export
 aggregate_tests = function(..., by = c("highest", "lowest", "majority"),
   na.rm = TRUE) {
@@ -28,8 +29,14 @@ aggregate_tests = function(..., by = c("highest", "lowest", "majority"),
     stop("Data vector is not an integer (function argument(s) ",
       paste(which(colclasses != "integer"), collapse = ", "), ")")
   fun = switch(by,
-    highest = max,
-    lowest = min,
+    highest = function(..., na.rm) {
+      r = max(..., na.rm = na.rm)
+      if_else(is.finite(r), as.integer(r), NA_integer_)
+    },
+    lowest = function(..., na.rm) {
+      r = min(..., na.rm = na.rm)
+      if_else(is.finite(r), as.integer(r), NA_integer_)
+    },
     majority = function(..., na.rm) {
       as.integer(names(which.max(table(c(...),
         useNA = if(na.rm) "no" else "ifany"))))
