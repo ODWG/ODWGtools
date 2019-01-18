@@ -3,14 +3,16 @@
 #' Aggregate the results of multiple tests.
 #'
 #' @param ... One of more vectors of test results.
-#' @param fun The function used to aggregate. The default `max` is the
-#'   most conservative approach, in that it uses the largest flag value
-#'   from the set of tests as the indicator of the overall quality of the
-#'   observation. 
-#' @param fun.args A list of additional arguments to `fun`. By default,
-#'   the argument `na.rm` is passed to `fun`.
+#' @param by The method to use for aggregating. When `by = "highest"`
+#'   the largest flag value from the set of tests as the indicator 
+#'   of the overall quality of the observation. When `by = "lowest"`
+#'   the smallest flag value from the set of tests as the indicator 
+#'   of the overall quality of the observation. When `by = "majority"`
+#'   a majority-vote algorithm is used to determine the overall quality
+#'   of the observation.
+#' @param na.rm Logical indicating whether missing flags should be 
+#'   ignored when calculating the aggregate flag.
 #' @return An integer vector of test flags.
-#'
 #'
 #' @examples
 #' flags = replicate(3, sample(c(1L,3L,4L), 10, replace = TRUE))
@@ -30,11 +32,11 @@ aggregate_tests = function(..., by = c("highest", "lowest", "majority"),
       paste(which(colclasses != "integer"), collapse = ", "), ")")
   fun = switch(by,
     highest = function(..., na.rm) {
-      r = max(..., na.rm = na.rm)
+      r = suppressWarnings(max(..., na.rm = na.rm))
       if_else(is.finite(r), as.integer(r), NA_integer_)
     },
     lowest = function(..., na.rm) {
-      r = min(..., na.rm = na.rm)
+      r = suppressWarnings(min(..., na.rm = na.rm))
       if_else(is.finite(r), as.integer(r), NA_integer_)
     },
     majority = function(..., na.rm) {

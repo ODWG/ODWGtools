@@ -10,13 +10,16 @@ aggregate_tests(..., by = c("highest", "lowest", "majority"),
 \arguments{
 \item{...}{One of more vectors of test results.}
 
-\item{fun}{The function used to aggregate. The default \code{max} is the
-most conservative approach, in that it uses the largest flag value
-from the set of tests as the indicator of the overall quality of the
-observation.}
+\item{by}{The method to use for aggregating. When \code{by = "highest"}
+the largest flag value from the set of tests as the indicator
+of the overall quality of the observation. When \code{by = "lowest"}
+the smallest flag value from the set of tests as the indicator
+of the overall quality of the observation. When \code{by = "majority"}
+a majority-vote algorithm is used to determine the overall quality
+of the observation.}
 
-\item{fun.args}{A list of additional arguments to \code{fun}. By default,
-the argument \code{na.rm} is passed to \code{fun}.}
+\item{na.rm}{Logical indicating whether missing flags should be
+ignored when calculating the aggregate flag.}
 }
 \value{
 An integer vector of test flags.
