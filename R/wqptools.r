@@ -3,7 +3,6 @@
 #' An R package for common tasks associated with the
 #' Water Quality Portal.
 #'
-#' @name wqptools-package
-#' @aliases wqptools
+#' @name wqptools
 #' @docType package
-NULL
+"_PACKAGE"
