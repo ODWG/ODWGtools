@@ -6,3 +6,16 @@
 #' @name wqptools
 #' @docType package
 "_PACKAGE"
+
+
+#' Belden's Landing Historical Data
+#' 
+#' Historical electrical conductivity data collected at 
+#' Belden's Landing.
+#'
+#' @docType data
+#' @keywords datasets
+#' @name bdl
+#' @usage data(bdl)
+#' @format A data frame with 384,771 rows and 3 variables.
+NULL
