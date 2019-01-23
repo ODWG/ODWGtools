@@ -1,0 +1,31 @@
+---
+title: "Processing visit and calibration sheets"
+author: "Michael Koohafkan"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Processing Visit Sheets}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+This vignette shows how to process the DWR Suisun Marsh Branch 
+field visit and laboratory calibration data sheets. These sheets
+used to compute fouling error and sensor drift using the
+Wagner Method.
+
+```{r}
+library(readxl)
+library(wqptools)
+```
+
+```{r}
+# test workbook
+workbook = system.file("Sample_Visit_Sheet.xlsx",
+  package = "wqptools")
+sheet = setdiff(excel_sheets(workbook), "TEMPLATE")[1]
+
+visit.data = read_visit(workbook, sheet)
+# compute fouling
+fouling.data = fouling_error(visit.data)
+```

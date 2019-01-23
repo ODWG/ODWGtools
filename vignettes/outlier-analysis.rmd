@@ -1,52 +1,74 @@
 ---
-title: "Outlier Analysis"
-output: html_document
+title: "Outlier Detection"
+author: "Michael Koohafkan"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Outlier Detection}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
-This document compares the outlier detection methods against a sample 
+This document compares outlier detection methods against a sample 
 dataset.
 
 ```{r}
 library(dplyr)
+library(purrr)
 library(tidyr)
 library(ggplot2)
-
-devtools::load_all()
-data(bdl)
+library(wqptools)
 ```
 
 ```{r}
+# get data
+data("bdl")
+
 # add some groupings
-test = bdl %>%
+bdl = bdl %>%
   mutate(
-    MONTH = format(DATE, "%b"),
-    YEAR = format(DATE, "%Y"),
-    DAYMON = format(DATE, "%b-%d")
+    MONTH = format(DATETIME, "%b"),
+    YEAR = format(DATETIME, "%Y"),
+    DAYMON = format(DATETIME, "%b-%d")
   )
 ```
 
 # ungrouped outlier detection
 
 ```{r}
-testnone = test %>%
+bdl.none = bdl %>%
   mutate(
     tukey = tukey_outliers(VALUE, QAQC_FLAG == "G"),
     zscore = zscore_outliers(VALUE, QAQC_FLAG == "G"),
     tscore = tscore_outliers(VALUE, QAQC_FLAG == "G"),
     chisq = chisq_outliers(VALUE, QAQC_FLAG == "G"),
     mad = mad_outliers(VALUE, QAQC_FLAG == "G"),
-    isofor = isofor_outliers(VALUE, QAQC_FLAG == "G"),
-    lof = lof_outliers(VALUE, QAQC_FLAG == "G")
+#    isofor = isofor_outliers(VALUE, QAQC_FLAG == "G"),
+#    lof = lof_outliers(VALUE, QAQC_FLAG == "G")
   ) %>%
   ungroup() %>%
-  select(-MONTH, - YEAR, - DAYMON)
+  select(-MONTH, - YEAR, - DAYMON) %>%
+  mutate(
+    extreme.outlier.score = pmap(
+      list(zscore, tscore, chisq, mad),
+      function(...) sum(list(...) %in% "extreme outlier")
+    ),
+    mild.outlier.score = pmap(
+      list(zscore, tscore, chisq, mad),
+      function(...) sum(list(...) %in% c("mild outlier", "extreme outlier"))
+    ),
+    not.outlier.score = pmap(
+      list(zscore, tscore, chisq, mad),
+      function(...) sum(list(...) %in% c("not outlier"))
+    )
+  )
 ```
 
-# Year, Month, and day groupings
+# Year grouping
 
 ```{r}
 # group by year
-testyear = test %>%
+bdl.year = bdl %>%
   group_by(YEAR) %>%
   mutate(
     tukey = tukey_outliers(VALUE, QAQC_FLAG == "G"),
@@ -54,14 +76,32 @@ testyear = test %>%
     tscore = tscore_outliers(VALUE, QAQC_FLAG == "G"),
     chisq = chisq_outliers(VALUE, QAQC_FLAG == "G"),
     mad = mad_outliers(VALUE, QAQC_FLAG == "G"),
-    isofor = isofor_outliers(VALUE, QAQC_FLAG == "G"),
-    lof = lof_outliers(VALUE, QAQC_FLAG == "G")
+#    isofor = isofor_outliers(VALUE, QAQC_FLAG == "G"),
+#    lof = lof_outliers(VALUE, QAQC_FLAG == "G")
   ) %>%
   ungroup() %>%
-  select(-MONTH, - YEAR, - DAYMON)
+  select(-MONTH, - DAYMON) %>%
+  mutate(
+    extreme.outlier.score = pmap(
+      list(zscore, tscore, chisq, mad),
+      function(...) sum(list(...) %in% "extreme outlier")
+    ),
+    mild.outlier.score = pmap(
+      list(zscore, tscore, chisq, mad),
+      function(...) sum(list(...) %in% c("mild outlier", "extreme outlier"))
+    ),
+    not.outlier.score = pmap(
+      list(zscore, tscore, chisq, mad),
+      function(...) sum(list(...) %in% c("not outlier"))
+    )
+  )
+```
 
+# Month grouping
+
+```{r}
 # group by month
-testmon = test %>%
+bdl.mon = bdl %>%
   group_by(MONTH) %>%
   mutate(
     tukey = tukey_outliers(VALUE, QAQC_FLAG =="G"),
@@ -69,50 +109,145 @@ testmon = test %>%
     tscore = tscore_outliers(VALUE, QAQC_FLAG == "G"),
     chisq = chisq_outliers(VALUE, QAQC_FLAG == "G"),
     mad = mad_outliers(VALUE, QAQC_FLAG == "G"),
-    isofor = isofor_outliers(VALUE, QAQC_FLAG == "G"),
-    lof = lof_outliers(VALUE, QAQC_FLAG == "G")
+#    isofor = isofor_outliers(VALUE, QAQC_FLAG == "G"),
+#    lof = lof_outliers(VALUE, QAQC_FLAG == "G")
   ) %>%
   ungroup() %>%
-  select(-MONTH, -YEAR,-DAYMON)
+  select(- YEAR, - DAYMON) %>%
+  mutate(
+    extreme.outlier.score = pmap(
+      list(zscore, tscore, chisq, mad),
+      function(...) sum(list(...) %in% "extreme outlier")
+    ),
+    mild.outlier.score = pmap(
+      list(zscore, tscore, chisq, mad),
+      function(...) sum(list(...) %in% c("mild outlier", "extreme outlier"))
+    ),
+    not.outlier.score = pmap(
+      list(zscore, tscore, chisq, mad),
+      function(...) sum(list(...) %in% c("not outlier"))
+    )
+  )
+```
 
-# group by month-day
-testdaymon = test %>%
-  group_by(DAYMON) %>%
+# Month-Day grouping
+
+```{r}
+bdl.daymon = bdl %>%
+   group_by(DAYMON) %>%
   mutate(
     tukey = tukey_outliers(VALUE, QAQC_FLAG == "G"),
     zscore = zscore_outliers(VALUE, QAQC_FLAG == "G"),
     tscore = tscore_outliers(VALUE, QAQC_FLAG == "G"),
     chisq = chisq_outliers(VALUE, QAQC_FLAG == "G"),
     mad = mad_outliers(VALUE, QAQC_FLAG == "G"),
-    isofor = isofor_outliers(VALUE, QAQC_FLAG == "G"),
-    lof = lof_outliers(VALUE, QAQC_FLAG == "G")
+#    isofor = isofor_outliers(VALUE, QAQC_FLAG == "G"),
+#    lof = lof_outliers(VALUE, QAQC_FLAG == "G")
   ) %>%
   ungroup() %>%
-  select(-MONTH, - YEAR, - DAYMON)
-
-
-```
-
-```{r}
-testmon %>%
-  na.omit() %>%
-  gather(test, tag, - DATE, - VALUE, - QAQC_FLAG) %>%
+  select(-MONTH, - YEAR) %>%
   mutate(
-    is.outlier = tag == "not outlier",
-    is.bad = QAQC_FLAG %in% c("B", "X")
-  ) %>%
-  ggplot() +
-    aes(x = is.bad, y = is.outlier) +
-    geom_jitter() + facet_wrap(~test)
+    extreme.outlier.score = pmap(
+      list(zscore, tscore, chisq, mad),
+      function(...) sum(list(...) %in% "extreme outlier")
+    ),
+    mild.outlier.score = pmap(
+      list(zscore, tscore, chisq, mad),
+      function(...) sum(list(...) %in% c("mild outlier", "extreme outlier"))
+    ),
+    not.outlier.score = pmap(
+      list(zscore, tscore, chisq, mad),
+      function(...) sum(list(...) %in% c("not outlier"))
+    )
+  )
 ```
 
+# Figures
+
+## Good data only
 
 ```{r}
-ggplot(test) +
-  aes(x = DATE, y = VALUE, color = QAQC_FLAG, shape = tukey) +
-  scale_x_datetime(NULL) +
-  geom_point()
+bdl.none %>%
+   filter(QAQC_FLAG == "G") %>%
+   select(-extreme.outlier.score, - mild.outlier.score, - not.outlier.score) %>%
+   gather(test, tag, - DATETIME, - VALUE, - QAQC_FLAG) %>%
+   ggplot() +
+     aes(x = VALUE, fill = tag) +
+     geom_density(alpha = 0.25) +
+     facet_wrap(~test, scales = "free_y") +
+     scale_fill_manual(NULL, values = c(
+       "not outlier" = "cornflowerblue",
+       "mild outlier" = "#ffeda0",
+       "extreme outlier" = "#fc4e2a"))
 
+bdl.year %>%
+   filter(QAQC_FLAG == "G") %>%
+   select(-extreme.outlier.score, - mild.outlier.score, - not.outlier.score) %>%
+   gather(test, tag, - DATETIME, - YEAR, - VALUE, - QAQC_FLAG) %>%
+   ggplot() +
+     aes(x = VALUE, fill = tag) +
+     geom_density(alpha = 0.25) +
+     facet_grid(YEAR ~ test, scales = "free_y") +
+     scale_fill_manual(NULL, values = c(
+       "not outlier" = "cornflowerblue",
+       "mild outlier" = "#ffeda0",
+       "extreme outlier" = "#fc4e2a"))
 
+bdl.mon %>%
+   filter(QAQC_FLAG == "G") %>%
+   select(-extreme.outlier.score, - mild.outlier.score, - not.outlier.score) %>%
+   mutate(MONTH = factor(MONTH, month.abb)) %>%
+   gather(test, tag, - DATETIME, - MONTH, - VALUE, - QAQC_FLAG) %>%
+   ggplot() +
+     aes(x = VALUE, fill = tag) +
+     geom_density(alpha = 0.25) +
+     facet_grid(MONTH ~ test, scales = "free_y") +
+     scale_fill_manual(NULL, values = c(
+       "not outlier" = "cornflowerblue",
+       "mild outlier" = "#ffeda0",
+       "extreme outlier" = "#fc4e2a"))
+```
 
+## Bad data only
+
+```{r}
+bdl.none %>%
+   filter(QAQC_FLAG == "X") %>%
+   select(-extreme.outlier.score, - mild.outlier.score, - not.outlier.score) %>%
+   gather(test, tag, - DATETIME, - VALUE, - QAQC_FLAG) %>%
+   ggplot() +
+     aes(x = VALUE, fill = tag) +
+     geom_density(alpha = 0.25) +
+     facet_wrap(~test, scales = "free_y") +
+     scale_fill_manual(NULL, values = c(
+       "not outlier" = "cornflowerblue",
+       "mild outlier" = "#ffeda0",
+       "extreme outlier" = "#fc4e2a"))
+
+bdl.year %>%
+   filter(QAQC_FLAG == "X") %>%
+   select(-extreme.outlier.score, - mild.outlier.score, - not.outlier.score) %>%
+   gather(test, tag, - DATETIME, - YEAR, - VALUE, - QAQC_FLAG) %>%
+   ggplot() +
+     aes(x = VALUE, fill = tag) +
+     geom_density(alpha = 0.25) +
+     facet_grid(YEAR ~ test, scales = "free_y") +
+     scale_fill_manual(NULL, values = c(
+       "not outlier" = "cornflowerblue",
+       "mild outlier" = "#ffeda0",
+       "extreme outlier" = "#fc4e2a"))
+
+bdl.mon %>%
+   filter(QAQC_FLAG == "X") %>%
+   select(-extreme.outlier.score, - mild.outlier.score, - not.outlier.score) %>%
+   mutate(MONTH = factor(MONTH, month.abb)) %>%
+   gather(test, tag, - DATETIME, - MONTH, - VALUE, - QAQC_FLAG) %>%
+   ggplot() +
+     aes(x = VALUE, fill = tag) +
+     geom_density(alpha = 0.25) +
+     facet_grid(MONTH ~ test, scales = "free_y") +
+     scale_fill_manual(NULL, values = c(
+       "not outlier" = "cornflowerblue",
+       "mild outlier" = "#ffeda0",
+       "extreme outlier" = "#fc4e2a"))
 ```
