@@ -47,21 +47,63 @@ aggregate_tests = function(..., by = c("highest", "lowest", "majority"),
   pmap_int(list(..., na.rm = na.rm), fun)
 }
 
-
-
-
+#' Aggregate QAQC Flags
+#'
+#' A set of rules for handling flags during data aggregation. This
+#' function is intended to be called within an aggregation statement,
+#' e.g. within a call to `dplyr::summarize` to average 15-minute data 
+#' into hourly data, etc.
+#'
+#' @param flags a vector of QAQC Flag codes.
+#' @return A single representative QAQC Flag code.
+#'
+#' @details The following rules are applied to aggregate QAQC Flags,
+#' in the specified order of precedence:
+#'
+#'  - `"X"` if *any* flags in the vector are `"X"`.
+#'  - `"B"` if *any* flags in the vector are `"B"`.
+#'  - `"U"` if *any* flags in the vector are `"U"`.
+#'  - `"A"` if *any* flags in the vector are `"A"`.
+#'  - `"M"` if more than 50% of flags in the vector are `"M"`.
+#'  - `"P"` if *any* non-missing flags in the vector are `"P"`.
+#'  - `"Q"` if *all* non-missing flags in the vector are `"Q" or "G"`.
+#'  - `"G"` if *all* non-missing flags in the vector are `"G"`.
+#'
+#' Any result not captured by the above rules will generate an error.
+#'
+#' @importFrom dplyr case_when
+#' @export
 aggregate_flags = function(flags) {
-  case_when(
-    any(flag == "X") ~ "X",
-    any(flag == "B") ~ "B",
-    any(flag == "U") ~ "U",
-    any(flag == "A") ~ "A",
-    any(flag == "P") ~ "P",
-    all(flag == "M") ~ "M",
-    all(flag == "G") ~ "G",
-    all(flag %in% c("Q", "G")) ~ "Q",
-    all(flag %in% c("M", "G", "Q")) ~ "Q",
-    TRUE ~ "Z"
+  out = case_when(
+    any(flags == "X") ~ "X",
+    any(flags == "B") ~ "B",
+    any(flags == "U") ~ "U",
+    any(flags == "A") ~ "A",
+    sum(flags == "M")/length(flags) >= 0.5 ~ "M",
+    any(flags == "P") ~ "P",
+    all(flags %in% c("Q", "G", "M")) ~ "Q",
+    all(flags %in% c("G", "M")) ~ "G",
+    TRUE ~ "ERROR"
   )
+  if (out == "ERROR")
+    stop("Could not determine aggregate flag for sequence: ",
+      paste(flags, sep = ", "))
+  out
+}
 
+
+
+#' Flag Descriptions
+#'
+#' return a table of flag values with descriptions and notes.
+#'
+#' @param flags A subset of flag values to return.
+#'
+#' @importFrom dplyr filter
+#' @export
+flag_descriptions = function(flags) {
+  if(!missing(flags))
+    filter(flag.descriptions, .data$Flag %in% flags)
+  else
+    flag.descriptions
 }
