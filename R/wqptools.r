@@ -18,4 +18,14 @@
 #' @name bdl
 #' @usage data(bdl)
 #' @format A data frame with 384,771 rows and 3 variables.
-NULL
+"bdl"
+
+#' Flag Descriptions
+#'
+#' Table of QAQC Flags with descriptions.
+#'
+#' @docType data
+#' @keywords datasets
+#' @name flag.descriptions
+#' @keywords internal
+"flag.descriptions"
