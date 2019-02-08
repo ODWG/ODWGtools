@@ -32,6 +32,7 @@ tukey_outliers = function(x, mask= !is.na(x), threshold = c(1.5, 3)) {
   )
 }
 
+
 #' Z-score test for outliers
 #'
 #' Performs a Z-score test for outliers.
@@ -55,6 +56,7 @@ zscore_outliers = function(x, mask = !is.na(x), threshold = c(0.9, 0.95)) {
     TRUE ~ "not outlier"
   )
 }
+
 
 #' t-score test for outliers
 #'
@@ -82,6 +84,7 @@ tscore_outliers = function(x, mask = !is.na(x), threshold = c(0.9, 0.95)) {
   )
 }
 
+
 #' Chi-squared test for outliers
 #'
 #' Performs a Chi-squared test for outliers.
@@ -105,6 +108,7 @@ chisq_outliers = function(x, mask = !is.na(x), threshold = c(0.9, 0.95)) {
     TRUE ~ "not outlier"
   )
 }
+
 
 #' Median absolute deviation test for outliers
 #'
@@ -139,6 +143,7 @@ mad_outliers = function(x, mask = !is.na(x), threshold = c(1.5, 3)) {
     TRUE ~ "not outlier"
   )
 }
+
 
 #' Isolation Forest outlier detection
 #'
