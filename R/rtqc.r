@@ -5,12 +5,15 @@
 #' for more information.
 #'
 #' @param x A vector of timestamps.
-#' @param inc A character string defining the expected time increment.
-#' @param con A character string specifying the required condition. "is"
-#'   specifies that the interval between observations must be exactly the 
-#'   supplied increment. "less than" or "greater than" specify that the 
-#'   interval must be at most or at least the specified increment, 
-#'   respectively.
+#' @param increment A character string defining the expected time 
+#'  increment. this consists of two parts: a numeric value defining 
+#'  the size of the increment, and the units of the increment. 
+#'  Acceptable units are "secs", "mins", "hours", "days", or "weeks".
+#' @param condition A character string specifying the required 
+#'   condition. "is" specifies that the interval between observations 
+#'   must be exactly the supplied increment. "less than" or 
+#'   "greater than" specify that the interval must be at most or at 
+#'   least the specified increment, respectively.
 #' @return An integer vector of test flags.
 #'
 #' @examples
@@ -20,18 +23,19 @@
 #'   rep(as.POSIXct("2018-01-01 01:00:00"), 3), 
 #'   as.POSIXct("2018-01-01 04:00:00")
 #' )
-#' gap_test(fake.timestamps, inc = "16 mins", con = "less than")
-#' gap_test(fake.timestamps, inc = "15 mins", con = "is")
+#' gap_test(fake.timestamps, "16 mins", "less than")
+#' gap_test(fake.timestamps, "15 mins", "is")
 #'
 #' @importFrom dplyr near case_when
 #' @export 
-gap_test = function(x, inc, con = c("is", "less than", "greater than")) {
+gap_test = function(x, increment, condition = c("is", "less than", 
+  "greater than")) {
   if (!any(class(x) %in% c("Date", 'POSIXt')))
     stop('argument "x" must be of class "Date" or "POSIXt"')
-  con = match.arg(con, c("is", "less than", "greater than"))
-  inc = lapply(strsplit(inc, " "), function(x) 
+  condition = match.arg(condition, c("is", "less than", "greater than"))
+  increment = lapply(strsplit(increment, " "), function(x)
     as.difftime(as.numeric(x[1]), units = x[2]))[[1]]
-  con.fun = switch(con,
+  con.fun = switch(condition,
     "is" = near,
     "greater than" = `>`,
     "less than" = `<`
@@ -39,7 +43,7 @@ gap_test = function(x, inc, con = c("is", "less than", "greater than")) {
   x.diff = diff(x)
   c(NA_integer_, case_when(
     is.na(x.diff) ~ NA_integer_,
-    con.fun(x.diff, inc) ~ 1L,
+    con.fun(x.diff, increment) ~ 1L,
     TRUE ~ 4L
   ))
 }
@@ -112,7 +116,7 @@ spike_test = function(x, spike.threshold) {
 #' @param n.dev The number of standard deviations to test against.
 #' @param n.prior the number of prior observations to use for computing 
 #'   the standard deviation. For example, to compute standard deviations
-#'   over the previous 25 hours from 15-minute data use `ntile = 100`.
+#'   over the previous 25 hours from 15-minute data use `n.prior = 100`.
 #'
 #' @examples
 #' fake.data = c(rnorm(10,10), rnorm(10, 50), rnorm(10,10))

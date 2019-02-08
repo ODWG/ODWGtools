@@ -4,18 +4,21 @@
 \alias{gap_test}
 \title{Gap Test}
 \usage{
-gap_test(x, inc, con = c("is", "less than", "greater than"))
+gap_test(x, increment, condition = c("is", "less than", "greater than"))
 }
 \arguments{
 \item{x}{A vector of timestamps.}
 
-\item{inc}{A character string defining the expected time increment.}
+\item{increment}{A character string defining the expected time
+increment. this consists of two parts: a numeric value defining
+the size of the increment, and the units of the increment.
+Acceptable units are "secs", "mins", "hours", "days", or "weeks".}
 
-\item{con}{A character string specifying the required condition. "is"
-specifies that the interval between observations must be exactly the
-supplied increment. "less than" or "greater than" specify that the
-interval must be at most or at least the specified increment,
-respectively.}
+\item{condition}{A character string specifying the required
+condition. "is" specifies that the interval between observations
+must be exactly the supplied increment. "less than" or
+"greater than" specify that the interval must be at most or at
+least the specified increment, respectively.}
 }
 \value{
 An integer vector of test flags.
@@ -32,7 +35,7 @@ fake.timestamps = c(
   rep(as.POSIXct("2018-01-01 01:00:00"), 3), 
   as.POSIXct("2018-01-01 04:00:00")
 )
-gap_test(fake.timestamps, inc = "16 mins", con = "less than")
-gap_test(fake.timestamps, inc = "15 mins", con = "is")
+gap_test(fake.timestamps, "16 mins", "less than")
+gap_test(fake.timestamps, "15 mins", "is")
 
 }

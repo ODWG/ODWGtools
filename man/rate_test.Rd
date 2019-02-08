@@ -13,7 +13,7 @@ rate_test(x, n.dev, n.prior)
 
 \item{n.prior}{the number of prior observations to use for computing
 the standard deviation. For example, to compute standard deviations
-over the previous 25 hours from 15-minute data use \code{ntile = 100}.}
+over the previous 25 hours from 15-minute data use \code{n.prior = 100}.}
 }
 \description{
 Perform a rate of change test. See
