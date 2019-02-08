@@ -8,12 +8,13 @@
 #' @return The original vector x with missing values imputed.
 #'
 #' @importFrom dplyr if_else
+#' @importFrom stats KalmanRun
 #' @export
 gapfill_kalman = function(x, ...) {
   if (!requireNamespace('forecast'))
     stop('Could not find package "forecast"')
   fit = forecast::auto.arima(x, ...)
-  kr = forecast::KalmanRun(x, fit$model)
+  kr = KalmanRun(x, fit$model)
   newx = sapply(1:length(x), function(i)
     fit$model$Z %*% kr$states[i,])
   if_else(is.na(x), newx, x)
