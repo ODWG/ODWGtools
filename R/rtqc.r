@@ -30,11 +30,11 @@
 #' @export 
 gap_test = function(x, increment, condition = c("is", "less than", 
   "greater than")) {
-  if (!any(class(x) %in% c("Date", 'POSIXt')))
+  if (!all(class(x) %in% c("Date", 'POSIXt')))
     stop('argument "x" must be of class "Date" or "POSIXt"')
   condition = match.arg(condition, c("is", "less than", "greater than"))
-  increment = lapply(strsplit(increment, " "), function(x)
-    as.difftime(as.numeric(x[1]), units = x[2]))[[1]]
+
+  increment = string_to_difftime(increment)
   con.fun = switch(condition,
     "is" = near,
     "greater than" = `>`,

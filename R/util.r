@@ -1,3 +1,19 @@
+#' String to difftime
+#'
+#' Convert a string to a `difftime` object.
+#' @param s A string
+#' @return A `difftime` object.
+#'
+#' @keywords internal 
+string_to_difftime = function(s) {
+  value = as.numeric(strsplit(s, " ")[[c(1, 1)]])
+  increment = strsplit(s, " ")[[c(1, 2)]]
+  increment = match.arg(increment,
+    c("secs", "mins", "hours", "days", "weeks"))
+  as.difftime(value, units = increment)
+  }
+
+
 #' Water Year
 #'
 #' Get the water year for a particular date.
