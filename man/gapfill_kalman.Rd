@@ -4,10 +4,15 @@
 \alias{gapfill_kalman}
 \title{ARIMIA and Kalman Filter Gap Fill}
 \usage{
-gapfill_kalman(x, ...)
+gapfill_kalman(x, mask = is.na(x), ...)
 }
 \arguments{
 \item{x}{A vector of data with missing values.}
+
+\item{mask}{A logical mask that identifies a subgroup of \code{x}
+to compute fill values for. Useful when a subset
+of quality-assured data is available. Default action is to
+only fill NA values.}
 
 \item{...}{Additional arguments to \code{\link[forecast:auto.arima]{forecast::auto.arima()}}.}
 }
