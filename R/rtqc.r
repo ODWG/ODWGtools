@@ -30,7 +30,7 @@
 #' @export 
 gap_test = function(x, increment, condition = c("is", "less than", 
   "greater than")) {
-  if (!all(class(x) %in% c("Date", 'POSIXt')))
+  if (!any(class(x) %in% c("Date", 'POSIXt')))
     stop('argument "x" must be of class "Date" or "POSIXt"')
   condition = match.arg(condition, c("is", "less than", "greater than"))
 
