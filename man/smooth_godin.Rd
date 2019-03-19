@@ -4,7 +4,7 @@
 \alias{smooth_godin}
 \title{Godin Smoother}
 \usage{
-smooth_godin(x, increment)
+smooth_godin(x, increment, kind = c("mean", "max", "min"))
 }
 \arguments{
 \item{x}{A vector of values.}
@@ -13,6 +13,10 @@ smooth_godin(x, increment)
 increment. this consists of two parts: a numeric value defining
 the size of the increment, and the units of the increment.
 Acceptable units are "secs", "mins", "hours", "days", or "weeks".}
+
+\item{Kind}{what values to filter. Default is the original Godin
+filter which averages the data. Other options are to use the \code{max}
+or \code{min} values of each window.}
 }
 \value{
 A vector of same length as x.
