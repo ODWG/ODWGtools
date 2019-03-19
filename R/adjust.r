@@ -1,3 +1,50 @@
+#' Adjust for Known Drift
+#'
+#' Adjust a regular time series for a known drift over a
+#' known period. The drift is assumed to increase linearly 
+#' in time from 0 at the beginning of the time series to
+#' the specified drift value at the end of the time series.
+#'
+#' @inheritParams gapfill_kalman
+#' @param mask A logical mask that identifies a subgroup of `x`
+#'   to correct for drift. Values outside the subgroup are ignored. 
+#'   If no mask is specified, 
+#'   no overall trend is assumed.
+#' @param drift The drift value to correct for. The drift
+#'   is assumed to occur at the last element of the masked vector
+#'   `x` and linearly shrink to zero at the first element of 
+#'   the masked vector `x`.
+#' @return The vector `x` with corrected values for the subgroup
+#'   specified by `mask`.
+#'
+#' @details This function assumes that `mask` specifies a 
+#'   contiguous block, and that the time series values are 
+#'   equally spaced. No consideration is given to noncontiguous
+#'   masks or unequal-interval time series.
+#'
+#' @examples
+#' x = rnorm(100, 10, 0.1) + 0.025 * (0:99)
+#' newx = adjust_known(x, 99*0.025)
+#' if (interactive()) {
+#'   plot(x, type = 'l')
+#'   lines(newx, col = 'red')
+#' }
+#'
+#' @importFrom stats approx
+#' @export
+adjust_known = function(x, mask, drift) {
+  if (missing(mask))
+    mask = rep(TRUE, length(x))
+  masked.x = x[mask]
+
+  trend = approx(x = c(1, length(masked.x)), y = c(0, drift),
+    xout = seq_along(masked.x))$y
+
+  newx = x
+  newx[mask] = masked.x - trend
+  newx
+}
+
 #' Adjust for Linear Drift
 #'
 #' Adjust a regular time series for an assumed linear drift over a
@@ -59,24 +106,10 @@ adjust_linear = function(x, mask) {
 }
 
 
-adjust_kalman = function(x, mask, ...) {
-  if (!requireNamespace('forecast'))
-    stop('Could not find package "forecast"')
-  fit.x = x
-  fit.x[mask] = NA
-  fit = forecast::auto.arima(fit.x, ...)
-#  newx = forecast::forecast(fit)
 
-  kr = KalmanForecast(sum(mask), fit$model)
-  newx = sapply(1:length(x), function(i)
-    fit$model$Z %*% kr$states[i,])
-  newx = x
-  newx[mask] = kr$pred
-  
-
+adjust_variance = function(x, mask) {
 
 }
-
 
 # Adjust drift using a Godin Smoother and Kalman filter
 adjust_godin = function(x, mask, increment, ...) {
