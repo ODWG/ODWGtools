@@ -68,6 +68,7 @@ aggregate_tests = function(..., by = c("highest", "lowest", "majority"),
 #'  - `"P"` if *any* non-missing flags in the vector are `"P"`.
 #'  - `"Q"` if *all* non-missing flags in the vector are `"Q" or "G"`.
 #'  - `"G"` if *all* non-missing flags in the vector are `"G"`.
+#'  - For all other cases, use the majority flag value.
 #'
 #' Any result not captured by the above rules will generate an error.
 #'
@@ -83,11 +84,9 @@ aggregate_flags = function(flags) {
     any(flags == "P") ~ "P",
     all(flags %in% c("Q", "G", "M")) ~ "Q",
     all(flags %in% c("G", "M")) ~ "G",
-    TRUE ~ "ERROR"
+    TRUE ~ names(which.max(table(c(flags),
+        useNA = "ifany")))
   )
-  if (out == "ERROR")
-    stop("Could not determine aggregate flag for sequence: ",
-      paste(flags, sep = ", "))
   out
 }
 

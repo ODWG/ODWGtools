@@ -30,6 +30,7 @@ in the specified order of precedence:
 \item \code{"P"} if \emph{any} non-missing flags in the vector are \code{"P"}.
 \item \code{"Q"} if \emph{all} non-missing flags in the vector are \code{"Q" or "G"}.
 \item \code{"G"} if \emph{all} non-missing flags in the vector are \code{"G"}.
+\item For all other cases, use the majority flag value.
 }
 
 Any result not captured by the above rules will generate an error.
