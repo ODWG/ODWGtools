@@ -12,6 +12,14 @@ vignette: >
 This document compares outlier detection methods against a sample 
 dataset.
 
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  echo = TRUE
+)
+```
+
 ```{r}
 library(dplyr)
 library(purrr)
