@@ -1,3 +1,39 @@
+#' Daily Tidal Mean
+#'
+#' Compute the daily low-tide or high-tide average.
+#'
+#' @param x A vector of values from a single day.
+#' @param y A vector of water surface elevations from a single day.
+#' @param tide Return the high-tide ("high") or low-tide ("low")
+#'  average.
+#' @param smooth If `TRUE`, A loess smoother will be applied to the
+#'   data prior to detecting the water surface elevation minimums
+#'   or maximums.
+#' @param span The `span` argument to [`stats::loess()`]. The
+#'   default value of 0.1 was found to work well with 15-minute 
+#'   tidal data.
+#'
+#' @importFrom stats loess predict
+#' @importFrom dplyr lag lead
+#' @export
+daily_tidal_mean = function(x, y, tide = c("high", "low"),
+  smooth = TRUE, span = 0.1) {
+  tide = match.arg(tide, c("high", "low"))
+  if (tide == "high") {
+    compare.fun = `>=`
+  } else {
+    compare.fun = `<=`
+  }
+  # apply smoothing if specified
+  if (smooth) {
+    d = data.frame(t = seq_along(y), y = y)
+    y = predict(loess(y ~ t, data = d, span = span, degree = 2))
+  }
+  select.points = compare.fun(y, lead(y, n = 1, default = NA)) &
+    compare.fun(y, lag(y, n = 1, default = NA))
+  mean(x[select.points], na.rm = TRUE)
+}
+
 #' Aggregate Test Results
 #'
 #' Aggregate the results of multiple tests.
