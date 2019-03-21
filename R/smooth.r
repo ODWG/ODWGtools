@@ -7,7 +7,7 @@
 #'  increment. this consists of two parts: a numeric value defining 
 #'  the size of the increment, and the units of the increment. 
 #'  Acceptable units are "secs", "mins", "hours", "days", or "weeks".
-#' @param Kind what values to filter. Default is the original Godin
+#' @param kind what values to filter. Default is the original Godin
 #'  filter which averages the data. Other options are to use the `max`
 #'  or `min` values of each window.
 #' @return A vector of same length as x.

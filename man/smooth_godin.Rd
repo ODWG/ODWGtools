@@ -14,7 +14,7 @@ increment. this consists of two parts: a numeric value defining
 the size of the increment, and the units of the increment.
 Acceptable units are "secs", "mins", "hours", "days", or "weeks".}
 
-\item{Kind}{what values to filter. Default is the original Godin
+\item{kind}{what values to filter. Default is the original Godin
 filter which averages the data. Other options are to use the \code{max}
 or \code{min} values of each window.}
 }

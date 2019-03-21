@@ -24,7 +24,7 @@
 #'
 #' @examples
 #' x = rnorm(100, 10, 0.1) + 0.025 * (0:99)
-#' newx = adjust_known(x, 99*0.025)
+#' newx = adjust_known(x, drift = 99*0.025)
 #' if (interactive()) {
 #'   plot(x, type = 'l')
 #'   lines(newx, col = 'red')
@@ -77,7 +77,7 @@ adjust_known = function(x, mask, drift) {
 #'   lines(newx, col = 'red')
 #' }
 #'
-#' @importFrom stats lm predict
+#' @importFrom stats lm predict offset
 #' @export
 adjust_linear = function(x, mask) {
   # check mask
@@ -109,24 +109,6 @@ adjust_linear = function(x, mask) {
 
 adjust_variance = function(x, mask) {
 
-}
-
-# Adjust drift using a Godin Smoother and Kalman filter
-adjust_godin = function(x, mask, increment, ...) {
-  smooth = smooth_godin(x, increment)
-  mean = mean(smooth[mask])
-  resid = x - smooth
-#  new = gapfill_kalman(if_else(mask, NA_real_, x), mask)
- # if_else(flag, new + resid, x)
-
-#  center = mean(smooth)
-  plot(x, type = 'l')
-  lines(if_else(flag, mean + resid, x), col = "red")
-  lines(smooth, col = "blue")
-  lines(if_else(flag, mean, smooth), col = "green")
-
-
-#  View(data.frame(x = x, new = new + resid))
 }
 
 

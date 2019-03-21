@@ -37,7 +37,7 @@ masks or unequal-interval time series.
 }
 \examples{
 x = rnorm(100, 10, 0.1) + 0.025 * (0:99)
-newx = adjust_known(x, 99*0.025)
+newx = adjust_known(x, drift = 99*0.025)
 if (interactive()) {
   plot(x, type = 'l')
   lines(newx, col = 'red')
