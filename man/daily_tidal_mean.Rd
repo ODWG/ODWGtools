@@ -5,7 +5,7 @@
 \title{Daily Tidal Mean}
 \usage{
 daily_tidal_mean(x, y, tide = c("high", "low"), smooth = TRUE,
-  span = 0.1)
+  span = 0.1, family = "symmetric", degree = 2)
 }
 \arguments{
 \item{x}{A vector of values from a single day.}
@@ -20,7 +20,15 @@ data prior to detecting the water surface elevation minimums
 or maximums.}
 
 \item{span}{The \code{span} argument to \code{\link[stats:loess]{stats::loess()}}. The
-default value of 0.1 was found to work well with 15-minute
+default span of 0.1 was found to work well with 15-minute
+tidal data.}
+
+\item{family}{The \code{family} argument to \code{\link[stats:loess]{stats::loess()}}. The
+default family "symmetric" was found to work well with 15-minute
+tidal data.}
+
+\item{degree}{The \code{degree} argument to \code{\link[stats:loess]{stats::loess()}}. The
+default degree of 2 was found to work well with 15-minute
 tidal data.}
 }
 \description{

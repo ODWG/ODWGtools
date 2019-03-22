@@ -10,14 +10,20 @@
 #'   data prior to detecting the water surface elevation minimums
 #'   or maximums.
 #' @param span The `span` argument to [`stats::loess()`]. The
-#'   default value of 0.1 was found to work well with 15-minute 
+#'   default span of 0.1 was found to work well with 15-minute 
+#'   tidal data.
+#' @param family The `family` argument to [`stats::loess()`]. The
+#'   default family "symmetric" was found to work well with 15-minute 
+#'   tidal data.
+#' @param degree The `degree` argument to [`stats::loess()`]. The
+#'   default degree of 2 was found to work well with 15-minute 
 #'   tidal data.
 #'
 #' @importFrom stats loess predict
 #' @importFrom dplyr lag lead
 #' @export
 daily_tidal_mean = function(x, y, tide = c("high", "low"),
-  smooth = TRUE, span = 0.1) {
+  smooth = TRUE, span = 0.1, family = "symmetric", degree = 2) {
   tide = match.arg(tide, c("high", "low"))
   if (tide == "high") {
     compare.fun = `>=`
@@ -27,11 +33,26 @@ daily_tidal_mean = function(x, y, tide = c("high", "low"),
   # apply smoothing if specified
   if (smooth) {
     d = data.frame(t = seq_along(y), y = y)
-    y = predict(loess(y ~ t, data = d, span = span, degree = 2))
+    y = tryCatch({
+      ysmooth = predict(loess(y ~ t, data = d, span = span,
+        degree = degree, family = family))
+      if (sqrt(mean((d$y - y) ^ 2)) > 0.05) {
+        warning("RMSE of loess-smoothed stage is greater than 0.05")
+      }
+      ysmooth
+    }, error = function(e) {
+      warning(paste(e))
+      NA
+    })
   }
   select.points = compare.fun(y, lead(y, n = 1, default = NA)) &
     compare.fun(y, lag(y, n = 1, default = NA))
-  mean(x[select.points], na.rm = TRUE)
+  if (all(is.na(select.points))) {
+    warning("Could not identify low/high tide locations.")
+    NA
+  } else {
+    mean(x[select.points], na.rm = TRUE)
+  }
 }
 
 #' Aggregate Test Results
