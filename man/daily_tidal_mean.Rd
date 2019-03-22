@@ -5,7 +5,7 @@
 \title{Daily Tidal Mean}
 \usage{
 daily_tidal_mean(x, y, tide = c("high", "low"), smooth = TRUE,
-  span = 0.1, family = "symmetric", degree = 2)
+  span = 0.1, family = "symmetric", degree = 2, ...)
 }
 \arguments{
 \item{x}{A vector of values from a single day.}
@@ -30,6 +30,12 @@ tidal data.}
 \item{degree}{The \code{degree} argument to \code{\link[stats:loess]{stats::loess()}}. The
 default degree of 2 was found to work well with 15-minute
 tidal data.}
+
+\item{...}{Additional arguments to \code{\link[stats:loess]{stats::loess()}}.}
+}
+\value{
+The daily tidal mean of \code{x}, i.e. the average of high-
+or low-tide values for the day.
 }
 \description{
 Compute the daily low-tide or high-tide average.

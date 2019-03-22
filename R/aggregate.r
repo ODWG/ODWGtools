@@ -18,12 +18,16 @@
 #' @param degree The `degree` argument to [`stats::loess()`]. The
 #'   default degree of 2 was found to work well with 15-minute 
 #'   tidal data.
+#' @param ... Additional arguments to [`stats::loess()`].
+#' @return The daily tidal mean of `x`, i.e. the average of high-
+#'   or low-tide values for the day.
 #'
 #' @importFrom stats loess predict
 #' @importFrom dplyr lag lead
 #' @export
 daily_tidal_mean = function(x, y, tide = c("high", "low"),
-  smooth = TRUE, span = 0.1, family = "symmetric", degree = 2) {
+  smooth = TRUE, span = 0.1, family = "symmetric", degree = 2,
+  ...) {
   tide = match.arg(tide, c("high", "low"))
   if (tide == "high") {
     compare.fun = `>=`
