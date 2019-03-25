@@ -4,13 +4,16 @@
 \alias{read_visit}
 \title{Read Visit Sheet}
 \usage{
-read_visit(workbook, sheet)
+read_visit(workbook, sheet, timezone = "US/Pacific")
 }
 \arguments{
 \item{workbook}{The Excel workbook (.xlsx) containing
 visit sheets.}
 
 \item{sheet}{The visit sheet to read.}
+
+\item{timezone}{The timezone assumed for the visit sheet.
+Default is "US/Pacific" (PST/PDT).}
 }
 \value{
 A tibble of visit data.
