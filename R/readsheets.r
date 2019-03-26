@@ -10,8 +10,9 @@
 #' @return A tibble of visit data.
 #'
 #' @importFrom rlang .data parse_expr
-#' @importFrom readxl read_excel
 #' @importFrom tibble as_tibble
+#' @importFrom dplyr slice select
+#' @importFrom readxl read_excel
 #' @importFrom lubridate as_date hm fit_to_timeline tz<-
 #' @importFrom purrr map map2
 #' @importFrom stats setNames
@@ -120,7 +121,7 @@ read_visit = function(workbook, sheet, timezone = "US/Pacific") {
   results$time = do.call(c, map(results$time, ~ fit_to_timeline(results$field.date + .x)))
   tz(results$time) = "US/Pacific"
   # add sample and sonde labels
-  results[["sample"]] = rep(c("Arrival", "Pre-cleaned", "Post-cleaned",
+  results[["sample"]] = rep(c("Arrival", "Dirty", "Clean",
     "Departure"), each = 2)
   results[["sonde"]] = c(rep(c("Outgoing", "Verification"), 3), "Installed",
     "Verification")
