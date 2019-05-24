@@ -4,16 +4,17 @@
 \alias{read_visit}
 \title{Read Visit Sheet}
 \usage{
-read_visit(workbook, sheet, timezone = "US/Pacific")
+read_visit(workbook, timezone = "Etc/GMT+8", col.types)
 }
 \arguments{
 \item{workbook}{The Excel workbook (.xlsx) containing
-visit sheets.}
-
-\item{sheet}{The visit sheet to read.}
+visit sheets. The workbook is expected to contain a sheet
+named "INTERNAL" which is formatted to contain five
+columns that match the WQP result components:
+"reading_type_name", "analyte_name", "time", "value", "cdec_code".}
 
 \item{timezone}{The timezone assumed for the visit sheet.
-Default is "US/Pacific" (PST/PDT).}
+Default is \code{"Etc/GMT+8"} (PST).}
 }
 \value{
 A tibble of visit data.
