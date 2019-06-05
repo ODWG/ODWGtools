@@ -25,7 +25,7 @@ gapfill_kalman = function(x, mask = is.na(x), ...) {
 }
 
 
-
+#' @keywords internal
 gapfill_deep = function(d, mask) {
 
 

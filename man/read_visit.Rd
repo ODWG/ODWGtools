@@ -4,7 +4,7 @@
 \alias{read_visit}
 \title{Read Visit Sheet}
 \usage{
-read_visit(workbook, timezone = "Etc/GMT+8", col.types)
+read_visit(workbook, timezone = "Etc/GMT+8")
 }
 \arguments{
 \item{workbook}{The Excel workbook (.xlsx) containing

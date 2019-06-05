@@ -13,15 +13,14 @@ Imports:
     readxl (>= 1.2),
     purrr (>= 0.2),
     rlang (>= 0.3),
-    yaml (>= 2.2)
+    yaml (>= 2.2),
 Suggests: 
     ggplot2 (>= 3.1),
     dbscan (>= 1.1), 
     knitr (>= 1.21),
     rmarkdown (>= 1.11), 
     forecast (>= 8.5),
-    isofor
-Remotes: github::Zelazny7/isofor
+    solitude (>= 0.1)
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
