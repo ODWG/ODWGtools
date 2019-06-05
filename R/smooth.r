@@ -36,5 +36,5 @@ smooth_godin = function(x, increment, kind = c("mean", "max", "min")) {
 
   (roll_fun(lag(x, offset), w24, fill = NA_real_) +
    roll_fun(lead(x, offset), w24, fill = NA_real_) +
-   roll_fun(x, w25, fill = NA_real_)) / 3
+   roll_fun(x, w25, fill = NA_real_)) / 3.0
 }

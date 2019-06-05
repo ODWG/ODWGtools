@@ -150,8 +150,8 @@ mad_outliers = function(x, mask = !is.na(x), threshold = c(1.5, 3)) {
 #' Performs outlier detection using an Isolation Forest.
 #'
 #' @inheritParams zscore_outliers
-#' @param ... Additional arguments to `isofor::iForest`, namely
-#'   `nt` and `phi`.
+#' @param ... Additional arguments to `ranger::ranger` (used by 
+#'   `solitude::isolationForest`).
 #'
 #' @details the values of `threshold` identify mild and extreme outliers
 #'   based on the Isolation Forest score in the range `[0,1]`.
@@ -161,16 +161,19 @@ mad_outliers = function(x, mask = !is.na(x), threshold = c(1.5, 3)) {
 #' @importFrom dplyr if_else between case_when
 #' @importFrom stats predict
 #' @export
-isofor_outliers = function(x, mask = !is.na(x), threshold = c(0.8, 0.9), ...) {
-  if (!requireNamespace('isofor'))
-    stop('Could not find package "isofor"')
+iforest_outliers = function(x, mask = !is.na(x), threshold = c(0.8, 0.9), ...) {
+  if (!requireNamespace('solitude'))
+    stop('Could not find package "solitude"')
   d = data.frame(x = x[mask])
-  mod = isofor::iForest(d, ...)
-  score = predict(mod, data.frame(x = x))
+  mod = solitude::isolationForest(d, ...)
+  p = data.frame(x = x)
+  score = predict(mod, na.omit(p), type = "anomaly_score")
+  p["score"] = NA_real_
+  p[!is.na(p$x), "score"] = score
   case_when(
     is.na(x) ~ NA_character_,
-    score > threshold[2] ~ "extreme outlier",
-    score > threshold[1] ~ "mild outlier",
+    p$score > threshold[2] ~ "extreme outlier",
+    p$score > threshold[1] ~ "mild outlier",
     TRUE ~ "not outlier"
   )
 }
