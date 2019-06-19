@@ -159,7 +159,7 @@ mad_outliers = function(x, mask = !is.na(x), threshold = c(1.5, 3)) {
 #'   outliers.
 #'
 #' @importFrom dplyr if_else between case_when
-#' @importFrom stats predict
+#' @importFrom stats predict na.omit
 #' @export
 iforest_outliers = function(x, mask = !is.na(x), threshold = c(0.8, 0.9), ...) {
   if (!requireNamespace('solitude'))
