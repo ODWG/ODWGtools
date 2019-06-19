@@ -4,7 +4,7 @@
 \alias{gapfill_kalman}
 \title{ARIMIA and Kalman Filter Gap Fill}
 \usage{
-gapfill_kalman(x, mask = is.na(x), max.contiguous = Inf, ...)
+gapfill_kalman(x, mask = is.na(x), ...)
 }
 \arguments{
 \item{x}{A vector of data with missing values.}
@@ -13,9 +13,6 @@ gapfill_kalman(x, mask = is.na(x), max.contiguous = Inf, ...)
 to compute fill values for. Useful when a subset
 of quality-assured data is available. Default action is to
 only fill NA values.}
-
-\item{max.contiguous}{The maximum number of contiguous values
-to fill.}
 
 \item{...}{Additional arguments to \code{\link[forecast:auto.arima]{forecast::auto.arima()}}.}
 }
