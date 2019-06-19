@@ -6,6 +6,7 @@ Description: A collection of tools for the Water Quality Portal.
 Depends: R (>= 3.5)
 Imports: 
     stats,
+    graphics,
     dplyr (>= 0.7),
     RcppRoll (>= 0.3),
     lubridate (>= 1.7),
