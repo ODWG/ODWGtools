@@ -9,34 +9,43 @@
 #' @param smooth If `TRUE`, A loess smoother will be applied to the
 #'   data prior to detecting the water surface elevation minimums
 #'   or maximums.
-#' @param span The `span` argument to [`stats::loess()`]. The
-#'   default span of 0.1 was found to work well with 15-minute 
-#'   tidal data.
+#' @param neighborhood The neighborhood (number of points) used to 
+#'   determine the `span` argument to [`stats::loess()`]. A time 
+#'   window of 6 hours was found to work well with tidal data, which
+#'   corresponds to 24 points for 15-minute data or 6 points for 
+#'   hourly data.
 #' @param family The `family` argument to [`stats::loess()`]. The
 #'   default family "symmetric" was found to work well with 15-minute 
 #'   tidal data.
 #' @param degree The `degree` argument to [`stats::loess()`]. The
 #'   default degree of 2 was found to work well with 15-minute 
 #'   tidal data.
-#' @param ... Additional arguments to [`stats::loess()`].
+#' @param ... Additional arguments to [`stats::loess()`].Note that
+#'   the value of `span` is computed from the argument `neighborhood`.
+#' @param plot If `TRUE`, printdiagnostic plots of the loess smoothing.
 #' @return The daily tidal mean of `x`, i.e. the average of high-
 #'   or low-tide values for the day.
 #'
 #' @importFrom stats loess predict
+#' @importFrom graphics lines
 #' @importFrom dplyr lag lead
 #' @export
 daily_tidal_mean = function(x, y, tide = c("high", "low"),
-  smooth = TRUE, span = 0.1, family = "symmetric", degree = 2,
-  ...) {
+  smooth = TRUE, neighborhood = 24, family = "symmetric",
+    degree = 2, ..., plot = FALSE) {
   tide = match.arg(tide, c("high", "low"))
   if (tide == "high") {
     compare.fun = `>=`
   } else {
     compare.fun = `<=`
   }
+  span = neighborhood/length(y)
   # apply smoothing if specified
   if (smooth) {
     d = data.frame(t = seq_along(y), y = y)
+    if (plot) {
+      plot(y, type = 'l')
+    }
     y = tryCatch({
       ysmooth = predict(loess(y ~ t, data = d, span = span,
         degree = degree, family = family))
@@ -48,6 +57,10 @@ daily_tidal_mean = function(x, y, tide = c("high", "low"),
       warning(paste(e))
       NA
     })
+    if (plot) {
+      tryCatch(lines(y, col = "red", lty = 2),
+        error = function(e) warning(paste(e)))
+    }
   }
   select.points = compare.fun(y, lead(y, n = 1, default = NA)) &
     compare.fun(y, lag(y, n = 1, default = NA))

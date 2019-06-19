@@ -5,7 +5,8 @@
 \title{Daily Tidal Mean}
 \usage{
 daily_tidal_mean(x, y, tide = c("high", "low"), smooth = TRUE,
-  span = 0.1, family = "symmetric", degree = 2, ...)
+  neighborhood = 24, family = "symmetric", degree = 2, ...,
+  plot = FALSE)
 }
 \arguments{
 \item{x}{A vector of values from a single day.}
@@ -19,9 +20,11 @@ average.}
 data prior to detecting the water surface elevation minimums
 or maximums.}
 
-\item{span}{The \code{span} argument to \code{\link[stats:loess]{stats::loess()}}. The
-default span of 0.1 was found to work well with 15-minute
-tidal data.}
+\item{neighborhood}{The neighborhood (number of points) used to
+determine the \code{span} argument to \code{\link[stats:loess]{stats::loess()}}. A time
+window of 6 hours was found to work well with tidal data, which
+corresponds to 24 points for 15-minute data or 6 points for
+hourly data.}
 
 \item{family}{The \code{family} argument to \code{\link[stats:loess]{stats::loess()}}. The
 default family "symmetric" was found to work well with 15-minute
@@ -31,7 +34,10 @@ tidal data.}
 default degree of 2 was found to work well with 15-minute
 tidal data.}
 
-\item{...}{Additional arguments to \code{\link[stats:loess]{stats::loess()}}.}
+\item{...}{Additional arguments to \code{\link[stats:loess]{stats::loess()}}.Note that
+the value of \code{span} is computed from the argument \code{neighborhood}.}
+
+\item{plot}{If \code{TRUE}, printdiagnostic plots of the loess smoothing.}
 }
 \value{
 The daily tidal mean of \code{x}, i.e. the average of high-
