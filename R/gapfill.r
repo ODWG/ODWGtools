@@ -16,7 +16,6 @@ blocksize = function(flags) {
   unlist(map(rle(flags)$lengths, ~ rep(.x, .x)))
 }
 
-
 #' ARIMIA and Kalman Filter Gap Fill
 #'
 #' Fill gaps in a timeseries by fitting an ARIMA model and applying
@@ -36,7 +35,12 @@ blocksize = function(flags) {
 gapfill_kalman = function(x, mask = is.na(x), ...) {
   if (!requireNamespace('forecast'))
     stop('Could not find package "forecast"')
-  fit = forecast::auto.arima(x, ...)
+  fit = tryCatch(forecast::auto.arima(x, ...),
+    error = function(e) e)
+  if ("error" %in% class(fit)) {
+    warning(f, "  Input unchanged.")
+    return(x)
+  }
   kr = KalmanRun(x, fit$model)
   newx = sapply(1:length(x), function(i)
     fit$model$Z %*% kr$states[i,])
