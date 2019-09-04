@@ -54,7 +54,6 @@ read_event = function(workbook, timezone = "Etc/GMT+8") {
     event = NULL
   }
   # read RESULT sheet as table
-  sheets = excel_sheets(workboook)
   if ("RESULT" %in% sheets) {
     result = suppressMessages(read_excel(workbook, "RESULT",
     col_names = TRUE, na = c("", " "), skip = 0,

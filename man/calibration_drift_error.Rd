@@ -10,7 +10,7 @@ calibration_drift_error(lab.data)
 }
 \arguments{
 \item{lab.data}{Processed laboratory calibration data,
-e.g. output from \link{read_calibration}.}
+e.g. output from \link{read_event}.}
 }
 \value{
 a tibble of calibration drift calculations.

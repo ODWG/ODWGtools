@@ -8,7 +8,7 @@ fouling_error(visit.data)
 }
 \arguments{
 \item{visit.data}{Processed visit data, i.e. output
-from \link{read_visit}.}
+from \link{read_event}.}
 }
 \value{
 A tibble of fouling calculations.

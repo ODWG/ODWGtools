@@ -3,7 +3,7 @@
 #' Calculate fouling error from pre/post cleaning visit data.
 #'
 #' @param visit.data Processed visit data, i.e. output 
-#'   from [read_visit].
+#'   from [read_event].
 #' @return A tibble of fouling calculations.
 #'
 #' @importFrom tidyr gather spread
@@ -41,7 +41,7 @@ fouling_error = function(visit.data) {
 #' calibration data.
 #'
 #' @param lab.data Processed laboratory calibration data,
-#'   e.g. output from [read_calibration].
+#'   e.g. output from [read_event].
 #' @return a tibble of calibration drift calculations.
 #'
 #' @importFrom rlang .data

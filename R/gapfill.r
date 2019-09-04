@@ -38,7 +38,7 @@ gapfill_kalman = function(x, mask = is.na(x), ...) {
   fit = tryCatch(forecast::auto.arima(x, ...),
     error = function(e) e)
   if ("error" %in% class(fit)) {
-    warning(f, "  Input unchanged.")
+    warning(fit, "  Input unchanged.")
     return(x)
   }
   kr = KalmanRun(x, fit$model)
