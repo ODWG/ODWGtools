@@ -22,12 +22,13 @@
 #'   - "ACTION": this sheet is formatted to contain columns
 #'     that match the WQP *action* components:
 #'
-#' @importFrom readxl read_excel
+#' @importFrom readxl read_excel excel_sheets
 #' @importFrom lubridate as_datetime
 #' @importFrom dplyr mutate
 #' @importFrom tibble tibble
 #' @export
 read_event = function(workbook, timezone = "Etc/GMT+8") {
+  sheets = excel_sheets(workbook)
   # read EVENT sheet as table
   if ("EVENT" %in% sheets) {
     event = suppressMessages(read_excel(workbook, "EVENT",
