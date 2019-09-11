@@ -29,35 +29,11 @@
 #' @export
 read_event = function(workbook, timezone = "Etc/GMT+8") {
   sheets = excel_sheets(workbook)
-  # read EVENT sheet as table
-  if ("EVENT" %in% sheets) {
-    event = suppressMessages(read_excel(workbook, "EVENT",
-    col_names = TRUE, na = c("", " "), skip = 0,
-    trim_ws = TRUE, col_types = "text"))
-    # parse event timestamps
-    event = mutate(event,
-    arrival_time = as_datetime(.data$arrival_time,
-      tz = timezone),
-    restart_time = as_datetime(.data$restart_time,
-      tz = timezone),
-    departure_time = as_datetime(.data$departure_time,
-      tz = timezone)
-    )
-    # warn about missing entries
-    missing.entries = apply(event, 1, is.na)
-    if (any(missing.entries)) {
-      warning(sum(missing.entries), " of ", length(missing.entries),
-      " event records are missing or improperly formatted in workbook ",
-      workbook, ".")
-    }
-  } else {
-    event = NULL
-  }
   # read RESULT sheet as table
   if ("RESULT" %in% sheets) {
     result = suppressMessages(read_excel(workbook, "RESULT",
-    col_names = TRUE, na = c("", " "), skip = 0,
-    trim_ws = TRUE, col_types = "text"))
+      col_names = TRUE, na = c("", " "), skip = 0,
+      trim_ws = TRUE, col_types = "text"))
     # parse result timestamps
     result = mutate(result,
     time = as_datetime(.data$time, tz = timezone))
@@ -65,25 +41,51 @@ read_event = function(workbook, timezone = "Etc/GMT+8") {
     missing.entries = is.na(result$time) | is.na(result$value)
     if (any(missing.entries)) {
       warning(sum(missing.entries), " of ", length(missing.entries),
-      " result records are missing or improperly formatted in workbook ",
-      workbook, ".")
+        " result records are missing or improperly formatted in workbook ",
+        workbook, ".", call. = FALSE)
     }
   } else {
     result = NULL
   }
+  # read EVENT sheet as table
+  if ("EVENT" %in% sheets) {
+    event = suppressMessages(read_excel(workbook, "EVENT",
+      col_names = TRUE, na = c("", " "), skip = 0,
+      trim_ws = TRUE, col_types = "text"))
+    # parse event timestamps
+    event = mutate(event,
+      arrival_time = as_datetime(.data$arrival_time,
+        tz = timezone),
+      restart_time = as_datetime(.data$restart_time,
+        tz = timezone),
+      departure_time = as_datetime(.data$departure_time,
+        tz = timezone)
+    )
+    # warn about missing entries
+    missing.entries = apply(event, 1, is.na)
+    if (any(missing.entries)) {
+      warning(sum(missing.entries), " of ", length(missing.entries),
+        " event records are missing or improperly formatted in workbook ",
+        workbook, ".", call. = FALSE)
+    }
+  } else {
+    event = NULL
+  }
   # read ACTION sheet as table
   if ("ACTION" %in% sheets) {
     action = suppressMessages(read_excel(workbook, "ACTION",
-    col_names = TRUE, na = c("", " "), skip = 0,
-    trim_ws = TRUE, col_types = "text"))
-    # parse ACTION timestamps
-    ## TODO
+      col_names = TRUE, na = c("", " "), skip = 0,
+      trim_ws = TRUE, col_types = "text"))
+    # parse event timestamps
+    action = mutate(action,
+      arrival_time = as_datetime(.data$arrival_time, tz = timezone))
     # warn about missing entries
-    ##  if (any(missing.entries)) {
-    ##    warning(sum(missing.entries), " of ", length(missing.entries),
-    ##      " action records are missing or improperly formatted in workbook ",
-    ##      workbook, ".")
-    ##  }
+    missing.entries = apply(action, 1, is.na)
+    if (any(missing.entries)) {
+      warning(sum(missing.entries), " of ", length(missing.entries),
+      " action records are missing or improperly formatted in workbook ",
+      workbook, ".", call. = FALSE)
+    }
   } else {
     action = NULL
   }
