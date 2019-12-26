@@ -9,16 +9,16 @@
 #' @param smooth If `TRUE`, A loess smoother will be applied to the
 #'   data prior to detecting the water surface elevation minimums
 #'   or maximums.
-#' @param neighborhood The neighborhood (number of points) used to 
-#'   determine the `span` argument to [`stats::loess()`]. A time 
+#' @param neighborhood The neighborhood (number of points) used to
+#'   determine the `span` argument to [`stats::loess()`]. A time
 #'   window of 6 hours was found to work well with tidal data, which
-#'   corresponds to 24 points for 15-minute data or 6 points for 
+#'   corresponds to 24 points for 15-minute data or 6 points for
 #'   hourly data.
 #' @param family The `family` argument to [`stats::loess()`]. The
-#'   default family "symmetric" was found to work well with 15-minute 
+#'   default family "symmetric" was found to work well with 15-minute
 #'   tidal data.
 #' @param degree The `degree` argument to [`stats::loess()`]. The
-#'   default degree of 2 was found to work well with 15-minute 
+#'   default degree of 2 was found to work well with 15-minute
 #'   tidal data.
 #' @param ... Additional arguments to [`stats::loess()`].Note that
 #'   the value of `span` is computed from the argument `neighborhood`.
@@ -39,12 +39,12 @@ daily_tidal_mean = function(x, y, tide = c("high", "low"),
   } else {
     compare.fun = `<=`
   }
-  span = neighborhood/length(y)
+  span = neighborhood / length(y)
   # apply smoothing if specified
   if (smooth) {
     d = data.frame(t = seq_along(y), y = y)
     if (plot) {
-      plot(y, type = 'l')
+      plot(y, type = "l")
     }
     y = tryCatch({
       ysmooth = predict(loess(y ~ t, data = d, span = span,
@@ -78,13 +78,13 @@ daily_tidal_mean = function(x, y, tide = c("high", "low"),
 #'
 #' @param ... One of more vectors of test results.
 #' @param by The method to use for aggregating. When `by = "highest"`
-#'   the largest flag value from the set of tests as the indicator 
+#'   the largest flag value from the set of tests as the indicator
 #'   of the overall quality of the observation. When `by = "lowest"`
-#'   the smallest flag value from the set of tests as the indicator 
+#'   the smallest flag value from the set of tests as the indicator
 #'   of the overall quality of the observation. When `by = "majority"`
 #'   a majority-vote algorithm is used to determine the overall quality
 #'   of the observation.
-#' @param na.rm Logical indicating whether missing flags should be 
+#' @param na.rm Logical indicating whether missing flags should be
 #'   ignored when calculating the aggregate flag.
 #' @return An integer vector of test flags.
 #'
@@ -115,7 +115,7 @@ aggregate_tests = function(..., by = c("highest", "lowest", "majority"),
     },
     majority = function(..., na.rm) {
       as.integer(names(which.max(table(c(...),
-        useNA = if(na.rm) "no" else "ifany"))))
+        useNA = if (na.rm) "no" else "ifany"))))
     }
   )
   pmap_int(list(..., na.rm = na.rm), fun)
@@ -125,7 +125,7 @@ aggregate_tests = function(..., by = c("highest", "lowest", "majority"),
 #'
 #' A set of rules for handling flags during data aggregation. This
 #' function is intended to be called within an aggregation statement,
-#' e.g. within a call to `dplyr::summarize` to average 15-minute data 
+#' e.g. within a call to `dplyr::summarize` to average 15-minute data
 #' into hourly data, etc.
 #'
 #' @param flags a vector of QAQC Flag codes.
@@ -154,7 +154,7 @@ aggregate_flags = function(flags) {
     any(flags == "B") ~ "B",
     any(flags == "U") ~ "U",
     any(flags == "A") ~ "A",
-    sum(flags == "M")/length(flags) >= 0.5 ~ "M",
+    sum(flags == "M") / length(flags) >= 0.5 ~ "M",
     any(flags == "P") ~ "P",
     all(flags %in% c("Q", "G", "M")) ~ "Q",
     all(flags %in% c("G", "M")) ~ "G",
@@ -175,7 +175,7 @@ aggregate_flags = function(flags) {
 #' @importFrom dplyr filter
 #' @export
 flag_descriptions = function(flags) {
-  if(!missing(flags))
+  if (!missing(flags))
     filter(flag.descriptions, .data$Flag %in% flags)
   else
     flag.descriptions

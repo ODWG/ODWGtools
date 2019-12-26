@@ -4,8 +4,7 @@
 \alias{aggregate_tests}
 \title{Aggregate Test Results}
 \usage{
-aggregate_tests(..., by = c("highest", "lowest", "majority"),
-  na.rm = TRUE)
+aggregate_tests(..., by = c("highest", "lowest", "majority"), na.rm = TRUE)
 }
 \arguments{
 \item{...}{One of more vectors of test results.}

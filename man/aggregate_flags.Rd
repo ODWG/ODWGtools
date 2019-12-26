@@ -26,9 +26,9 @@ in the specified order of precedence:
 \item \code{"B"} if \emph{any} flags in the vector are \code{"B"}.
 \item \code{"U"} if \emph{any} flags in the vector are \code{"U"}.
 \item \code{"A"} if \emph{any} flags in the vector are \code{"A"}.
-\item \code{"M"} if more than 50% of flags in the vector are \code{"M"}.
+\item \code{"M"} if more than 50\% of flags in the vector are \code{"M"}.
 \item \code{"P"} if \emph{any} non-missing flags in the vector are \code{"P"}.
-\item \code{"Q"} if \emph{all} non-missing flags in the vector are \code{"Q" or "G"}.
+\item \code{"Q"} if \emph{all} non-missing flags in the vector are \verb{"Q" or "G"}.
 \item \code{"G"} if \emph{all} non-missing flags in the vector are \code{"G"}.
 \item For all other cases, use the majority flag value.
 }

@@ -24,8 +24,8 @@ thresholds for "mild" and "extreme" outliers.}
 Performs outlier detection using Local Outlier Factor algorithm.
 }
 \details{
-the values of \code{threshold} identify mild and extreme outliers
-based on the LOF score. Scores significantly larger
-than 1 indicate outliers. Default values are 1.5 for "mild" outliers
-and 2.0 for "extreme" outliers.
+the values of \code{threshold} identify mild and extreme
+outliers based on the LOF score. Scores significantly larger
+than 1 indicate outliers. Default values are 1.5 for "mild"
+outliers and 2.0 for "extreme" outliers.
 }

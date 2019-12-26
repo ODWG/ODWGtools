@@ -9,16 +9,16 @@
 #'  remove NA values.
 #' @param threshold A length-two vector identifying
 #'  thresholds for "mild" and "extreme" outliers.
-#' @return A  vector the same length as `x` containing labels 
+#' @return A  vector the same length as `x` containing labels
 #'   "not outlier", "mild outlier", or "extreme outlier".
 #'
 #' @details the values of `threshold` identify the multiplier of the
 #'   interquartile range used to identify mild and extreme outliers.
 #'   typical values are 1.5 for "mild" outliers and 3.0 for "extreme"
 #'   outliers.
-#'   
+#'
 #' @importFrom dplyr if_else between case_when
-#' @importFrom stats quantile 
+#' @importFrom stats quantile
 #' @export
 tukey_outliers = function(x, mask= !is.na(x), threshold = c(1.5, 3)) {
   lowerq = quantile(x[mask])[2]
@@ -70,12 +70,12 @@ zscore_outliers = function(x, mask = !is.na(x), threshold = c(0.9, 0.95)) {
 #'   outliers.
 #'
 #' @importFrom dplyr if_else between case_when
-#' @importFrom stats qt sd 
+#' @importFrom stats qt sd
 #' @export
 tscore_outliers = function(x, mask = !is.na(x), threshold = c(0.9, 0.95)) {
   n = length(x)
   temp = (x - mean(x[mask])) / sd(x[mask])
-  score = (temp * sqrt(n - 2)) / sqrt(n - 1 - temp^2)
+  score = (temp * sqrt(n - 2)) / sqrt(n - 1 - temp ^ 2)
   case_when(
     is.na(x) ~ NA_character_,
     abs(score) > qt(threshold[2], n - 2) ~ "extreme outlier",
@@ -117,12 +117,12 @@ chisq_outliers = function(x, mask = !is.na(x), threshold = c(0.9, 0.95)) {
 #' @inheritParams zscore_outliers
 #'
 #' @details the values of `threshold` identify the multiplier of the
-#'   median distance used to identify mild and extreme outliers. 
+#'   median distance used to identify mild and extreme outliers.
 #'   Default values are 1.5 for "mild" outliers and 3.0 for "extreme"
 #'   outliers.
 #'
 #' @importFrom dplyr if_else between case_when
-#' @importFrom stats median 
+#' @importFrom stats median
 #' @export
 mad_outliers = function(x, mask = !is.na(x), threshold = c(1.5, 3)) {
   xx = x[mask]
@@ -135,7 +135,7 @@ mad_outliers = function(x, mask = !is.na(x), threshold = c(1.5, 3)) {
     x < m ~ left.mad,
     TRUE ~ 0.0
   )
-  score = (x - m)/mad.dist
+  score = (x - m) / mad.dist
   case_when(
     is.na(x) ~ NA_character_,
     abs(score) > threshold[2] ~ "extreme outlier",
@@ -150,11 +150,11 @@ mad_outliers = function(x, mask = !is.na(x), threshold = c(1.5, 3)) {
 #' Performs outlier detection using an Isolation Forest.
 #'
 #' @inheritParams zscore_outliers
-#' @param ... Additional arguments to `ranger::ranger` (used by 
+#' @param ... Additional arguments to `ranger::ranger` (used by
 #'   `solitude::isolationForest`).
 #'
-#' @details the values of `threshold` identify mild and extreme outliers
-#'   based on the Isolation Forest score in the range `[0,1]`.
+#' @details the values of `threshold` identify mild and extreme\
+#'   outliers based on the Isolation Forest score in the range `[0,1]`.
 #'   Default values are 0.8 for "mild" outliers and 0.9 for "extreme"
 #'   outliers.
 #'
@@ -162,8 +162,8 @@ mad_outliers = function(x, mask = !is.na(x), threshold = c(1.5, 3)) {
 #' @importFrom stats predict na.omit
 #' @export
 iforest_outliers = function(x, mask = !is.na(x), threshold = c(0.8, 0.9), ...) {
-  if (!requireNamespace('solitude'))
-    stop('Could not find package "solitude"')
+  if (!requireNamespace("solitude"))
+    stop("Could not find package \"solitude\"")
   d = data.frame(x = x[mask])
   mod = solitude::isolationForest(d, ...)
   p = data.frame(x = x)
@@ -187,16 +187,16 @@ iforest_outliers = function(x, mask = !is.na(x), threshold = c(0.8, 0.9), ...) {
 #' @param ... Additional arguments to `dbscan::lof`, namely
 #'   `k`.
 #'
-#' @details the values of `threshold` identify mild and extreme outliers
-#'   based on the LOF score. Scores significantly larger 
-#'   than 1 indicate outliers. Default values are 1.5 for "mild" outliers 
-#'   and 2.0 for "extreme" outliers.
+#' @details the values of `threshold` identify mild and extreme
+#'   outliers based on the LOF score. Scores significantly larger
+#'   than 1 indicate outliers. Default values are 1.5 for "mild"
+#'   outliers and 2.0 for "extreme" outliers.
 #'
 #' @importFrom dplyr if_else between case_when
 #' @export
 lof_outliers = function(x, mask = !is.na(x), threshold = c(1.5, 2), ...) {
-  if (!requireNamespace('dbscan'))
-    stop('Could not find package "dbscan"')
+  if (!requireNamespace("dbscan"))
+    stop("Could not find package \"dbscan\"")
   xx = as.matrix(x[mask])
   lof.omit = dbscan::lof(xx, ...)
   score = rep(NA, length(x))
@@ -212,14 +212,11 @@ lof_outliers = function(x, mask = !is.na(x), threshold = c(1.5, 2), ...) {
 
 
 glosh_outliers = function(x, mask) {
-  if (!requireNamespace('dbscan'))
-    stop('Could not find package "dbscan"')
-
-
+  if (!requireNamespace("dbscan"))
+    stop("Could not find package \"dbscan\"")
 }
 
 
 hdbscan_outliers = function(x, threshold = c(0.9, 0.95), ...) {
-
-
+  # TODO
 }

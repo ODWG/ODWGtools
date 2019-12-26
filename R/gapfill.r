@@ -1,6 +1,6 @@
 #' Contiguous Blocks of Discrete Values
-#' 
-#' Identify contiguous periods of discrete values (i.e. QAQC Flags). 
+#'
+#' Identify contiguous periods of discrete values (i.e. QAQC Flags).
 #'
 #' @inheritParams aggregate_flags
 #' @return A vector of same length as `flags` where each
@@ -33,8 +33,8 @@ blocksize = function(flags) {
 #' @importFrom stats KalmanRun
 #' @export
 gapfill_kalman = function(x, mask = is.na(x), ...) {
-  if (!requireNamespace('forecast'))
-    stop('Could not find package "forecast"')
+  if (!requireNamespace("forecast"))
+    stop("Could not find package \"forecast\"")
   fit = tryCatch(forecast::auto.arima(x, ...),
     error = function(e) e)
   if ("error" %in% class(fit)) {
@@ -43,13 +43,12 @@ gapfill_kalman = function(x, mask = is.na(x), ...) {
   }
   kr = KalmanRun(x, fit$model)
   newx = sapply(1:length(x), function(i)
-    fit$model$Z %*% kr$states[i,])
+    fit$model$Z %*% kr$states[i, ])
   if_else(mask, newx, x)
 }
 
 
 #' @keywords internal
 gapfill_deep = function(d, mask) {
-
-
+  # TODO
 }

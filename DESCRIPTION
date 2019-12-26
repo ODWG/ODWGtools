@@ -10,12 +10,8 @@ Imports:
     dplyr (>= 0.7),
     RcppRoll (>= 0.3),
     lubridate (>= 1.7),
-    tidyr (>= 0.8),
-    readxl (>= 1.2),
     purrr (>= 0.2),
-    rlang (>= 0.3),
-    yaml (>= 2.2),
-	tibble (>= 2.1)
+    yaml (>= 2.2)
 Suggests: 
     ggplot2 (>= 3.1),
     dbscan (>= 1.1), 
@@ -27,5 +23,5 @@ License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 VignetteBuilder: knitr
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 Roxygen: list(markdown = TRUE)

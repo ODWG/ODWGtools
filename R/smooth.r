@@ -3,9 +3,9 @@
 #' Apply a Godin filter to a vector of data.
 #'
 #' @param x A vector of values.
-#' @param increment A character string defining the expected time 
-#'  increment. this consists of two parts: a numeric value defining 
-#'  the size of the increment, and the units of the increment. 
+#' @param increment A character string defining the expected time
+#'  increment. this consists of two parts: a numeric value defining
+#'  the size of the increment, and the units of the increment.
 #'  Acceptable units are "secs", "mins", "hours", "days", or "weeks".
 #' @param kind what values to filter. Default is the original Godin
 #'  filter which averages the data. Other options are to use the `max`
@@ -32,9 +32,19 @@ smooth_godin = function(x, increment, kind = c("mean", "max", "min")) {
   w25 = as.numeric(d25, units = inc.units) / as.numeric(increment)
   w24 = as.numeric(d24, units = inc.units) / as.numeric(increment)
   offset = as.numeric(as.difftime(1L, units = "hours"),
-    units = inc.units)/as.numeric(increment)
+    units = inc.units) / as.numeric(increment)
 
   (roll_fun(lag(x, offset), w24, fill = NA_real_) +
    roll_fun(lead(x, offset), w24, fill = NA_real_) +
    roll_fun(x, w25, fill = NA_real_)) / 3.0
+}
+
+smooth_lanczos = function(x, increment, cutoff, window) {
+  increment = string_to_difftime(increment)
+  inc.units = units(increment)
+
+  cutoff = string_to_difftime(cutoff)
+  inc.units = units(cutoff)
+
+  cutoff
 }

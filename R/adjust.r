@@ -84,19 +84,19 @@ adjust_linear = function(x, mask) {
   if (missing(mask)) {
     mask = rep(TRUE, length(x))
   } else if (!any(mask)) {
-    warning('All values are masked. No correction applied.')
+    warning("All values are masked. No correction applied.")
     return(x)
   }
   # prepare for linear fits
   d = data.frame(index = seq_along(x), value = x)
   # fit drift
-  drift.fit = lm(value ~ index, data = d[mask,])
+  drift.fit = lm(value ~ index, data = d[mask, ])
   drift = predict(drift.fit, newdata = d)
   # fit trend
   if (all(mask)) {
     trend = rep(offset(drift.fit)[[c(1, 1)]], nrow(d))
   } else {
-    trend.fit = lm(value ~ index, data = d[!mask,])
+    trend.fit = lm(value ~ index, data = d[!mask, ])
     trend = predict(trend.fit, newdata = d)
   }
   # apply correction
@@ -110,5 +110,3 @@ adjust_linear = function(x, mask) {
 adjust_variance = function(x, mask) {
 
 }
-
-

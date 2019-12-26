@@ -4,9 +4,17 @@
 \alias{daily_tidal_mean}
 \title{Daily Tidal Mean}
 \usage{
-daily_tidal_mean(x, y, tide = c("high", "low"), smooth = TRUE,
-  neighborhood = 24, family = "symmetric", degree = 2, ...,
-  plot = FALSE)
+daily_tidal_mean(
+  x,
+  y,
+  tide = c("high", "low"),
+  smooth = TRUE,
+  neighborhood = 24,
+  family = "symmetric",
+  degree = 2,
+  ...,
+  plot = FALSE
+)
 }
 \arguments{
 \item{x}{A vector of values from a single day.}

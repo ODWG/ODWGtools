@@ -24,8 +24,8 @@ thresholds for "mild" and "extreme" outliers.}
 Performs outlier detection using an Isolation Forest.
 }
 \details{
-the values of \code{threshold} identify mild and extreme outliers
-based on the Isolation Forest score in the range \code{[0,1]}.
+the values of \code{threshold} identify mild and extreme\
+outliers based on the Isolation Forest score in the range \verb{[0,1]}.
 Default values are 0.8 for "mild" outliers and 0.9 for "extreme"
 outliers.
 }
