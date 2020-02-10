@@ -15,14 +15,15 @@
 #' @details The Godin filter is defined
 #'  \deqn{F = \frac{A_{24}^2}{24^2}\frac{A_{25}}{25}}
 #'
-#' @importFrom RcppRoll roll_mean roll_max roll_min
+#' @importFrom slider slide_dbl
+#' @importFrom dplyr lag lead
 #' @export
 smooth_godin = function(x, increment, kind = c("mean", "max", "min")) {
   kind = match.arg(kind, c("mean", "max", "min"))
   roll_fun = switch(kind,
-    "mean" = roll_mean,
-    "max" = roll_max,
-    "min" = roll_min
+    "mean" = mean,
+    "max" = max,
+    "min" = min
   )
   increment = string_to_difftime(increment)
   inc.units = units(increment)
@@ -31,12 +32,20 @@ smooth_godin = function(x, increment, kind = c("mean", "max", "min")) {
 
   w25 = as.numeric(d25, units = inc.units) / as.numeric(increment)
   w24 = as.numeric(d24, units = inc.units) / as.numeric(increment)
+  w25.before = sum(seq(w25) < ceiling(w25 / 2))
+  w25.after = sum(seq(w25) > ceiling(w25 / 2))
+  w24.before = sum(seq(w24) < ceiling(w24 / 2))
+  w24.after = sum(seq(w24) > ceiling(w24 / 2))
+
   offset = as.numeric(as.difftime(1L, units = "hours"),
     units = inc.units) / as.numeric(increment)
 
-  (roll_fun(lag(x, offset), w24, fill = NA_real_) +
-   roll_fun(lead(x, offset), w24, fill = NA_real_) +
-   roll_fun(x, w25, fill = NA_real_)) / 3.0
+  (slide_dbl(lag(x, offset), roll_fun, .complete = TRUE,
+    .before = w24.before, .after = w24.after) +
+   slide_dbl(lead(x, offset), roll_fun, .complete = TRUE,
+     .before = w24.before, .after = w24.after) +
+   slide_dbl(x, roll_fun, .complete = TRUE,
+     .before = w25.before, .after = w25.after)) / 3.0
 }
 
 smooth_lanczos = function(x, increment, cutoff, window) {

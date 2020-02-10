@@ -7,18 +7,19 @@ Depends: R (>= 3.5)
 Imports: 
     stats,
     graphics,
-    dplyr (>= 0.7),
-    RcppRoll (>= 0.3),
+    dplyr (>= 0.8),
+    slider (>= 0.1),
     lubridate (>= 1.7),
-    purrr (>= 0.2),
+    purrr (>= 0.3),
     yaml (>= 2.2)
 Suggests: 
-    ggplot2 (>= 3.1),
     dbscan (>= 1.1), 
-    knitr (>= 1.21),
-    rmarkdown (>= 1.11), 
+    solitude (>= 0.2),
     forecast (>= 8.5),
-    solitude (>= 0.1)
+    tidyr(>= 1.0),
+    ggplot2 (>= 3.1),
+    knitr (>= 1.21),
+    rmarkdown (>= 1.11),
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
