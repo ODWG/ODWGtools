@@ -9,8 +9,11 @@
 #'  remove NA values.
 #' @param threshold A length-two vector identifying
 #'  thresholds for "mild" and "extreme" outliers.
-#' @return A  vector the same length as `x` containing labels
+#' @param return.score if `TRUE`, return the numeric outlier score.
+#'   If FALSE, return a label classifying the observations as one of
 #'   "not outlier", "mild outlier", or "extreme outlier".
+#' @return A  vector the same length as `x` containing numeric
+#'   scores or character labels.
 #'
 #' @details the values of `threshold` identify the multiplier of the
 #'   interquartile range used to identify mild and extreme outliers.
@@ -20,16 +23,21 @@
 #' @importFrom dplyr if_else between case_when
 #' @importFrom stats quantile
 #' @export
-tukey_outliers = function(x, mask= !is.na(x), threshold = c(1.5, 3)) {
+tukey_outliers = function(x, mask = !is.na(x), threshold = c(1.5, 3), return.score = FALSE) {
   lowerq = quantile(x[mask])[2]
   upperq = quantile(x[mask])[4]
   iqr = upperq - lowerq
-  case_when(
-    is.na(x) ~ NA_character_,
-    !between(x, lowerq - threshold[2] * iqr, upperq + threshold[2] * iqr) ~ "extreme outlier",
-    !between(x, lowerq - threshold[1] * iqr, upperq + threshold[1] * iqr) ~ "mild outlier",
-    TRUE ~ "not outlier"
-  )
+  score = pmax(x - upperq, lowerq - x) / iqr
+  if (return.score) {
+    score
+  } else {
+    case_when(
+      is.na(x) ~ NA_character_,
+      score > threshold[2] ~ "extreme outlier",
+      score > threshold[1] ~ "mild outlier",
+      TRUE ~ "not outlier"
+    )
+  }
 }
 
 
@@ -47,14 +55,18 @@ tukey_outliers = function(x, mask= !is.na(x), threshold = c(1.5, 3)) {
 #' @importFrom dplyr if_else between case_when
 #' @importFrom stats qnorm sd
 #' @export
-zscore_outliers = function(x, mask = !is.na(x), threshold = c(0.9, 0.95)) {
+zscore_outliers = function(x, mask = !is.na(x), threshold = c(0.9, 0.95), return.score = FALSE) {
   score = (x - mean(x[mask])) / sd(x[mask])
-  case_when(
-    is.na(x) ~ NA_character_,
-    abs(score) > qnorm(threshold[2]) ~ "extreme outlier",
-    abs(score) > qnorm(threshold[1]) ~ "mild outlier",
-    TRUE ~ "not outlier"
-  )
+  if (return.score) {
+    score
+  } else {
+    case_when(
+      is.na(x) ~ NA_character_,
+      abs(score) > qnorm(threshold[2]) ~ "extreme outlier",
+      abs(score) > qnorm(threshold[1]) ~ "mild outlier",
+      TRUE ~ "not outlier"
+    )
+  }
 }
 
 
@@ -72,16 +84,20 @@ zscore_outliers = function(x, mask = !is.na(x), threshold = c(0.9, 0.95)) {
 #' @importFrom dplyr if_else between case_when
 #' @importFrom stats qt sd
 #' @export
-tscore_outliers = function(x, mask = !is.na(x), threshold = c(0.9, 0.95)) {
+tscore_outliers = function(x, mask = !is.na(x), threshold = c(0.9, 0.95), return.score = FALSE) {
   n = length(x)
   temp = (x - mean(x[mask])) / sd(x[mask])
   score = (temp * sqrt(n - 2)) / sqrt(n - 1 - temp ^ 2)
-  case_when(
-    is.na(x) ~ NA_character_,
-    abs(score) > qt(threshold[2], n - 2) ~ "extreme outlier",
-    abs(score) > qt(threshold[1], n - 2) ~ "mild outlier",
-    TRUE ~ "not outlier"
-  )
+  if (return.score) {
+    score
+  } else {
+    case_when(
+      is.na(x) ~ NA_character_,
+      abs(score) > qt(threshold[2], n - 2) ~ "extreme outlier",
+      abs(score) > qt(threshold[1], n - 2) ~ "mild outlier",
+      TRUE ~ "not outlier"
+    )
+  }
 }
 
 
@@ -99,14 +115,18 @@ tscore_outliers = function(x, mask = !is.na(x), threshold = c(0.9, 0.95)) {
 #' @importFrom dplyr if_else between case_when
 #' @importFrom stats qchisq var
 #' @export
-chisq_outliers = function(x, mask = !is.na(x), threshold = c(0.9, 0.95)) {
+chisq_outliers = function(x, mask = !is.na(x), threshold = c(0.9, 0.95), return.score = FALSE) {
   score = (x - mean(x[mask])) ^ 2 / var(x[mask])
-  case_when(
-    is.na(x) ~ NA_character_,
-    abs(score) > qchisq(threshold[2], 1) ~ "extreme outlier",
-    abs(score) > qchisq(threshold[1], 1) ~ "mild outlier",
-    TRUE ~ "not outlier"
-  )
+  if (return.score) {
+    score
+  } else {
+    case_when(
+      is.na(x) ~ NA_character_,
+      abs(score) > qchisq(threshold[2], 1) ~ "extreme outlier",
+      abs(score) > qchisq(threshold[1], 1) ~ "mild outlier",
+      TRUE ~ "not outlier"
+    )
+  }
 }
 
 
@@ -124,7 +144,7 @@ chisq_outliers = function(x, mask = !is.na(x), threshold = c(0.9, 0.95)) {
 #' @importFrom dplyr if_else between case_when
 #' @importFrom stats median
 #' @export
-mad_outliers = function(x, mask = !is.na(x), threshold = c(1.5, 3)) {
+mad_outliers = function(x, mask = !is.na(x), threshold = c(1.5, 3), return.score = FALSE) {
   xx = x[mask]
   m = median(xx)
   abs.dev = abs(xx - m)
@@ -136,12 +156,16 @@ mad_outliers = function(x, mask = !is.na(x), threshold = c(1.5, 3)) {
     TRUE ~ 0.0
   )
   score = (x - m) / mad.dist
-  case_when(
-    is.na(x) ~ NA_character_,
-    abs(score) > threshold[2] ~ "extreme outlier",
-    abs(score) > threshold[1] ~ "mild outlier",
-    TRUE ~ "not outlier"
-  )
+  if (return.score) {
+    score
+  } else {
+    case_when(
+      is.na(x) ~ NA_character_,
+      abs(score) > threshold[2] ~ "extreme outlier",
+      abs(score) > threshold[1] ~ "mild outlier",
+      TRUE ~ "not outlier"
+    )
+  }
 }
 
 
@@ -161,21 +185,26 @@ mad_outliers = function(x, mask = !is.na(x), threshold = c(1.5, 3)) {
 #' @importFrom dplyr if_else between case_when
 #' @importFrom stats predict na.omit
 #' @export
-iforest_outliers = function(x, mask = !is.na(x), threshold = c(0.8, 0.9), ...) {
+iforest_outliers = function(x, mask = !is.na(x), sample.size = length(mask), threshold = c(0.8, 0.9), return.score = FALSE, ...) {
   if (!requireNamespace("solitude"))
     stop("Could not find package \"solitude\"")
   d = data.frame(x = x[mask])
-  mod = solitude::isolationForest(d, ...)
+  mod = solitude::isolationForest$new(sample_size =sample.size, ...)
+  mod$fit(d)
   p = data.frame(x = x)
-  score = predict(mod, na.omit(p), type = "anomaly_score")
+  score = mod$predict(na.omit(p))$anomaly_score
   p["score"] = NA_real_
   p[!is.na(p$x), "score"] = score
-  case_when(
-    is.na(x) ~ NA_character_,
-    p$score > threshold[2] ~ "extreme outlier",
-    p$score > threshold[1] ~ "mild outlier",
-    TRUE ~ "not outlier"
-  )
+  if (return.score) {
+    p$score
+  } else {
+    case_when(
+      is.na(x) ~ NA_character_,
+      p$score > threshold[2] ~ "extreme outlier",
+      p$score > threshold[1] ~ "mild outlier",
+      TRUE ~ "not outlier"
+    )
+  }
 }
 
 
@@ -194,19 +223,23 @@ iforest_outliers = function(x, mask = !is.na(x), threshold = c(0.8, 0.9), ...) {
 #'
 #' @importFrom dplyr if_else between case_when
 #' @export
-lof_outliers = function(x, mask = !is.na(x), threshold = c(1.5, 2), ...) {
+lof_outliers = function(x, mask = !is.na(x), threshold = c(1.5, 2), return.score = FALSE, ...) {
   if (!requireNamespace("dbscan"))
     stop("Could not find package \"dbscan\"")
   xx = as.matrix(x[mask])
   lof.omit = dbscan::lof(xx, ...)
   score = rep(NA, length(x))
   score[mask] = lof.omit
-  case_when(
-    is.na(x) ~ NA_character_,
-    score > threshold[2] ~ "extreme outlier",
-    score > threshold[1] ~ "mild outlier",
-    TRUE ~ "not outlier"
-  )
+  if (return.score) {
+    score
+  } else {
+    case_when(
+      is.na(x) ~ NA_character_,
+      score > threshold[2] ~ "extreme outlier",
+      score > threshold[1] ~ "mild outlier",
+      TRUE ~ "not outlier"
+    )
+  }
 }
 
 

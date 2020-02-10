@@ -4,7 +4,12 @@
 \alias{tukey_outliers}
 \title{Tukey's test for outliers}
 \usage{
-tukey_outliers(x, mask = !is.na(x), threshold = c(1.5, 3))
+tukey_outliers(
+  x,
+  mask = !is.na(x),
+  threshold = c(1.5, 3),
+  return.score = FALSE
+)
 }
 \arguments{
 \item{x}{A vector of data.}
@@ -16,10 +21,14 @@ remove NA values.}
 
 \item{threshold}{A length-two vector identifying
 thresholds for "mild" and "extreme" outliers.}
+
+\item{return.score}{if \code{TRUE}, return the numeric outlier score.
+If FALSE, return a label classifying the observations as one of
+"not outlier", "mild outlier", or "extreme outlier".}
 }
 \value{
-A  vector the same length as \code{x} containing labels
-"not outlier", "mild outlier", or "extreme outlier".
+A  vector the same length as \code{x} containing numeric
+scores or character labels.
 }
 \description{
 Perform Tukey's test for mild and extreme outliers.

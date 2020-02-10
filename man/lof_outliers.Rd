@@ -4,7 +4,13 @@
 \alias{lof_outliers}
 \title{LOF outlier detection}
 \usage{
-lof_outliers(x, mask = !is.na(x), threshold = c(1.5, 2), ...)
+lof_outliers(
+  x,
+  mask = !is.na(x),
+  threshold = c(1.5, 2),
+  return.score = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{A vector of data.}
@@ -16,6 +22,10 @@ remove NA values.}
 
 \item{threshold}{A length-two vector identifying
 thresholds for "mild" and "extreme" outliers.}
+
+\item{return.score}{if \code{TRUE}, return the numeric outlier score.
+If FALSE, return a label classifying the observations as one of
+"not outlier", "mild outlier", or "extreme outlier".}
 
 \item{...}{Additional arguments to \code{dbscan::lof}, namely
 \code{k}.}

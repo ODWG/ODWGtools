@@ -4,7 +4,12 @@
 \alias{zscore_outliers}
 \title{Z-score test for outliers}
 \usage{
-zscore_outliers(x, mask = !is.na(x), threshold = c(0.9, 0.95))
+zscore_outliers(
+  x,
+  mask = !is.na(x),
+  threshold = c(0.9, 0.95),
+  return.score = FALSE
+)
 }
 \arguments{
 \item{x}{A vector of data.}
@@ -16,6 +21,10 @@ remove NA values.}
 
 \item{threshold}{A length-two vector identifying
 thresholds for "mild" and "extreme" outliers.}
+
+\item{return.score}{if \code{TRUE}, return the numeric outlier score.
+If FALSE, return a label classifying the observations as one of
+"not outlier", "mild outlier", or "extreme outlier".}
 }
 \description{
 Performs a Z-score test for outliers.

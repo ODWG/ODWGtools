@@ -4,7 +4,14 @@
 \alias{iforest_outliers}
 \title{Isolation Forest outlier detection}
 \usage{
-iforest_outliers(x, mask = !is.na(x), threshold = c(0.8, 0.9), ...)
+iforest_outliers(
+  x,
+  mask = !is.na(x),
+  sample.size = length(mask),
+  threshold = c(0.8, 0.9),
+  return.score = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{A vector of data.}
@@ -16,6 +23,10 @@ remove NA values.}
 
 \item{threshold}{A length-two vector identifying
 thresholds for "mild" and "extreme" outliers.}
+
+\item{return.score}{if \code{TRUE}, return the numeric outlier score.
+If FALSE, return a label classifying the observations as one of
+"not outlier", "mild outlier", or "extreme outlier".}
 
 \item{...}{Additional arguments to \code{ranger::ranger} (used by
 \code{solitude::isolationForest}).}
