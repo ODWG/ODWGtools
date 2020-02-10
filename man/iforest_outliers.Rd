@@ -7,7 +7,6 @@
 iforest_outliers(
   x,
   mask = !is.na(x),
-  sample.size = length(mask),
   threshold = c(0.8, 0.9),
   return.score = FALSE,
   ...
@@ -19,7 +18,7 @@ iforest_outliers(
 \item{mask}{A logical mask that identifies a subgroup of \code{x}
 to compute non-parametric statistics on. Useful when a subset
 of quality-assured data is available. Default action is to
-remove NA values.}
+ignore NA values.}
 
 \item{threshold}{A length-two vector identifying
 thresholds for "mild" and "extreme" outliers.}
@@ -28,8 +27,9 @@ thresholds for "mild" and "extreme" outliers.}
 If FALSE, return a label classifying the observations as one of
 "not outlier", "mild outlier", or "extreme outlier".}
 
-\item{...}{Additional arguments to \code{ranger::ranger} (used by
-\code{solitude::isolationForest}).}
+\item{...}{Additional arguments to \code{solitude::isolationForest$new()}.
+note that the argument \code{sample_size} will be overwritten to use the
+number of unmasked data points, i.e. \code{length(which(mask))}.}
 }
 \description{
 Performs outlier detection using an Isolation Forest.

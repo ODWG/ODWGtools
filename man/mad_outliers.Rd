@@ -12,7 +12,7 @@ mad_outliers(x, mask = !is.na(x), threshold = c(1.5, 3), return.score = FALSE)
 \item{mask}{A logical mask that identifies a subgroup of \code{x}
 to compute non-parametric statistics on. Useful when a subset
 of quality-assured data is available. Default action is to
-remove NA values.}
+ignore NA values.}
 
 \item{threshold}{A length-two vector identifying
 thresholds for "mild" and "extreme" outliers.}

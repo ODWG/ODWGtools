@@ -6,7 +6,7 @@
 #' @param mask A logical mask that identifies a subgroup of `x`
 #'  to compute non-parametric statistics on. Useful when a subset
 #'  of quality-assured data is available. Default action is to
-#'  remove NA values.
+#'  ignore NA values.
 #' @param threshold A length-two vector identifying
 #'  thresholds for "mild" and "extreme" outliers.
 #' @param return.score if `TRUE`, return the numeric outlier score.
@@ -174,8 +174,9 @@ mad_outliers = function(x, mask = !is.na(x), threshold = c(1.5, 3), return.score
 #' Performs outlier detection using an Isolation Forest.
 #'
 #' @inheritParams zscore_outliers
-#' @param ... Additional arguments to `ranger::ranger` (used by
-#'   `solitude::isolationForest`).
+#' @param ... Additional arguments to `solitude::isolationForest$new()`.
+#'   note that the argument `sample_size` will be overwritten to use the
+#'   number of unmasked data points, i.e. `length(which(mask))`.
 #'
 #' @details the values of `threshold` identify mild and extreme\
 #'   outliers based on the Isolation Forest score in the range `[0,1]`.
@@ -185,11 +186,11 @@ mad_outliers = function(x, mask = !is.na(x), threshold = c(1.5, 3), return.score
 #' @importFrom dplyr if_else between case_when
 #' @importFrom stats predict na.omit
 #' @export
-iforest_outliers = function(x, mask = !is.na(x), sample.size = length(mask), threshold = c(0.8, 0.9), return.score = FALSE, ...) {
+iforest_outliers = function(x, mask = !is.na(x), threshold = c(0.8, 0.9), return.score = FALSE, ...) {
   if (!requireNamespace("solitude"))
     stop("Could not find package \"solitude\"")
   d = data.frame(x = x[mask])
-  mod = solitude::isolationForest$new(sample_size =sample.size, ...)
+  mod = solitude::isolationForest$new(sample_size = nrow(d), ...)
   mod$fit(d)
   p = data.frame(x = x)
   score = mod$predict(na.omit(p))$anomaly_score
