@@ -122,12 +122,11 @@ spike_test = function(x, spike.threshold) {
 #' fake.data = c(rnorm(10,10), rnorm(10, 50), rnorm(10,10))
 #' rate_test(fake.data, 2, 5)
 #'
-#' @importFrom RcppRoll roll_sdr
+#' @importFrom slider slide_dbl
 #' @importFrom dplyr lag case_when
 #' @export
 rate_test = function(x, n.dev, n.prior) {
-  xsd = roll_sdr(x, n.prior + 1L, partial = FALSE,
-    fill = NA, normalize = FALSE)
+  xsd = slide_dbl(x, sd, .before = n.prior, .complete = TRUE)
   case_when(
     is.na(xsd) | is.na(x) ~ NA_integer_,
     abs(x - lag(x)) > n.dev * xsd ~ 3L,
@@ -138,7 +137,7 @@ rate_test = function(x, n.dev, n.prior) {
 
 #' Flat line test
 #' 
-#' Perform a flat line test. See 
+#' Perform a flat line test. See
 #' https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
 #' for more information.
 #'
