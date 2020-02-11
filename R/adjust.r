@@ -1,24 +1,24 @@
 #' Adjust for Known Drift
 #'
 #' Adjust a regular time series for a known drift over a
-#' known period. The drift is assumed to increase linearly 
+#' known period. The drift is assumed to increase linearly
 #' in time from 0 at the beginning of the time series to
 #' the specified drift value at the end of the time series.
 #'
 #' @inheritParams gapfill_kalman
 #' @param mask A logical mask that identifies a subgroup of `x`
-#'   to correct for drift. Values outside the subgroup are ignored. 
-#'   If no mask is specified, 
+#'   to correct for drift. Values outside the subgroup are ignored.
+#'   If no mask is specified,
 #'   no overall trend is assumed.
 #' @param drift The drift value to correct for. The drift
 #'   is assumed to occur at the last element of the masked vector
-#'   `x` and linearly shrink to zero at the first element of 
+#'   `x` and linearly shrink to zero at the first element of
 #'   the masked vector `x`.
 #' @return The vector `x` with corrected values for the subgroup
 #'   specified by `mask`.
 #'
-#' @details This function assumes that `mask` specifies a 
-#'   contiguous block, and that the time series values are 
+#' @details This function assumes that `mask` specifies a
+#'   contiguous block, and that the time series values are
 #'   equally spaced. No consideration is given to noncontiguous
 #'   masks or unequal-interval time series.
 #'
@@ -54,7 +54,7 @@ adjust_known = function(x, mask, drift) {
 #' @inheritParams gapfill_kalman
 #' @param mask A logical mask that identifies a subgroup of `x`
 #'   to correct for drift. Values outside the subgroup are used to
-#'   determine the overall linear trend. If no mask is specified, 
+#'   determine the overall linear trend. If no mask is specified,
 #'   no overall trend is assumed.
 #' @return The vector `x` with corrected values for the subgroup
 #'   specified by `mask`.

@@ -21,13 +21,13 @@ devtools::install_github('mkoohafkan/wqptools')
 ```
 devtools::load_all('path/to/repository/folder')
 # also install dependencies
-install.packages("dplyr")
+install.packages(c("dplyr", "purrr", "lubridate", "slider"))
 ```
 
 3. Install optional dependencies and helper packages:
 
 - package `dbscan`: `install.packages('dbscan')`
-- package `isofor`: devtools::install_github('Zelazny7/isofor')
+- package `solitude`: install.packages('solitude')
 
 4. Play!
 

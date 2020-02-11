@@ -1,18 +1,18 @@
 #' Gap Test
-#' 
-#' Perform a data gap test. See 
+#'
+#' Perform a data gap test. See
 #' https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
 #' for more information.
 #'
 #' @param x A vector of timestamps.
-#' @param increment A character string defining the expected time 
-#'  increment. this consists of two parts: a numeric value defining 
-#'  the size of the increment, and the units of the increment. 
+#' @param increment A character string defining the expected time
+#'  increment. this consists of two parts: a numeric value defining
+#'  the size of the increment, and the units of the increment.
 #'  Acceptable units are "secs", "mins", "hours", "days", or "weeks".
-#' @param condition A character string specifying the required 
-#'   condition. "is" specifies that the interval between observations 
-#'   must be exactly the supplied increment. "less than" or 
-#'   "greater than" specify that the interval must be at most or at 
+#' @param condition A character string specifying the required
+#'   condition. "is" specifies that the interval between observations
+#'   must be exactly the supplied increment. "less than" or
+#'   "greater than" specify that the interval must be at most or at
 #'   least the specified increment, respectively.
 #' @return An integer vector of test flags.
 #'
@@ -20,18 +20,18 @@
 #' # Application to 15-minute data:
 #' fake.timestamps = c(
 #'   seq(as.POSIXct("2018-01-01"), by = "15 mins", length.out = 5),
-#'   rep(as.POSIXct("2018-01-01 01:00:00"), 3), 
+#'   rep(as.POSIXct("2018-01-01 01:00:00"), 3),
 #'   as.POSIXct("2018-01-01 04:00:00")
 #' )
 #' gap_test(fake.timestamps, "16 mins", "less than")
 #' gap_test(fake.timestamps, "15 mins", "is")
 #'
 #' @importFrom dplyr near case_when
-#' @export 
-gap_test = function(x, increment, condition = c("is", "less than", 
+#' @export
+gap_test = function(x, increment, condition = c("is", "less than",
   "greater than")) {
-  if (!any(class(x) %in% c("Date", 'POSIXt')))
-    stop('argument "x" must be of class "Date" or "POSIXt"')
+  if (!any(class(x) %in% c("Date", "POSIXt")))
+    stop("argument \"x\" must be of class \"Date\" or \"POSIXt\"")
   condition = match.arg(condition, c("is", "less than", "greater than"))
 
   increment = string_to_difftime(increment)
@@ -50,14 +50,14 @@ gap_test = function(x, increment, condition = c("is", "less than",
 
 
 #' Range Test
-#' 
-#' Perform a range test. See 
+#'
+#' Perform a range test. See
 #' https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
 #' for more information.
 #'
 #' @param x A vector of values.
 #' @param sensor.range A length-2 numeric vector identifying the sensor
-#'   measurement range. 
+#'   measurement range.
 #' @param user.range A length-2 numeric vector identifying a reasonable
 #'   measurement range for the provided data `x`. Typically specific to
 #'   location and/or climate and based on expert judgment.
@@ -68,7 +68,7 @@ gap_test = function(x, increment, condition = c("is", "less than",
 #' range_test(fake.data, c(0, 25), c(7, 15))
 #'
 #' @importFrom dplyr between case_when
-#' @export 
+#' @export
 range_test = function(x, sensor.range, user.range) {
   case_when(
     is.na(x) ~ NA_integer_,
@@ -80,14 +80,14 @@ range_test = function(x, sensor.range, user.range) {
 
 
 #' Spike test
-#' 
-#' Perform a spike test. See 
+#'
+#' Perform a spike test. See
 #' https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
 #' for more information.
 #'
 #' @inheritParams range_test
 #' @param spike.threshold A length-2 numeric vector identifying reasonable
-#'   magnitudes of difference between adjacent data points. Typically 
+#'   magnitudes of difference between adjacent data points. Typically
 #'   specific to location and/or climate and based on expert judgment.
 #'
 #' @examples
@@ -107,14 +107,14 @@ spike_test = function(x, spike.threshold) {
 
 
 #' Rate test
-#' 
-#' Perform a rate of change test. See 
+#'
+#' Perform a rate of change test. See
 #' https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
 #' for more information.
 #'
 #' @inheritParams range_test
 #' @param n.dev The number of standard deviations to test against.
-#' @param n.prior the number of prior observations to use for computing 
+#' @param n.prior the number of prior observations to use for computing
 #'   the standard deviation. For example, to compute standard deviations
 #'   over the previous 25 hours from 15-minute data use `n.prior = 100`.
 #'
@@ -136,14 +136,14 @@ rate_test = function(x, n.dev, n.prior) {
 
 
 #' Flat line test
-#' 
+#'
 #' Perform a flat line test. See
 #' https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
 #' for more information.
 #'
 #' @inheritParams range_test
 #' @param rep.threshold A length-2 numeric vector identifying reasonable
-#'   magnitudes of difference between adjacent data points. Typically 
+#'   magnitudes of difference between adjacent data points. Typically
 #'   specific to location and/or climate and based on expert judgment.
 #' @param tol Numerical tolerance to flag observations as repeated values.
 #'
@@ -170,11 +170,11 @@ flat_test = function(x, rep.threshold, tol) {
 
 
 #' Multivariate test
-#' 
+#'
 #' Perform a multivariate rate of change test. This function can also be
-#'   used for the neighbor test. See 
+#'   used for the neighbor test. See
 #' https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
-#' for more information. 
+#' for more information.
 #'
 #' @inheritParams rate_test
 #' @param y A vector of coincident observations, e.g. from a separate sensor
@@ -205,4 +205,3 @@ multivariate_test = function(x, y, n.dev, n.prior) {
 attenuated_test = function(x, var.threshold, n.prior) {
 
 }
-
