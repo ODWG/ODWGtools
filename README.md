@@ -2,35 +2,48 @@
 
 [![Build Status](https://travis-ci.org/mkoohafkan/wqptools.svg)](https://travis-ci.org/mkoohafkan/wqptools)
 
-## Installation instructions
+## How to use this package
 
-1. Install the R package `devtools`:
+### Step 1: install R
 
-```
-install.packages("devtools")
-```
+This package requires R version 3.5 or higher. Visit the 
+R homepage (https://cran.r-project.org/) to get the latest
+version.
 
-2. Install the development version from Github:
+### Step 2: install the `remotes` package for R
 
-```
-devtools::install_github('mkoohafkan/wqptools')
-```
+The [`remotes`](https://cran.r-project.org/package=remotes) 
+package simplifies the process of installing R packages from 
+GitHub Repositories. To install the `remotes` package, open R 
+and execute the following command:
 
-*OR* Clone the repository on your machine and load it without installing:
-
-```
-devtools::load_all('path/to/repository/folder')
-# also install dependencies
-install.packages(c("dplyr", "purrr", "lubridate", "slider"))
+```r
+install.packages("remotes")
 ```
 
-3. Install optional dependencies and helper packages:
+### Step 3: install the `wqptools` package (this repository)
 
-- package `dbscan`: `install.packages('dbscan')`
-- package `solitude`: install.packages('solitude')
+The `wqptools` package (this repository) can be installed by
+executing the following command in R:
 
-4. Play!
+```r
+remotes::install_github("SuisunMarshBranch/wqptools")
+```
 
-- R/outliers.r - main outlier detection functions.
-- data/bld.rda - sample dataset, load with `data(bdl)`.
-- vignettes/outlier-analysis.Rmd - reproducible example of using the outlier detection functions.
+### Step 4: (optional) install additional packages
+
+While they are not strictly required, the `wqptools` package can use
+tools from some additional packages:
+
+- package `dbscan`: `install.packages("dbscan")`
+- package `solitude`: `install.packages("solitude")`
+
+
+### Step 5: load the `wqptools` package
+
+The `wqptools` package can now be used just like any other R package.
+You can load the package by executing the following R command:
+
+```r
+library(wqptools)
+```
