@@ -1,6 +1,8 @@
 # WQPtools
 
-[![Build Status](https://travis-ci.org/mkoohafkan/wqptools.svg)](https://travis-ci.org/mkoohafkan/wqptools)
+An R package for common tasks associated with the
+Water Quality Portal, including outlier detection,
+unit conversion and time series smoothing.
 
 ## How to use this package
 
