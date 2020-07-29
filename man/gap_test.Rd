@@ -32,7 +32,7 @@ for more information.
 # Application to 15-minute data:
 fake.timestamps = c(
   seq(as.POSIXct("2018-01-01"), by = "15 mins", length.out = 5),
-  rep(as.POSIXct("2018-01-01 01:00:00"), 3), 
+  rep(as.POSIXct("2018-01-01 01:00:00"), 3),
   as.POSIXct("2018-01-01 04:00:00")
 )
 gap_test(fake.timestamps, "16 mins", "less than")

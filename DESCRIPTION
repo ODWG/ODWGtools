@@ -1,5 +1,5 @@
-Package: wqptools
-Title: WQP Toolbox
+Package: ODWGtools
+Title: Outlier Detection Working Group Toolbox
 Version: 0.5.0.9000
 Authors@R: person("Michael", "Koohafkan", email = "Michael.Koohafkan@water.ca.gov", role = c("aut", "cre"))
 Description: A collection of tools for the Water Quality Portal.
@@ -24,5 +24,5 @@ License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 VignetteBuilder: knitr
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)

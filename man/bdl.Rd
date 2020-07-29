@@ -4,7 +4,9 @@
 \name{bdl}
 \alias{bdl}
 \title{Belden's Landing Historical Data}
-\format{A data frame with 384,771 rows and 3 variables.}
+\format{
+A data frame with 384,771 rows and 3 variables.
+}
 \usage{
 data(bdl)
 }

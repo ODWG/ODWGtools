@@ -1,9 +1,9 @@
-#' WQP Tools
+#' ODWG Tools
 #'
 #' An R package for common tasks associated with the
-#' Water Quality Portal.
+#' Outlier Detection Working Group.
 #'
-#' @name wqptools
+#' @name ODWGtools
 #' @docType package
 "_PACKAGE"
 

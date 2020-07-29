@@ -1,7 +1,7 @@
-# WQPtools
+# ODWGtools
 
 An R package for common tasks associated with the
-Water Quality Portal, including outlier detection,
+Outlier Detection working Group, including outlier detection,
 unit conversion and time series smoothing.
 
 ## How to use this package
@@ -23,29 +23,29 @@ and execute the following command:
 install.packages("remotes")
 ```
 
-### Step 3: install the `wqptools` package (this repository)
+### Step 3: install the `ODWGtools` package (this repository)
 
-The `wqptools` package (this repository) can be installed by
+The `ODWGtools` package (this repository) can be installed by
 executing the following command in R:
 
 ```r
-remotes::install_github("SuisunMarshBranch/wqptools")
+remotes::install_github("ODWG/ODWGtools")
 ```
 
 ### Step 4: (optional) install additional packages
 
-While they are not strictly required, the `wqptools` package can use
+While they are not strictly required, the `ODWGtools` package can use
 tools from some additional packages:
 
 - package `dbscan`: `install.packages("dbscan")`
 - package `solitude`: `install.packages("solitude")`
 
 
-### Step 5: load the `wqptools` package
+### Step 5: load the `ODWGtools` package
 
-The `wqptools` package can now be used just like any other R package.
+The `ODWGtools` package can now be used just like any other R package.
 You can load the package by executing the following R command:
 
 ```r
-library(wqptools)
+library(ODWGtools)
 ```

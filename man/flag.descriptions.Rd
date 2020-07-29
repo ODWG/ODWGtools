@@ -4,7 +4,9 @@
 \name{flag.descriptions}
 \alias{flag.descriptions}
 \title{Flag Descriptions}
-\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 9 rows and 3 columns.}
+\format{
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 9 rows and 3 columns.
+}
 \usage{
 flag.descriptions
 }
