@@ -1,5 +1,9 @@
 # ODWGtools
 
+<!-- badges: start -->
+[![R build status](https://github.com/ODWG/ODWGtools/workflows/R-CMD-check/badge.svg)](https://github.com/ODWG/ODWGtools/actions)
+<!-- badges: end -->
+
 An R package for common tasks associated with the
 Outlier Detection working Group, including outlier detection,
 unit conversion and time series smoothing.
