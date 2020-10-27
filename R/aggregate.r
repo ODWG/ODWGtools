@@ -173,6 +173,7 @@ aggregate_flags = function(flags) {
 #' @param flags A subset of flag values to return.
 #'
 #' @importFrom dplyr filter
+#' @importFrom rlang .data
 #' @export
 flag_descriptions = function(flags) {
   if (!missing(flags))
