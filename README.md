@@ -8,6 +8,8 @@ An R package for common tasks associated with the
 Outlier Detection working Group, including outlier detection,
 unit conversion and time series smoothing.
 
+Browse the documentation at [odwg.github.io/ODWGtools](https://odwg.github.io/ODWGtools/)
+
 ## How to use this package
 
 ### Step 1: install R
