@@ -36,3 +36,4 @@ vignettes/*.pdf
 rsconnect/
 /.vs/wqptools/v15
 /.vs
+docs

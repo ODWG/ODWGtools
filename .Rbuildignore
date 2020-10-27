@@ -15,3 +15,6 @@ inst/*\.pdf$
 ^_internal_data.r$
 ^flag_descriptions.xlsx$
 ^\.github$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
