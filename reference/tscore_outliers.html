@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="t-score test for outliers — tscore_outliers" />
-<meta property="og:description" content="Performs a t-test for outliers." />
+<meta property="og:description" content="Performs a t-score test for outliers." />
 
 
 
@@ -121,7 +121,7 @@
     </div>
 
     <div class="ref-description">
-    <p>Performs a t-test for outliers.</p>
+    <p>Performs a t-score test for outliers.</p>
     </div>
 
     <pre class="usage"><span class='fu'>tscore_outliers</span><span class='op'>(</span>
@@ -153,18 +153,164 @@ thresholds for "mild" and "extreme" outliers.</p></td>
     <tr>
       <th>return.score</th>
       <td><p>if <code>TRUE</code>, return the numeric outlier score.
-If FALSE, return a label classifying the observations as one of
-"not outlier", "mild outlier", or "extreme outlier".</p></td>
+If FALSE, return an ordered factor classifying the observations as one of
+"not outlier" (1), "mild outlier" (2), or "extreme outlier" (3).</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>the values of <code>threshold</code> identify the quantiles of the
-t distribution used to identify mild and extreme outliers.
+    <p>The values of <code>threshold</code> identify the quantiles of the
+t-distribution used to identify mild and extreme outliers.
 Default values are 0.9 for "mild" outliers and 0.95 for "extreme"
 outliers.</p>
+<p>The t-score is equivalent to the z-score for sample
+sizes greater than 30.</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='va'>x</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>34</span>, by <span class='op'>=</span> <span class='fl'>0.25</span><span class='op'>)</span><span class='op'>*</span><span class='va'>pi</span>     
+<span class='va'>noise</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Lognormal.html'>rlnorm</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, meanlog <span class='op'>=</span> <span class='fl'>1</span>, sdlog <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
+<span class='va'>y</span><span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/Trig.html'>sin</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>+</span> <span class='va'>noise</span>
+<span class='va'>mask</span> <span class='op'>=</span> <span class='va'>noise</span> <span class='op'>&lt;</span> <span class='fl'>1</span>
+
+<span class='fu'>tscore_outliers</span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   [1] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;   [5] extreme outlier extreme outlier not outlier     extreme outlier
+#&gt;   [9] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [13] extreme outlier not outlier     extreme outlier extreme outlier
+#&gt;  [17] extreme outlier extreme outlier mild outlier    extreme outlier
+#&gt;  [21] extreme outlier not outlier     extreme outlier extreme outlier
+#&gt;  [25] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [29] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [33] extreme outlier extreme outlier mild outlier    extreme outlier
+#&gt;  [37] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [41] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [45] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [49] extreme outlier extreme outlier mild outlier    extreme outlier
+#&gt;  [53] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [57] extreme outlier extreme outlier extreme outlier not outlier    
+#&gt;  [61] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [65] extreme outlier mild outlier    extreme outlier extreme outlier
+#&gt;  [69] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [73] extreme outlier mild outlier    extreme outlier extreme outlier
+#&gt;  [77] extreme outlier mild outlier    extreme outlier extreme outlier
+#&gt;  [81] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [85] extreme outlier extreme outlier extreme outlier not outlier    
+#&gt;  [89] not outlier     not outlier     extreme outlier not outlier    
+#&gt;  [93] not outlier     extreme outlier extreme outlier extreme outlier
+#&gt;  [97] not outlier     extreme outlier mild outlier    extreme outlier
+#&gt; [101] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt; [105] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt; [109] extreme outlier extreme outlier not outlier     extreme outlier
+#&gt; [113] mild outlier    extreme outlier extreme outlier extreme outlier
+#&gt; [117] extreme outlier extreme outlier extreme outlier not outlier    
+#&gt; [121] not outlier     extreme outlier extreme outlier extreme outlier
+#&gt; [125] not outlier     extreme outlier extreme outlier extreme outlier
+#&gt; [129] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt; [133] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt; [137] extreme outlier
+#&gt; Levels: not outlier &lt; mild outlier &lt; extreme outlier</div><div class='input'><span class='fu'>tscore_outliers</span><span class='op'>(</span><span class='va'>y</span>, <span class='va'>mask</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   [1] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;   [5] not outlier     extreme outlier extreme outlier extreme outlier
+#&gt;   [9] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [13] extreme outlier extreme outlier extreme outlier not outlier    
+#&gt;  [17] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [21] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [25] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [29] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [33] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [37] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [41] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [45] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [49] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [53] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [57] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [61] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [65] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [69] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [73] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [77] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [81] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [85] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [89] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [93] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [97] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt; [101] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt; [105] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt; [109] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt; [113] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt; [117] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt; [121] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt; [125] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt; [129] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt; [133] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt; [137] extreme outlier
+#&gt; Levels: not outlier &lt; mild outlier &lt; extreme outlier</div><div class='input'><span class='fu'>tscore_outliers</span><span class='op'>(</span><span class='va'>y</span>, <span class='va'>mask</span>, threshold <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.8</span>, <span class='fl'>0.9</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   [1] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;   [5] mild outlier    extreme outlier extreme outlier extreme outlier
+#&gt;   [9] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [13] extreme outlier extreme outlier extreme outlier not outlier    
+#&gt;  [17] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [21] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [25] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [29] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [33] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [37] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [41] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [45] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [49] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [53] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [57] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [61] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [65] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [69] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [73] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [77] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [81] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [85] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [89] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [93] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [97] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt; [101] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt; [105] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt; [109] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt; [113] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt; [117] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt; [121] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt; [125] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt; [129] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt; [133] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt; [137] extreme outlier
+#&gt; Levels: not outlier &lt; mild outlier &lt; extreme outlier</div><div class='input'><span class='fu'>tscore_outliers</span><span class='op'>(</span><span class='va'>y</span>, return.score <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   [1]  -1.90996478  -2.09407011  -2.11911200  -2.12549693  -2.13519531
+#&gt;   [6]  -2.09890322  -0.87455058  -2.00705067  32.15354575  -2.07463223
+#&gt;  [11]  -2.12687642  -2.12039225  -2.12871361  -0.69050462  -2.15417941
+#&gt;  [16]  -2.13573383  -2.10547049  -2.13097948  -1.58594414  -2.13056988
+#&gt;  [21]  -1.99800481   0.13238197  -2.11925967  -2.12349860  -2.05784031
+#&gt;  [26]  -2.03774609  -2.10534774  -1.93010589  -2.11934108  -2.14723150
+#&gt;  [31]  -2.15427446  -1.97848424   5.09565607  -1.90936466  -1.33540608
+#&gt;  [36]  -2.07702191  -2.13928210  -2.14929578  -2.14689579  -2.14565367
+#&gt;  [41]  -2.12033833   3.73750980  -2.12528328  -2.10753320  -2.10814698
+#&gt;  [46]  -2.14836421  -2.02388050  -2.09773802  -2.09535339  -2.12863122
+#&gt;  [51]  -1.56700356  -2.12758473  -1.86250472  -2.09079806  -2.09940432
+#&gt;  [56]  -2.15013181  -2.07197589  -2.12665361  -2.01603348   0.36109703
+#&gt;  [61]  -2.02609906  -2.15016692  -2.12244980  -1.97527587  -1.94564755
+#&gt;  [66]  -1.62461127  -1.83491216  -2.10800057  -2.14058117  -2.14883953
+#&gt;  [71]  -1.70226216  -1.91870049  -2.11477900  -1.51500909  -2.12487358
+#&gt;  [76]  -2.05043919  -2.13346011  -1.53959715  -2.14707740  -2.14086241
+#&gt;  [81]  -2.13072441  -2.12510684  -1.98596762  -1.97156911  -1.95013449
+#&gt;  [86]  -2.15047004  -2.05944788   0.37982668   0.19297155  -1.22860890
+#&gt;  [91]  -1.87723745  -1.15968985   0.05273015  -2.03932978  22.97761446
+#&gt;  [96]  -2.09361078   0.18743938  -2.12242756   1.61968103  -2.12025434
+#&gt; [101]  -2.13289503  -1.66962690  -2.05230379  -2.14739517  -2.12130985
+#&gt; [106]  -2.13064459  -2.05151285  -2.08986426  -2.03108954   2.52336222
+#&gt; [111]   0.57921194  -2.14832991  -1.35158453  -2.08903331  -2.12676948
+#&gt; [116]  -2.12896688  -2.12190340  -2.14849646 118.53629407   0.29266158
+#&gt; [121]   0.07665938  -2.11848460  -2.12420455  -2.12280776  -0.70708958
+#&gt; [126]  -1.97898091  -2.15447770  -2.10899167  -1.65677240  -1.78253742
+#&gt; [131]  -1.92756597  -2.13012305  -2.12066808  -2.01678479  -2.14635050
+#&gt; [136]  -2.14452361  49.85142262</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

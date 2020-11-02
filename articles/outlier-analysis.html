@@ -76,7 +76,7 @@
       <h1 data-toc-skip>Outlier Detection</h1>
                         <h4 class="author">Michael Koohafkan</h4>
             
-            <h4 class="date">2020-10-27</h4>
+            <h4 class="date">2020-11-02</h4>
       
       
       <div class="hidden name"><code>outlier-analysis.rmd</code></div>
@@ -118,26 +118,24 @@
 <span class="va">bdl.none</span> <span class="op">=</span> <span class="va">bdl</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
     tukey <span class="op">=</span> <span class="fu"><a href="../reference/tukey_outliers.html">tukey_outliers</a></span><span class="op">(</span><span class="va">VALUE</span>, <span class="va">QAQC_FLAG</span> <span class="op">==</span> <span class="st">"G"</span><span class="op">)</span>,
-    zscore <span class="op">=</span> <span class="fu"><a href="../reference/zscore_outliers.html">zscore_outliers</a></span><span class="op">(</span><span class="va">VALUE</span>, <span class="va">QAQC_FLAG</span> <span class="op">==</span> <span class="st">"G"</span><span class="op">)</span>,
     tscore <span class="op">=</span> <span class="fu"><a href="../reference/tscore_outliers.html">tscore_outliers</a></span><span class="op">(</span><span class="va">VALUE</span>, <span class="va">QAQC_FLAG</span> <span class="op">==</span> <span class="st">"G"</span><span class="op">)</span>,
     chisq <span class="op">=</span> <span class="fu"><a href="../reference/chisq_outliers.html">chisq_outliers</a></span><span class="op">(</span><span class="va">VALUE</span>, <span class="va">QAQC_FLAG</span> <span class="op">==</span> <span class="st">"G"</span><span class="op">)</span>,
     mad <span class="op">=</span> <span class="fu"><a href="../reference/mad_outliers.html">mad_outliers</a></span><span class="op">(</span><span class="va">VALUE</span>, <span class="va">QAQC_FLAG</span> <span class="op">==</span> <span class="st">"G"</span><span class="op">)</span>,
 <span class="co">#    isofor = isofor_outliers(VALUE, QAQC_FLAG == "G"),</span>
 <span class="co">#    lof = lof_outliers(VALUE, QAQC_FLAG == "G")</span>
   <span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">MONTH</span>, <span class="op">-</span> <span class="va">YEAR</span>, <span class="op">-</span> <span class="va">DAYMON</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
     extreme.outlier.score <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map2.html">pmap</a></span><span class="op">(</span>
-      <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">zscore</span>, <span class="va">tscore</span>, <span class="va">chisq</span>, <span class="va">mad</span><span class="op">)</span>,
+      <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">tscore</span>, <span class="va">chisq</span>, <span class="va">mad</span><span class="op">)</span>,
       <span class="kw">function</span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="op">%in%</span> <span class="st">"extreme outlier"</span><span class="op">)</span>
     <span class="op">)</span>,
     mild.outlier.score <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map2.html">pmap</a></span><span class="op">(</span>
-      <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">zscore</span>, <span class="va">tscore</span>, <span class="va">chisq</span>, <span class="va">mad</span><span class="op">)</span>,
+      <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">tscore</span>, <span class="va">chisq</span>, <span class="va">mad</span><span class="op">)</span>,
       <span class="kw">function</span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"mild outlier"</span>, <span class="st">"extreme outlier"</span><span class="op">)</span><span class="op">)</span>
     <span class="op">)</span>,
     not.outlier.score <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map2.html">pmap</a></span><span class="op">(</span>
-      <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">zscore</span>, <span class="va">tscore</span>, <span class="va">chisq</span>, <span class="va">mad</span><span class="op">)</span>,
+      <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">tscore</span>, <span class="va">chisq</span>, <span class="va">mad</span><span class="op">)</span>,
       <span class="kw">function</span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"not outlier"</span><span class="op">)</span><span class="op">)</span>
     <span class="op">)</span>
   <span class="op">)</span></pre></div>
@@ -151,7 +149,6 @@
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">YEAR</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
     tukey <span class="op">=</span> <span class="fu"><a href="../reference/tukey_outliers.html">tukey_outliers</a></span><span class="op">(</span><span class="va">VALUE</span>, <span class="va">QAQC_FLAG</span> <span class="op">==</span> <span class="st">"G"</span><span class="op">)</span>,
-    zscore <span class="op">=</span> <span class="fu"><a href="../reference/zscore_outliers.html">zscore_outliers</a></span><span class="op">(</span><span class="va">VALUE</span>, <span class="va">QAQC_FLAG</span> <span class="op">==</span> <span class="st">"G"</span><span class="op">)</span>,
     tscore <span class="op">=</span> <span class="fu"><a href="../reference/tscore_outliers.html">tscore_outliers</a></span><span class="op">(</span><span class="va">VALUE</span>, <span class="va">QAQC_FLAG</span> <span class="op">==</span> <span class="st">"G"</span><span class="op">)</span>,
     chisq <span class="op">=</span> <span class="fu"><a href="../reference/chisq_outliers.html">chisq_outliers</a></span><span class="op">(</span><span class="va">VALUE</span>, <span class="va">QAQC_FLAG</span> <span class="op">==</span> <span class="st">"G"</span><span class="op">)</span>,
     mad <span class="op">=</span> <span class="fu"><a href="../reference/mad_outliers.html">mad_outliers</a></span><span class="op">(</span><span class="va">VALUE</span>, <span class="va">QAQC_FLAG</span> <span class="op">==</span> <span class="st">"G"</span><span class="op">)</span>,
@@ -162,15 +159,15 @@
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">MONTH</span>, <span class="op">-</span> <span class="va">DAYMON</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
     extreme.outlier.score <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map2.html">pmap</a></span><span class="op">(</span>
-      <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">zscore</span>, <span class="va">tscore</span>, <span class="va">chisq</span>, <span class="va">mad</span><span class="op">)</span>,
+      <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">tscore</span>, <span class="va">chisq</span>, <span class="va">mad</span><span class="op">)</span>,
       <span class="kw">function</span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="op">%in%</span> <span class="st">"extreme outlier"</span><span class="op">)</span>
     <span class="op">)</span>,
     mild.outlier.score <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map2.html">pmap</a></span><span class="op">(</span>
-      <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">zscore</span>, <span class="va">tscore</span>, <span class="va">chisq</span>, <span class="va">mad</span><span class="op">)</span>,
+      <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">tscore</span>, <span class="va">chisq</span>, <span class="va">mad</span><span class="op">)</span>,
       <span class="kw">function</span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"mild outlier"</span>, <span class="st">"extreme outlier"</span><span class="op">)</span><span class="op">)</span>
     <span class="op">)</span>,
     not.outlier.score <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map2.html">pmap</a></span><span class="op">(</span>
-      <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">zscore</span>, <span class="va">tscore</span>, <span class="va">chisq</span>, <span class="va">mad</span><span class="op">)</span>,
+      <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">tscore</span>, <span class="va">chisq</span>, <span class="va">mad</span><span class="op">)</span>,
       <span class="kw">function</span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"not outlier"</span><span class="op">)</span><span class="op">)</span>
     <span class="op">)</span>
   <span class="op">)</span></pre></div>
@@ -184,7 +181,6 @@
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">MONTH</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
     tukey <span class="op">=</span> <span class="fu"><a href="../reference/tukey_outliers.html">tukey_outliers</a></span><span class="op">(</span><span class="va">VALUE</span>, <span class="va">QAQC_FLAG</span> <span class="op">==</span><span class="st">"G"</span><span class="op">)</span>,
-    zscore <span class="op">=</span> <span class="fu"><a href="../reference/zscore_outliers.html">zscore_outliers</a></span><span class="op">(</span><span class="va">VALUE</span>, <span class="va">QAQC_FLAG</span> <span class="op">==</span> <span class="st">"G"</span><span class="op">)</span>,
     tscore <span class="op">=</span> <span class="fu"><a href="../reference/tscore_outliers.html">tscore_outliers</a></span><span class="op">(</span><span class="va">VALUE</span>, <span class="va">QAQC_FLAG</span> <span class="op">==</span> <span class="st">"G"</span><span class="op">)</span>,
     chisq <span class="op">=</span> <span class="fu"><a href="../reference/chisq_outliers.html">chisq_outliers</a></span><span class="op">(</span><span class="va">VALUE</span>, <span class="va">QAQC_FLAG</span> <span class="op">==</span> <span class="st">"G"</span><span class="op">)</span>,
     mad <span class="op">=</span> <span class="fu"><a href="../reference/mad_outliers.html">mad_outliers</a></span><span class="op">(</span><span class="va">VALUE</span>, <span class="va">QAQC_FLAG</span> <span class="op">==</span> <span class="st">"G"</span><span class="op">)</span>,
@@ -195,15 +191,15 @@
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span> <span class="va">YEAR</span>, <span class="op">-</span> <span class="va">DAYMON</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
     extreme.outlier.score <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map2.html">pmap</a></span><span class="op">(</span>
-      <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">zscore</span>, <span class="va">tscore</span>, <span class="va">chisq</span>, <span class="va">mad</span><span class="op">)</span>,
+      <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">tscore</span>, <span class="va">chisq</span>, <span class="va">mad</span><span class="op">)</span>,
       <span class="kw">function</span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="op">%in%</span> <span class="st">"extreme outlier"</span><span class="op">)</span>
     <span class="op">)</span>,
     mild.outlier.score <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map2.html">pmap</a></span><span class="op">(</span>
-      <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">zscore</span>, <span class="va">tscore</span>, <span class="va">chisq</span>, <span class="va">mad</span><span class="op">)</span>,
+      <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">tscore</span>, <span class="va">chisq</span>, <span class="va">mad</span><span class="op">)</span>,
       <span class="kw">function</span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"mild outlier"</span>, <span class="st">"extreme outlier"</span><span class="op">)</span><span class="op">)</span>
     <span class="op">)</span>,
     not.outlier.score <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map2.html">pmap</a></span><span class="op">(</span>
-      <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">zscore</span>, <span class="va">tscore</span>, <span class="va">chisq</span>, <span class="va">mad</span><span class="op">)</span>,
+      <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">tscore</span>, <span class="va">chisq</span>, <span class="va">mad</span><span class="op">)</span>,
       <span class="kw">function</span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"not outlier"</span><span class="op">)</span><span class="op">)</span>
     <span class="op">)</span>
   <span class="op">)</span></pre></div>
@@ -216,7 +212,6 @@
    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">DAYMON</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
     tukey <span class="op">=</span> <span class="fu"><a href="../reference/tukey_outliers.html">tukey_outliers</a></span><span class="op">(</span><span class="va">VALUE</span>, <span class="va">QAQC_FLAG</span> <span class="op">==</span> <span class="st">"G"</span><span class="op">)</span>,
-    zscore <span class="op">=</span> <span class="fu"><a href="../reference/zscore_outliers.html">zscore_outliers</a></span><span class="op">(</span><span class="va">VALUE</span>, <span class="va">QAQC_FLAG</span> <span class="op">==</span> <span class="st">"G"</span><span class="op">)</span>,
     tscore <span class="op">=</span> <span class="fu"><a href="../reference/tscore_outliers.html">tscore_outliers</a></span><span class="op">(</span><span class="va">VALUE</span>, <span class="va">QAQC_FLAG</span> <span class="op">==</span> <span class="st">"G"</span><span class="op">)</span>,
     chisq <span class="op">=</span> <span class="fu"><a href="../reference/chisq_outliers.html">chisq_outliers</a></span><span class="op">(</span><span class="va">VALUE</span>, <span class="va">QAQC_FLAG</span> <span class="op">==</span> <span class="st">"G"</span><span class="op">)</span>,
     mad <span class="op">=</span> <span class="fu"><a href="../reference/mad_outliers.html">mad_outliers</a></span><span class="op">(</span><span class="va">VALUE</span>, <span class="va">QAQC_FLAG</span> <span class="op">==</span> <span class="st">"G"</span><span class="op">)</span>,
@@ -227,68 +222,18 @@
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">MONTH</span>, <span class="op">-</span> <span class="va">YEAR</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
     extreme.outlier.score <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map2.html">pmap</a></span><span class="op">(</span>
-      <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">zscore</span>, <span class="va">tscore</span>, <span class="va">chisq</span>, <span class="va">mad</span><span class="op">)</span>,
+      <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">tscore</span>, <span class="va">chisq</span>, <span class="va">mad</span><span class="op">)</span>,
       <span class="kw">function</span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="op">%in%</span> <span class="st">"extreme outlier"</span><span class="op">)</span>
     <span class="op">)</span>,
     mild.outlier.score <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map2.html">pmap</a></span><span class="op">(</span>
-      <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">zscore</span>, <span class="va">tscore</span>, <span class="va">chisq</span>, <span class="va">mad</span><span class="op">)</span>,
+      <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">tscore</span>, <span class="va">chisq</span>, <span class="va">mad</span><span class="op">)</span>,
       <span class="kw">function</span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"mild outlier"</span>, <span class="st">"extreme outlier"</span><span class="op">)</span><span class="op">)</span>
     <span class="op">)</span>,
     not.outlier.score <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map2.html">pmap</a></span><span class="op">(</span>
-      <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">zscore</span>, <span class="va">tscore</span>, <span class="va">chisq</span>, <span class="va">mad</span><span class="op">)</span>,
+      <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">tscore</span>, <span class="va">chisq</span>, <span class="va">mad</span><span class="op">)</span>,
       <span class="kw">function</span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"not outlier"</span><span class="op">)</span><span class="op">)</span>
     <span class="op">)</span>
-  <span class="op">)</span>
-<span class="co">#&gt; Warning: Problem with `mutate()` input `tscore`.</span>
-<span class="co">#&gt; ℹ NaNs produced</span>
-<span class="co">#&gt; ℹ Input `tscore` is `tscore_outliers(VALUE, QAQC_FLAG == "G")`.</span>
-<span class="co">#&gt; ℹ The error occurred in group 125: DAYMON = "Jan-05".</span>
-<span class="co">#&gt; Warning in sqrt(n - 1 - temp^2): NaNs produced</span>
-<span class="co">#&gt; Warning: Problem with `mutate()` input `tscore`.</span>
-<span class="co">#&gt; ℹ NaNs produced</span>
-<span class="co">#&gt; ℹ Input `tscore` is `tscore_outliers(VALUE, QAQC_FLAG == "G")`.</span>
-<span class="co">#&gt; ℹ The error occurred in group 216: DAYMON = "Mar-04".</span>
-<span class="co">#&gt; Warning in sqrt(n - 1 - temp^2): NaNs produced</span>
-<span class="co">#&gt; Warning: Problem with `mutate()` input `tscore`.</span>
-<span class="co">#&gt; ℹ NaNs produced</span>
-<span class="co">#&gt; ℹ Input `tscore` is `tscore_outliers(VALUE, QAQC_FLAG == "G")`.</span>
-<span class="co">#&gt; ℹ The error occurred in group 217: DAYMON = "Mar-05".</span>
-<span class="co">#&gt; Warning in sqrt(n - 1 - temp^2): NaNs produced</span>
-<span class="co">#&gt; Warning: Problem with `mutate()` input `tscore`.</span>
-<span class="co">#&gt; ℹ NaNs produced</span>
-<span class="co">#&gt; ℹ Input `tscore` is `tscore_outliers(VALUE, QAQC_FLAG == "G")`.</span>
-<span class="co">#&gt; ℹ The error occurred in group 287: DAYMON = "Nov-13".</span>
-<span class="co">#&gt; Warning in sqrt(n - 1 - temp^2): NaNs produced</span>
-<span class="co">#&gt; Warning: Problem with `mutate()` input `tscore`.</span>
-<span class="co">#&gt; ℹ NaNs produced</span>
-<span class="co">#&gt; ℹ Input `tscore` is `tscore_outliers(VALUE, QAQC_FLAG == "G")`.</span>
-<span class="co">#&gt; ℹ The error occurred in group 288: DAYMON = "Nov-14".</span>
-<span class="co">#&gt; Warning in sqrt(n - 1 - temp^2): NaNs produced</span>
-<span class="co">#&gt; Warning: Problem with `mutate()` input `tscore`.</span>
-<span class="co">#&gt; ℹ NaNs produced</span>
-<span class="co">#&gt; ℹ Input `tscore` is `tscore_outliers(VALUE, QAQC_FLAG == "G")`.</span>
-<span class="co">#&gt; ℹ The error occurred in group 292: DAYMON = "Nov-18".</span>
-<span class="co">#&gt; Warning in sqrt(n - 1 - temp^2): NaNs produced</span>
-<span class="co">#&gt; Warning: Problem with `mutate()` input `tscore`.</span>
-<span class="co">#&gt; ℹ NaNs produced</span>
-<span class="co">#&gt; ℹ Input `tscore` is `tscore_outliers(VALUE, QAQC_FLAG == "G")`.</span>
-<span class="co">#&gt; ℹ The error occurred in group 295: DAYMON = "Nov-21".</span>
-<span class="co">#&gt; Warning in sqrt(n - 1 - temp^2): NaNs produced</span>
-<span class="co">#&gt; Warning: Problem with `mutate()` input `tscore`.</span>
-<span class="co">#&gt; ℹ NaNs produced</span>
-<span class="co">#&gt; ℹ Input `tscore` is `tscore_outliers(VALUE, QAQC_FLAG == "G")`.</span>
-<span class="co">#&gt; ℹ The error occurred in group 319: DAYMON = "Oct-15".</span>
-<span class="co">#&gt; Warning in sqrt(n - 1 - temp^2): NaNs produced</span>
-<span class="co">#&gt; Warning: Problem with `mutate()` input `tscore`.</span>
-<span class="co">#&gt; ℹ NaNs produced</span>
-<span class="co">#&gt; ℹ Input `tscore` is `tscore_outliers(VALUE, QAQC_FLAG == "G")`.</span>
-<span class="co">#&gt; ℹ The error occurred in group 322: DAYMON = "Oct-18".</span>
-<span class="co">#&gt; Warning in sqrt(n - 1 - temp^2): NaNs produced</span>
-<span class="co">#&gt; Warning: Problem with `mutate()` input `tscore`.</span>
-<span class="co">#&gt; ℹ NaNs produced</span>
-<span class="co">#&gt; ℹ Input `tscore` is `tscore_outliers(VALUE, QAQC_FLAG == "G")`.</span>
-<span class="co">#&gt; ℹ The error occurred in group 344: DAYMON = "Sep-09".</span>
-<span class="co">#&gt; Warning in sqrt(n - 1 - temp^2): NaNs produced</span></pre></div>
+  <span class="op">)</span></pre></div>
 </div>
 <div id="figures" class="section level1">
 <h1 class="hasAnchor">
@@ -341,6 +286,11 @@
        <span class="st">"mild outlier"</span> <span class="op">=</span> <span class="st">"#ffeda0"</span>,
        <span class="st">"extreme outlier"</span> <span class="op">=</span> <span class="st">"#fc4e2a"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Groups with fewer than two data points have been dropped.</span>
+
+<span class="co">#&gt; Warning: Groups with fewer than two data points have been dropped.</span>
+<span class="co">#&gt; Warning in max(ids, na.rm = TRUE): no non-missing arguments to max; returning -</span>
+<span class="co">#&gt; Inf</span>
+
 <span class="co">#&gt; Warning in max(ids, na.rm = TRUE): no non-missing arguments to max; returning -</span>
 <span class="co">#&gt; Inf</span></pre></div>
 <p><img src="outlier-analysis_files/figure-html/unnamed-chunk-7-3.png" width="700"></p>
@@ -395,26 +345,6 @@
 <span class="co">#&gt; Warning: Groups with fewer than two data points have been dropped.</span>
 
 <span class="co">#&gt; Warning: Groups with fewer than two data points have been dropped.</span>
-
-<span class="co">#&gt; Warning: Groups with fewer than two data points have been dropped.</span>
-
-<span class="co">#&gt; Warning: Groups with fewer than two data points have been dropped.</span>
-
-<span class="co">#&gt; Warning: Groups with fewer than two data points have been dropped.</span>
-
-<span class="co">#&gt; Warning: Groups with fewer than two data points have been dropped.</span>
-<span class="co">#&gt; Warning in max(ids, na.rm = TRUE): no non-missing arguments to max; returning -</span>
-<span class="co">#&gt; Inf</span>
-
-<span class="co">#&gt; Warning in max(ids, na.rm = TRUE): no non-missing arguments to max; returning -</span>
-<span class="co">#&gt; Inf</span>
-
-<span class="co">#&gt; Warning in max(ids, na.rm = TRUE): no non-missing arguments to max; returning -</span>
-<span class="co">#&gt; Inf</span>
-
-<span class="co">#&gt; Warning in max(ids, na.rm = TRUE): no non-missing arguments to max; returning -</span>
-<span class="co">#&gt; Inf</span>
-
 <span class="co">#&gt; Warning in max(ids, na.rm = TRUE): no non-missing arguments to max; returning -</span>
 <span class="co">#&gt; Inf</span>
 

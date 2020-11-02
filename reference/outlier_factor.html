@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Isolation Forest outlier detection — iforest_outliers • ODWGtools</title>
+<title>Outlier Factor — outlier_factor • ODWGtools</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Isolation Forest outlier detection — iforest_outliers" />
-<meta property="og:description" content="Performs outlier detection using an Isolation Forest." />
+<meta property="og:title" content="Outlier Factor — outlier_factor" />
+<meta property="og:description" content="Convert outlier labels to ordered factor." />
 
 
 
@@ -115,62 +115,29 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Isolation Forest outlier detection</h1>
+    <h1>Outlier Factor</h1>
     
-    <div class="hidden name"><code>iforest_outliers.Rd</code></div>
+    <div class="hidden name"><code>outlier_factor.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Performs outlier detection using an Isolation Forest.</p>
+    <p>Convert outlier labels to ordered factor.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>iforest_outliers</span><span class='op'>(</span>
-  <span class='va'>x</span>,
-  mask <span class='op'>=</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>,
-  threshold <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.8</span>, <span class='fl'>0.9</span><span class='op'>)</span>,
-  return.score <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  <span class='va'>...</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>outlier_factor</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A vector of data.</p></td>
-    </tr>
-    <tr>
-      <th>mask</th>
-      <td><p>A logical mask that identifies a subgroup of <code>x</code>
-to compute non-parametric statistics on. Useful when a subset
-of quality-assured data is available. Default action is to
-ignore NA values.</p></td>
-    </tr>
-    <tr>
-      <th>threshold</th>
-      <td><p>A length-two vector identifying
-thresholds for "mild" and "extreme" outliers.</p></td>
-    </tr>
-    <tr>
-      <th>return.score</th>
-      <td><p>if <code>TRUE</code>, return the numeric outlier score.
-If FALSE, return an ordered factor classifying the observations as one of
-"not outlier" (1), "mild outlier" (2), or "extreme outlier" (3).</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Additional arguments to <code>solitude::isolationForest$new()</code>.
-note that the argument <code>sample_size</code> will be overwritten to use the
-number of unmasked data points, i.e. <code><a href='https://rdrr.io/r/base/length.html'>length(which(mask))</a></code>.</p></td>
+      <td><p>A vector of character labels.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>the values of <code>threshold</code> identify mild and extreme\
-outliers based on the Isolation Forest score in the range <code>[0,1]</code>.
-Default values are 0.8 for "mild" outliers and 0.9 for "extreme"
-outliers.</p>
+    <p>A vector or ordered factors.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
