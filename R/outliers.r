@@ -1,3 +1,16 @@
+#' Outlier Factor
+#'
+#' Convert outlier labels to ordered factor.
+#'
+#' @param x A vector of character labels.
+#' @return A vector or ordered factors.
+#'
+#' @keywords internal
+outlier_factor = function(x) {
+  factor(x, c("not outlier", "mild outlier", "extreme outlier"),
+    ordered = TRUE)
+}
+
 #' Tukey's test for outliers
 #'
 #' Perform Tukey's test for mild and extreme outliers.
@@ -10,20 +23,32 @@
 #' @param threshold A length-two vector identifying
 #'  thresholds for "mild" and "extreme" outliers.
 #' @param return.score if `TRUE`, return the numeric outlier score.
-#'   If FALSE, return a label classifying the observations as one of
-#'   "not outlier", "mild outlier", or "extreme outlier".
+#'   If FALSE, return an ordered factor classifying the observations as one of
+#'   "not outlier" (1), "mild outlier" (2), or "extreme outlier" (3).
 #' @return A  vector the same length as `x` containing numeric
-#'   scores or character labels.
+#'   scores or ordered factors.
 #'
 #' @details the values of `threshold` identify the multiplier of the
 #'   interquartile range used to identify mild and extreme outliers.
 #'   typical values are 1.5 for "mild" outliers and 3.0 for "extreme"
 #'   outliers.
 #'
+#' @examples
+#' x = seq(0, 34, by = 0.25)*pi     
+#' noise = rlnorm(length(x), meanlog = 1, sdlog = 3)
+#' y=sin(x) + noise
+#' mask = noise < 1
+#'
+#' tukey_outliers(y)
+#' tukey_outliers(y, mask)
+#' tukey_outliers(y, mask, threshold = c(2, 5))
+#' tukey_outliers(y, return.score = TRUE)
+#'
 #' @importFrom dplyr if_else between case_when
 #' @importFrom stats quantile
 #' @export
-tukey_outliers = function(x, mask = !is.na(x), threshold = c(1.5, 3), return.score = FALSE) {
+tukey_outliers = function(x, mask = !is.na(x),
+  threshold = c(1.5, 3), return.score = FALSE) {
   lowerq = quantile(x[mask])[2]
   upperq = quantile(x[mask])[4]
   iqr = upperq - lowerq
@@ -31,72 +56,57 @@ tukey_outliers = function(x, mask = !is.na(x), threshold = c(1.5, 3), return.sco
   if (return.score) {
     score
   } else {
-    case_when(
+    outlier_factor(case_when(
       is.na(x) ~ NA_character_,
       score > threshold[2] ~ "extreme outlier",
       score > threshold[1] ~ "mild outlier",
       TRUE ~ "not outlier"
-    )
-  }
-}
-
-
-#' Z-score test for outliers
-#'
-#' Performs a Z-score test for outliers.
-#'
-#' @inheritParams tukey_outliers
-#'
-#' @details the values of `threshold` identify the quantiles of the
-#'   normal distribution used to identify mild and extreme outliers.
-#'   Default values are 0.9 for "mild" outliers and 0.95 for "extreme"
-#'   outliers.
-#'
-#' @importFrom dplyr if_else between case_when
-#' @importFrom stats qnorm sd
-#' @export
-zscore_outliers = function(x, mask = !is.na(x), threshold = c(0.9, 0.95), return.score = FALSE) {
-  score = (x - mean(x[mask])) / sd(x[mask])
-  if (return.score) {
-    score
-  } else {
-    case_when(
-      is.na(x) ~ NA_character_,
-      abs(score) > qnorm(threshold[2]) ~ "extreme outlier",
-      abs(score) > qnorm(threshold[1]) ~ "mild outlier",
-      TRUE ~ "not outlier"
-    )
+    ))
   }
 }
 
 
 #' t-score test for outliers
 #'
-#' Performs a t-test for outliers.
+#' Performs a t-score test for outliers.
 #'
-#' @inheritParams zscore_outliers
+#' @inheritParams tukey_outliers
 #'
-#' @details the values of `threshold` identify the quantiles of the
-#'   t distribution used to identify mild and extreme outliers.
+#' @details The values of `threshold` identify the quantiles of the
+#'   t-distribution used to identify mild and extreme outliers.
 #'   Default values are 0.9 for "mild" outliers and 0.95 for "extreme"
 #'   outliers.
 #'
+#'   The t-score is equivalent to the z-score for sample
+#'   sizes greater than 30.
+#'
+#' @examples
+#' x = seq(0, 34, by = 0.25)*pi     
+#' noise = rlnorm(length(x), meanlog = 1, sdlog = 3)
+#' y=sin(x) + noise
+#' mask = noise < 1
+#'
+#' tscore_outliers(y)
+#' tscore_outliers(y, mask)
+#' tscore_outliers(y, mask, threshold = c(0.8, 0.9))
+#' tscore_outliers(y, return.score = TRUE)
+#'
 #' @importFrom dplyr if_else between case_when
-#' @importFrom stats qt sd
+#' @importFrom stats qnorm sd
 #' @export
-tscore_outliers = function(x, mask = !is.na(x), threshold = c(0.9, 0.95), return.score = FALSE) {
+tscore_outliers = function(x, mask = !is.na(x), 
+  threshold = c(0.9, 0.95), return.score = FALSE) {
   n = length(x)
-  temp = (x - mean(x[mask])) / sd(x[mask])
-  score = (temp * sqrt(n - 2)) / sqrt(n - 1 - temp ^ 2)
+  score = (x - mean(x[mask])) / (sd(x[mask]) / sqrt(x))
   if (return.score) {
     score
   } else {
-    case_when(
+    outlier_factor(case_when(
       is.na(x) ~ NA_character_,
-      abs(score) > qt(threshold[2], n - 2) ~ "extreme outlier",
-      abs(score) > qt(threshold[1], n - 2) ~ "mild outlier",
+      abs(score) > qt(threshold[2], n - 1) ~ "extreme outlier",
+      abs(score) > qt(threshold[1], n -1) ~ "mild outlier",
       TRUE ~ "not outlier"
-    )
+    ))
   }
 }
 
@@ -105,27 +115,40 @@ tscore_outliers = function(x, mask = !is.na(x), threshold = c(0.9, 0.95), return
 #'
 #' Performs a Chi-squared test for outliers.
 #'
-#' @inheritParams zscore_outliers
+#' @inheritParams tscore_outliers
 #'
 #' @details the values of `threshold` identify the quantiles of the
 #'   Chi-squared distribution used to identify mild and extreme outliers.
 #'   Default values are 0.9 for "mild" outliers and 0.95 for "extreme"
 #'   outliers.
 #'
+#' @examples
+#' x = seq(0, 34, by = 0.25)*pi     
+#' noise = rlnorm(length(x), meanlog = 1, sdlog = 3)
+#' y=sin(x) + noise
+#' mask = noise < 1
+#'
+#' chisq_outliers(y)
+#' chisq_outliers(y, mask)
+#' chisq_outliers(y, mask, threshold = c(0.8, 0.9))
+#' chisq_outliers(y, return.score = TRUE)
+#'
 #' @importFrom dplyr if_else between case_when
 #' @importFrom stats qchisq var
 #' @export
-chisq_outliers = function(x, mask = !is.na(x), threshold = c(0.9, 0.95), return.score = FALSE) {
+chisq_outliers = function(x, mask = !is.na(x),
+  threshold = c(0.9, 0.95), return.score = FALSE) {
+  df = length(x) - 1
   score = (x - mean(x[mask])) ^ 2 / var(x[mask])
   if (return.score) {
     score
   } else {
-    case_when(
+    outlier_factor(case_when(
       is.na(x) ~ NA_character_,
-      abs(score) > qchisq(threshold[2], 1) ~ "extreme outlier",
-      abs(score) > qchisq(threshold[1], 1) ~ "mild outlier",
+      abs(score) > qchisq(threshold[2], df) ~ "extreme outlier",
+      abs(score) > qchisq(threshold[1], df) ~ "mild outlier",
       TRUE ~ "not outlier"
-    )
+    ))
   }
 }
 
@@ -134,17 +157,29 @@ chisq_outliers = function(x, mask = !is.na(x), threshold = c(0.9, 0.95), return.
 #'
 #' Performs a median absolute deviation (MAD) test for outliers.
 #'
-#' @inheritParams zscore_outliers
+#' @inheritParams tscore_outliers
 #'
 #' @details the values of `threshold` identify the multiplier of the
 #'   median distance used to identify mild and extreme outliers.
 #'   Default values are 1.5 for "mild" outliers and 3.0 for "extreme"
 #'   outliers.
 #'
+#' @examples
+#' x = seq(0, 34, by = 0.25)*pi     
+#' noise = rlnorm(length(x), meanlog = 1, sdlog = 3)
+#' y=sin(x) + noise
+#' mask = noise < 1
+#'
+#' mad_outliers(y)
+#' mad_outliers(y, mask)
+#' mad_outliers(y, mask, threshold = c(1, 2))
+#' mad_outliers(y, return.score = TRUE)
+#'
 #' @importFrom dplyr if_else between case_when
 #' @importFrom stats median
 #' @export
-mad_outliers = function(x, mask = !is.na(x), threshold = c(1.5, 3), return.score = FALSE) {
+mad_outliers = function(x, mask = !is.na(x),
+  threshold = c(1.5, 3), return.score = FALSE) {
   xx = x[mask]
   m = median(xx)
   abs.dev = abs(xx - m)
@@ -159,12 +194,12 @@ mad_outliers = function(x, mask = !is.na(x), threshold = c(1.5, 3), return.score
   if (return.score) {
     score
   } else {
-    case_when(
+    outlier_factor(case_when(
       is.na(x) ~ NA_character_,
       abs(score) > threshold[2] ~ "extreme outlier",
       abs(score) > threshold[1] ~ "mild outlier",
       TRUE ~ "not outlier"
-    )
+    ))
   }
 }
 
@@ -173,7 +208,7 @@ mad_outliers = function(x, mask = !is.na(x), threshold = c(1.5, 3), return.score
 #'
 #' Performs outlier detection using an Isolation Forest.
 #'
-#' @inheritParams zscore_outliers
+#' @inheritParams tscore_outliers
 #' @param ... Additional arguments to `solitude::isolationForest$new()`.
 #'   note that the argument `sample_size` will be overwritten to use the
 #'   number of unmasked data points, i.e. `length(which(mask))`.
@@ -186,7 +221,8 @@ mad_outliers = function(x, mask = !is.na(x), threshold = c(1.5, 3), return.score
 #' @importFrom dplyr if_else between case_when
 #' @importFrom stats predict na.omit
 #' @export
-iforest_outliers = function(x, mask = !is.na(x), threshold = c(0.8, 0.9), return.score = FALSE, ...) {
+iforest_outliers = function(x, mask = !is.na(x),
+  threshold = c(0.8, 0.9), return.score = FALSE, ...) {
   if (!requireNamespace("solitude"))
     stop("Could not find package \"solitude\"")
   d = data.frame(x = x[mask])
@@ -199,12 +235,12 @@ iforest_outliers = function(x, mask = !is.na(x), threshold = c(0.8, 0.9), return
   if (return.score) {
     p$score
   } else {
-    case_when(
+    outlier_factor(case_when(
       is.na(x) ~ NA_character_,
       p$score > threshold[2] ~ "extreme outlier",
       p$score > threshold[1] ~ "mild outlier",
       TRUE ~ "not outlier"
-    )
+    ))
   }
 }
 
@@ -213,7 +249,7 @@ iforest_outliers = function(x, mask = !is.na(x), threshold = c(0.8, 0.9), return
 #'
 #' Performs outlier detection using Local Outlier Factor algorithm.
 #'
-#' @inheritParams zscore_outliers
+#' @inheritParams tscore_outliers
 #' @param ... Additional arguments to `dbscan::lof`, namely
 #'   `k`.
 #'
@@ -224,7 +260,8 @@ iforest_outliers = function(x, mask = !is.na(x), threshold = c(0.8, 0.9), return
 #'
 #' @importFrom dplyr if_else between case_when
 #' @export
-lof_outliers = function(x, mask = !is.na(x), threshold = c(1.5, 2), return.score = FALSE, ...) {
+lof_outliers = function(x, mask = !is.na(x),
+  threshold = c(1.5, 2), return.score = FALSE, ...) {
   if (!requireNamespace("dbscan"))
     stop("Could not find package \"dbscan\"")
   xx = as.matrix(x[mask])
@@ -234,12 +271,12 @@ lof_outliers = function(x, mask = !is.na(x), threshold = c(1.5, 2), return.score
   if (return.score) {
     score
   } else {
-    case_when(
+    outlier_factor(case_when(
       is.na(x) ~ NA_character_,
       score > threshold[2] ~ "extreme outlier",
       score > threshold[1] ~ "mild outlier",
       TRUE ~ "not outlier"
-    )
+    ))
   }
 }
 

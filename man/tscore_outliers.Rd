@@ -23,15 +23,30 @@ ignore NA values.}
 thresholds for "mild" and "extreme" outliers.}
 
 \item{return.score}{if \code{TRUE}, return the numeric outlier score.
-If FALSE, return a label classifying the observations as one of
-"not outlier", "mild outlier", or "extreme outlier".}
+If FALSE, return an ordered factor classifying the observations as one of
+"not outlier" (1), "mild outlier" (2), or "extreme outlier" (3).}
 }
 \description{
-Performs a t-test for outliers.
+Performs a t-score test for outliers.
 }
 \details{
-the values of \code{threshold} identify the quantiles of the
-t distribution used to identify mild and extreme outliers.
+The values of \code{threshold} identify the quantiles of the
+t-distribution used to identify mild and extreme outliers.
 Default values are 0.9 for "mild" outliers and 0.95 for "extreme"
 outliers.
+
+The t-score is equivalent to the z-score for sample
+sizes greater than 30.
+}
+\examples{
+x = seq(0, 34, by = 0.25)*pi     
+noise = rlnorm(length(x), meanlog = 1, sdlog = 3)
+y=sin(x) + noise
+mask = noise < 1
+
+tscore_outliers(y)
+tscore_outliers(y, mask)
+tscore_outliers(y, mask, threshold = c(0.8, 0.9))
+tscore_outliers(y, return.score = TRUE)
+
 }

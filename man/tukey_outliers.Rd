@@ -23,12 +23,12 @@ ignore NA values.}
 thresholds for "mild" and "extreme" outliers.}
 
 \item{return.score}{if \code{TRUE}, return the numeric outlier score.
-If FALSE, return a label classifying the observations as one of
-"not outlier", "mild outlier", or "extreme outlier".}
+If FALSE, return an ordered factor classifying the observations as one of
+"not outlier" (1), "mild outlier" (2), or "extreme outlier" (3).}
 }
 \value{
 A  vector the same length as \code{x} containing numeric
-scores or character labels.
+scores or ordered factors.
 }
 \description{
 Perform Tukey's test for mild and extreme outliers.
@@ -38,4 +38,16 @@ the values of \code{threshold} identify the multiplier of the
 interquartile range used to identify mild and extreme outliers.
 typical values are 1.5 for "mild" outliers and 3.0 for "extreme"
 outliers.
+}
+\examples{
+x = seq(0, 34, by = 0.25)*pi     
+noise = rlnorm(length(x), meanlog = 1, sdlog = 3)
+y=sin(x) + noise
+mask = noise < 1
+
+tukey_outliers(y)
+tukey_outliers(y, mask)
+tukey_outliers(y, mask, threshold = c(2, 5))
+tukey_outliers(y, return.score = TRUE)
+
 }

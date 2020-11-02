@@ -18,8 +18,8 @@ ignore NA values.}
 thresholds for "mild" and "extreme" outliers.}
 
 \item{return.score}{if \code{TRUE}, return the numeric outlier score.
-If FALSE, return a label classifying the observations as one of
-"not outlier", "mild outlier", or "extreme outlier".}
+If FALSE, return an ordered factor classifying the observations as one of
+"not outlier" (1), "mild outlier" (2), or "extreme outlier" (3).}
 }
 \description{
 Performs a median absolute deviation (MAD) test for outliers.
@@ -29,4 +29,16 @@ the values of \code{threshold} identify the multiplier of the
 median distance used to identify mild and extreme outliers.
 Default values are 1.5 for "mild" outliers and 3.0 for "extreme"
 outliers.
+}
+\examples{
+x = seq(0, 34, by = 0.25)*pi     
+noise = rlnorm(length(x), meanlog = 1, sdlog = 3)
+y=sin(x) + noise
+mask = noise < 1
+
+mad_outliers(y)
+mad_outliers(y, mask)
+mad_outliers(y, mask, threshold = c(1, 2))
+mad_outliers(y, return.score = TRUE)
+
 }
