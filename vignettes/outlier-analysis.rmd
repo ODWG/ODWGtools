@@ -47,26 +47,24 @@ bdl = bdl %>%
 bdl.none = bdl %>%
   mutate(
     tukey = tukey_outliers(VALUE, QAQC_FLAG == "G"),
-    zscore = zscore_outliers(VALUE, QAQC_FLAG == "G"),
     tscore = tscore_outliers(VALUE, QAQC_FLAG == "G"),
     chisq = chisq_outliers(VALUE, QAQC_FLAG == "G"),
     mad = mad_outliers(VALUE, QAQC_FLAG == "G"),
 #    isofor = isofor_outliers(VALUE, QAQC_FLAG == "G"),
 #    lof = lof_outliers(VALUE, QAQC_FLAG == "G")
   ) %>%
-  ungroup() %>%
   select(-MONTH, - YEAR, - DAYMON) %>%
   mutate(
     extreme.outlier.score = pmap(
-      list(zscore, tscore, chisq, mad),
+      list(tscore, chisq, mad),
       function(...) sum(list(...) %in% "extreme outlier")
     ),
     mild.outlier.score = pmap(
-      list(zscore, tscore, chisq, mad),
+      list(tscore, chisq, mad),
       function(...) sum(list(...) %in% c("mild outlier", "extreme outlier"))
     ),
     not.outlier.score = pmap(
-      list(zscore, tscore, chisq, mad),
+      list(tscore, chisq, mad),
       function(...) sum(list(...) %in% c("not outlier"))
     )
   )
@@ -80,7 +78,6 @@ bdl.year = bdl %>%
   group_by(YEAR) %>%
   mutate(
     tukey = tukey_outliers(VALUE, QAQC_FLAG == "G"),
-    zscore = zscore_outliers(VALUE, QAQC_FLAG == "G"),
     tscore = tscore_outliers(VALUE, QAQC_FLAG == "G"),
     chisq = chisq_outliers(VALUE, QAQC_FLAG == "G"),
     mad = mad_outliers(VALUE, QAQC_FLAG == "G"),
@@ -91,15 +88,15 @@ bdl.year = bdl %>%
   select(-MONTH, - DAYMON) %>%
   mutate(
     extreme.outlier.score = pmap(
-      list(zscore, tscore, chisq, mad),
+      list(tscore, chisq, mad),
       function(...) sum(list(...) %in% "extreme outlier")
     ),
     mild.outlier.score = pmap(
-      list(zscore, tscore, chisq, mad),
+      list(tscore, chisq, mad),
       function(...) sum(list(...) %in% c("mild outlier", "extreme outlier"))
     ),
     not.outlier.score = pmap(
-      list(zscore, tscore, chisq, mad),
+      list(tscore, chisq, mad),
       function(...) sum(list(...) %in% c("not outlier"))
     )
   )
@@ -113,7 +110,6 @@ bdl.mon = bdl %>%
   group_by(MONTH) %>%
   mutate(
     tukey = tukey_outliers(VALUE, QAQC_FLAG =="G"),
-    zscore = zscore_outliers(VALUE, QAQC_FLAG == "G"),
     tscore = tscore_outliers(VALUE, QAQC_FLAG == "G"),
     chisq = chisq_outliers(VALUE, QAQC_FLAG == "G"),
     mad = mad_outliers(VALUE, QAQC_FLAG == "G"),
@@ -124,15 +120,15 @@ bdl.mon = bdl %>%
   select(- YEAR, - DAYMON) %>%
   mutate(
     extreme.outlier.score = pmap(
-      list(zscore, tscore, chisq, mad),
+      list(tscore, chisq, mad),
       function(...) sum(list(...) %in% "extreme outlier")
     ),
     mild.outlier.score = pmap(
-      list(zscore, tscore, chisq, mad),
+      list(tscore, chisq, mad),
       function(...) sum(list(...) %in% c("mild outlier", "extreme outlier"))
     ),
     not.outlier.score = pmap(
-      list(zscore, tscore, chisq, mad),
+      list(tscore, chisq, mad),
       function(...) sum(list(...) %in% c("not outlier"))
     )
   )
@@ -145,7 +141,6 @@ bdl.daymon = bdl %>%
    group_by(DAYMON) %>%
   mutate(
     tukey = tukey_outliers(VALUE, QAQC_FLAG == "G"),
-    zscore = zscore_outliers(VALUE, QAQC_FLAG == "G"),
     tscore = tscore_outliers(VALUE, QAQC_FLAG == "G"),
     chisq = chisq_outliers(VALUE, QAQC_FLAG == "G"),
     mad = mad_outliers(VALUE, QAQC_FLAG == "G"),
@@ -156,15 +151,15 @@ bdl.daymon = bdl %>%
   select(-MONTH, - YEAR) %>%
   mutate(
     extreme.outlier.score = pmap(
-      list(zscore, tscore, chisq, mad),
+      list(tscore, chisq, mad),
       function(...) sum(list(...) %in% "extreme outlier")
     ),
     mild.outlier.score = pmap(
-      list(zscore, tscore, chisq, mad),
+      list(tscore, chisq, mad),
       function(...) sum(list(...) %in% c("mild outlier", "extreme outlier"))
     ),
     not.outlier.score = pmap(
-      list(zscore, tscore, chisq, mad),
+      list(tscore, chisq, mad),
       function(...) sum(list(...) %in% c("not outlier"))
     )
   )
