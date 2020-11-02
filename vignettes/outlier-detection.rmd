@@ -1,0 +1,64 @@
+---
+title: "Outlier Detection"
+author: "Michael Koohafkan"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Outlier Detection}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+This vignette describes functions available for outlier detection,
+i.e., the detection of data values outside some specification based
+on the statistical or structural distribution of values.
+
+## General structure and output
+
+All outlier detection functions follow a similar template of inputs
+and outputs. All outlier detection functions accept the following 
+arguments:
+
+ 1. a vector of data values;
+ 2. a logical "mask" used to restrict the calculation of certain
+   parameters to a subset of the data; and
+ 3. A specification of thresholds that discriminate between 
+    non-outliers, "mild" outliers, and "extreme" outliers.
+
+All functions return an ordered factor tagging each data value
+as a non-outlier (1), a mild outlier (2), or an extreme outlier (3).
+Some outlier detection functions can alternatively return the actual
+test statistic or score used to classify the data by specifying the
+argument `return.score = TRUE`.
+
+## Parametric approaches
+
+`ODWGtools` provides the following functions for parametric
+(distribution-based) outlier detection:
+
+ - `tscore_outliers()`: outlier detection based on the one-sample
+   t-test. Note that for sample sizes greater than 30, the t-test
+   (t-distribution) approach is equivalent to the z-score 
+   (normal distribution) approach.
+ - `chisq_outliers()`: outlier detection based on the $\Chi^2$
+   distribution.
+
+## Non-parametric approaches
+
+`ODWGtools` provides the following functions for non-parametric
+(quantile-based) outlier detection:
+ 
+ - `tukey_outliers()`: Tukey's test for outliers (interquartile range).
+ - `mad_outliers()`: Outlier detection based on median absolute
+   deviation (MAD).
+
+## Other approaches
+
+`ODWGtools` provides the following additional functions 
+for outlier detection:
+ 
+ - `lof_outliers()`: Local Outlier Factor (LOF) test for outliers.
+ - `iforest_outliers()`: outlier detection based on Isolation Forests.
+
+## Example Application
+
