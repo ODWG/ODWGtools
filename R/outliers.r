@@ -97,7 +97,7 @@ tukey_outliers = function(x, mask = !is.na(x),
 tscore_outliers = function(x, mask = !is.na(x), 
   threshold = c(0.9, 0.95), return.score = FALSE) {
   n = length(x)
-  score = (x - mean(x[mask])) / (sd(x[mask]) / sqrt(x))
+  score = (x - mean(x[mask])) / (sd(x[mask]) / sqrt(n))
   if (return.score) {
     score
   } else {
