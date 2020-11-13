@@ -46,7 +46,7 @@ and the "rate of change test" only returns "pass" or "suspect" flags.
 We use the sample dataset `bdl` (Belden's Landing salinity data) to
 demonstrate the outlier detection functions.
 
-```{r}
+```{r eval = FALSE}
 data(bdl)
 
 bdl["gap"] = rtqc_gap(bdl$time, "15 min", "is")
