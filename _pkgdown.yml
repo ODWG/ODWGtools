@@ -55,14 +55,14 @@ reference:
   - starts_with("smooth_")
 
 
- - title: Adjustment
+- title: Adjustment
   desc: >
     Functions for adjusting data, e.g., offset or drift over time, are
     provided.
   contents:
     - starts_with("adjust_")
 
- - title: Gap Filling
+- title: Gap Filling
   desc: >
     Functions for filling data gaps, e.g., via linear interpolation or
     time-series modeling, are provided.
