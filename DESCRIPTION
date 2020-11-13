@@ -14,13 +14,14 @@ Imports:
     purrr (>= 0.3),
     yaml (>= 2.2)
 Suggests: 
-    dbscan (>= 1.1), 
+    dbscan (>= 1.1),
     solitude (>= 0.2),
     forecast (>= 8.5),
-    tidyr(>= 1.0),
+    tidyr (>= 1.0),
     ggplot2 (>= 3.1),
     knitr (>= 1.21),
     rmarkdown (>= 1.11),
+    testthat
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true

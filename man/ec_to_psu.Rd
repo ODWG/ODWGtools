@@ -13,11 +13,13 @@ ec_to_psu(ec)
 Salinity, in PSU.
 }
 \description{
-Convert from Electrical Conductivity (microsiemens) to to Practical Salinity Units (PSU)
+Convert from Electrical Conductivity (microsiemens) to to Practical
+Salinity Units (PSU)
 }
 \details{
 Conversion follows the equation described in
-Wagner, R. J., Boulger Jr, R. W., Oblinger, C. J., & Smith, B. A. (2006).
-Guidelines and standard procedures for continuous water-quality monitors:
-station operation, record computation, and data reporting. No. 1-D3.
+Wagner, R. J., Boulger Jr, R. W., Oblinger, C. J.,
+& Smith, B. A. (2006). Guidelines and standard procedures for
+continuous water-quality monitors: station operation, record
+computation, and data reporting. No. 1-D3.
 }

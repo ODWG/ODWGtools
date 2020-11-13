@@ -15,8 +15,8 @@ A single representative QAQC Flag code.
 \description{
 A set of rules for handling flags during data aggregation. This
 function is intended to be called within an aggregation statement,
-e.g. within a call to \code{dplyr::summarize} to average 15-minute data
-into hourly data, etc.
+e.g. within a call to \code{\link[dplyr:summarise]{dplyr::summarize()}} to average 15-minute
+data into hourly data, etc.
 }
 \details{
 The following rules are applied to aggregate QAQC Flags,
