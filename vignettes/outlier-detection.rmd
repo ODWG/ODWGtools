@@ -36,11 +36,11 @@ argument `return.score = TRUE`.
 `ODWGtools` provides the following functions for parametric
 (distribution-based) outlier detection:
 
- - `tscore_outliers()`: outlier detection based on the one-sample
+ - `outlier_tscore()`: outlier detection based on the one-sample
    t-test. Note that for sample sizes greater than 30, the t-test
    (t-distribution) approach is equivalent to the z-score 
    (normal distribution) approach.
- - `chisq_outliers()`: outlier detection based on the $\Chi^2$
+ - `outlier_chisq()`: outlier detection based on the $\Chi^2$
    distribution.
 
 ## Non-parametric approaches
@@ -48,8 +48,8 @@ argument `return.score = TRUE`.
 `ODWGtools` provides the following functions for non-parametric
 (quantile-based) outlier detection:
  
- - `tukey_outliers()`: Tukey's test for outliers (interquartile range).
- - `mad_outliers()`: Outlier detection based on median absolute
+ - `outlier_tukey()`: Tukey's test for outliers (interquartile range).
+ - `outlier_mad()`: Outlier detection based on median absolute
    deviation (MAD).
 
 ## Other approaches
@@ -57,8 +57,60 @@ argument `return.score = TRUE`.
 `ODWGtools` provides the following additional functions 
 for outlier detection:
  
- - `lof_outliers()`: Local Outlier Factor (LOF) test for outliers.
- - `iforest_outliers()`: outlier detection based on Isolation Forests.
+ - `outlier_lof()`: Local Outlier Factor (LOF) test for outliers.
+ - `outlier_iforest()`: outlier detection based on Isolation Forests.
+ - `outlier_glosh()`:  Global-Local Outlier Score from Hierarchies (GLOSH) test for outliers.
+ - `outlier_hdbscan()`: outlier detection based on Hierarchical DBSCAN.
 
 ## Example Application
 
+We use the sample dataset `bdl` (Belden's Landing salinity data) to
+demonstrate the outlier detection functions.
+
+```{r}
+data(bdl)
+
+bdl["tscore"] = outlier_tscore(bdl$value)
+bdl["chisq"] = outlier_chisq(bdl$value)
+bdl["tukey"] = outlier_tukey(bdl$value)
+bdl["mad"] = outlier_mad(bdl$value)
+bdl["lof"] = outlier_lof(bdl$value)
+bdl["iforest"] = outlier_iforest(bdl$value)
+
+bdl["tscore.window"] = slide_chr(bdl$value, ~outlier_tscore(.x)[49]], 
+  .before = 48, .after = 48)
+
+bdl["mad.window"] = slide_chr(bdl$value, ~ outlier_mad(.x)[25], 
+  .before = 24, .after = 24)
+
+bdl["lof.window"] = slide_chr(bdl$value, ~ outlier_lof(.x)[1501], 
+  .before = 1500, .after = 1500, .complete = TRUE)
+
+
+ggplot(bdl) + theme_bw() +
+  aes(x = time, y = value, color = lof.window) + 
+  geom_point()
+
+
+ggplot(bdl) + aes(x = time, y = value, color = lof) + geom_point()
+
+bdl["tukey"] = unlist(map(block(bdl$value, bdl$time, "day"), 
+  outlier_tukey))
+bdl["iforest"] = unlist(map(block(bdl$value, bdl$time, "day"), 
+  outlier_iforest))
+
+
+
+ggplot(bdl) + aes(x = time, y = value, color = chisq) + geom_point()
+ggplot() + aes(x = time, y = value, color = tukey) + geom_point()
+ggplot(head(bdl, 2000)) + aes(x = time, y = value) + geom_line() + 
+  geom_point(aes(color = tukey))
+ggplot(bdl) + aes(x = time, y = value, color = isofor) + geom_point()
+
+
+
+
+
+
+
+```
