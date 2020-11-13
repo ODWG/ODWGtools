@@ -94,7 +94,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/outlier-analysis.html">Outlier Detection</a>
+      <a href="../articles/outlier-detection.html">Outlier Detection</a>
+    </li>
+    <li>
+      <a href="../articles/real-time-quality-control.html">Real-Time Quality Control</a>
     </li>
   </ul>
 </li>
@@ -128,8 +131,136 @@
     <tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
+          <h2 id="section-data-flagging" class="hasAnchor"><a href="#section-data-flagging" class="anchor"></a>Data Flagging</h2>
+          <p class="section-desc"><p>A variety of outlier and anomaly detection functions are described below. Additional functions for aggregating the results of anomaly detection tests, and aggregating data quality flags, are also provided.</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      
+    </tbody><tbody>
+      
+      <tr>
+        <th colspan="2">
+          <h3 id="section-outlier-detection" class="hasAnchor"><a href="#section-outlier-detection" class="anchor"></a>Outlier detection</h3>
+          <p class="section-desc">
+<p>All outlier detection functions follow a similar template of inputs and outputs. All outlier detection functions accept the following arguments: 1. a vector of data values; 2. a logical “mask” used to restrict the calculation of certain parameters to a subset of the data; and</p>
+<ol>
+<li>A specification of thresholds that discriminate between non-outliers, “mild” outliers, and “extreme” outliers. All functions return an ordered factor tagging each data value as a non-outlier (1), a mild outlier (2), or an extreme outlier (3). Some outlier detection functions can alternatively return the actual test statistic or score used to classify the data by specifying the argument <code>return.score = TRUE</code>.</li>
+</ol>
+</p>
+        </th>
+      </tr>
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="outlier_chisq.html">outlier_chisq()</a></code> </p>
+        </td>
+        <td><p>Chi-squared test for outliers</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="outlier_flags.html">outlier_flags()</a></code> </p>
+        </td>
+        <td><p>Outlier Flags</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="outlier_iforest.html">outlier_iforest()</a></code> </p>
+        </td>
+        <td><p>Isolation Forest outlier detection</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="outlier_lof.html">outlier_lof()</a></code> </p>
+        </td>
+        <td><p>LOF outlier detection</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="outlier_mad.html">outlier_mad()</a></code> </p>
+        </td>
+        <td><p>Median absolute deviation test for outliers</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="outlier_tscore.html">outlier_tscore()</a></code> </p>
+        </td>
+        <td><p>t-score test for outliers</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="outlier_tukey.html">outlier_tukey()</a></code> </p>
+        </td>
+        <td><p>Tukey's test for outliers</p></td>
+      </tr>
+    </tbody><tbody>
+      
+      <tr>
+        <th colspan="2">
+          <h3 id="section-real-time-quality-control" class="hasAnchor"><a href="#section-real-time-quality-control" class="anchor"></a>Real-time quality control</h3>
+          <p class="section-desc">
+<p>All real-time quality control functions accept a vector of data values, and may additionally require parameters such as - A set of “user thresholds” defining some expected behavior based on expert judgment.</p>
+<ul>
+<li>A set of “sensor thresholds” defining some expected behavior based on sensor design or manufacturer guidelines.</li>
+<li>Test-specific parameters. All functions return an ordered factor tagging each data value as “pass” (1), “suspect” (2), or “fail” (3). Note that not all tests are capable of producing any of the three outcomes; for example, the “gap test” only returns “pass” or “fail” flags, and the “rate of change test” only returns “pass” or “suspect” flags.</li>
+</ul>
+</p>
+        </th>
+      </tr>
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="rtqc_flags.html">rtqc_flags()</a></code> </p>
+        </td>
+        <td><p>Real-time Quality Control Flags</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="rtqc_flat.html">rtqc_flat()</a></code> </p>
+        </td>
+        <td><p>Flat line test</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="rtqc_gap.html">rtqc_gap()</a></code> </p>
+        </td>
+        <td><p>Gap Test</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="rtqc_range.html">rtqc_range()</a></code> </p>
+        </td>
+        <td><p>Range Test</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="rtqc_rate.html">rtqc_rate()</a></code> </p>
+        </td>
+        <td><p>Rate test</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="rtqc_spike.html">rtqc_spike()</a></code> </p>
+        </td>
+        <td><p>Spike test</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-smoothing" class="hasAnchor"><a href="#section-smoothing" class="anchor"></a>Smoothing</h2>
+          <p class="section-desc"><p>Functions for smoothing data (e.g., tidal filtering) are provided.</p></p>
         </th>
       </tr>
       
@@ -140,10 +271,23 @@
       <tr>
         
         <td>
-          <p><code><a href="ODWGtools.html">ODWGtools</a></code> </p>
+          <p><code><a href="smooth_godin.html">smooth_godin()</a></code> </p>
         </td>
-        <td><p>ODWG Tools</p></td>
-      </tr><tr>
+        <td><p>Godin Smoother</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-adjustment" class="hasAnchor"><a href="#section-adjustment" class="anchor"></a>Adjustment</h2>
+          <p class="section-desc"><p>Functions for adjusting data, e.g., offset or drift over time, are provided.</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
         
         <td>
           <p><code><a href="adjust_known.html">adjust_known()</a></code> </p>
@@ -155,144 +299,25 @@
           <p><code><a href="adjust_linear.html">adjust_linear()</a></code> </p>
         </td>
         <td><p>Adjust for Linear Drift</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="aggregate_flags.html">aggregate_flags()</a></code> </p>
-        </td>
-        <td><p>Aggregate QAQC Flags</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="aggregate_tests.html">aggregate_tests()</a></code> </p>
-        </td>
-        <td><p>Aggregate Test Results</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="bdl.html">bdl</a></code> </p>
-        </td>
-        <td><p>Belden's Landing Historical Data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="blocksize.html">blocksize()</a></code> </p>
-        </td>
-        <td><p>Contiguous Blocks of Discrete Values</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="chisq_outliers.html">chisq_outliers()</a></code> </p>
-        </td>
-        <td><p>Chi-squared test for outliers</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="daily_tidal_mean.html">daily_tidal_mean()</a></code> </p>
-        </td>
-        <td><p>Daily Tidal Mean</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="ec_to_psu.html">ec_to_psu()</a></code> </p>
-        </td>
-        <td><p>EC to PSU</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="flag_descriptions.html">flag_descriptions()</a></code> </p>
-        </td>
-        <td><p>Flag Descriptions</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="flat_test.html">flat_test()</a></code> </p>
-        </td>
-        <td><p>Flat line test</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="gap_test.html">gap_test()</a></code> </p>
-        </td>
-        <td><p>Gap Test</p></td>
-      </tr><tr>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-gap-filling" class="hasAnchor"><a href="#section-gap-filling" class="anchor"></a>Gap Filling</h2>
+          <p class="section-desc"><p>Functions for filling data gaps, e.g., via linear interpolation or time-series modeling, are provided.</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
         
         <td>
           <p><code><a href="gapfill_kalman.html">gapfill_kalman()</a></code> </p>
         </td>
         <td><p>ARIMIA and Kalman Filter Gap Fill</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="iforest_outliers.html">iforest_outliers()</a></code> </p>
-        </td>
-        <td><p>Isolation Forest outlier detection</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="lof_outliers.html">lof_outliers()</a></code> </p>
-        </td>
-        <td><p>LOF outlier detection</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="mad_outliers.html">mad_outliers()</a></code> </p>
-        </td>
-        <td><p>Median absolute deviation test for outliers</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="multivariate_test.html">multivariate_test()</a></code> </p>
-        </td>
-        <td><p>Multivariate test</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="range_test.html">range_test()</a></code> </p>
-        </td>
-        <td><p>Range Test</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="rate_test.html">rate_test()</a></code> </p>
-        </td>
-        <td><p>Rate test</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="regional_regression.html">regional_regression()</a></code> </p>
-        </td>
-        <td><p>Regional Regression</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="smooth_godin.html">smooth_godin()</a></code> </p>
-        </td>
-        <td><p>Godin Smoother</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="spike_test.html">spike_test()</a></code> </p>
-        </td>
-        <td><p>Spike test</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tscore_outliers.html">tscore_outliers()</a></code> </p>
-        </td>
-        <td><p>t-score test for outliers</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tukey_outliers.html">tukey_outliers()</a></code> </p>
-        </td>
-        <td><p>Tukey's test for outliers</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="water_year.html">water_year()</a></code> </p>
-        </td>
-        <td><p>Water Year</p></td>
       </tr>
     </tbody>
     </table>
