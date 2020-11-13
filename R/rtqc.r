@@ -1,3 +1,28 @@
+#' Real-time Quality Control Factor
+#'
+#' Convert real-time quality control labels to ordered factor.
+#'
+#' @param x A vector of integers.
+#' @return A vector or ordered factors.
+#'
+#' @keywords internal
+rtqc_factor = function(x) {
+  factor(x, c(1L, 3L, 4L), c("pass", "suspect", "fail"),
+    ordered = TRUE)
+}
+
+#' Real-time Quality Control Flags
+#'
+#' Return a data frame of real-time quality control flags
+#' and ranks.
+#'
+#' @export
+rtqc_flags = function() {
+  f = rtqc_factor(NA)
+  data.frame(flag = levels(f), rank = seq_along(levels(f)))
+}
+
+
 #' Gap Test
 #'
 #' Perform a data gap test. See
@@ -23,12 +48,12 @@
 #'   rep(as.POSIXct("2018-01-01 01:00:00"), 3),
 #'   as.POSIXct("2018-01-01 04:00:00")
 #' )
-#' gap_test(fake.timestamps, "16 mins", "less than")
-#' gap_test(fake.timestamps, "15 mins", "is")
+#' rtqc_gap(fake.timestamps, "16 mins", "less than")
+#' rtqc_gap(fake.timestamps, "15 mins", "is")
 #'
 #' @importFrom dplyr near case_when
 #' @export
-gap_test = function(x, increment, condition = c("is", "less than",
+rtqc_gap = function(x, increment, condition = c("is", "less than",
   "greater than")) {
   if (!any(class(x) %in% c("Date", "POSIXt")))
     stop("argument \"x\" must be of class \"Date\" or \"POSIXt\"")
@@ -41,11 +66,11 @@ gap_test = function(x, increment, condition = c("is", "less than",
     "less than" = `<`
   )
   x.diff = diff(x)
-  c(NA_integer_, case_when(
+  rtqc_factor(c(NA_integer_, case_when(
     is.na(x.diff) ~ NA_integer_,
     con.fun(x.diff, increment) ~ 1L,
     TRUE ~ 4L
-  ))
+  )))
 }
 
 
@@ -64,18 +89,19 @@ gap_test = function(x, increment, condition = c("is", "less than",
 #' @return An integer vector of test flags.
 #'
 #' @examples
-#' fake.data = c(rnorm(3, 10), rep(c(-5, 30), each =  3), rep(c(5, 20), each = 3))
-#' range_test(fake.data, c(0, 25), c(7, 15))
+#' fake.data = c(rnorm(3, 10), rep(c(-5, 30), each =  3),
+#'   rep(c(5, 20), each = 3))
+#' rtqc_range(fake.data, c(0, 25), c(7, 15))
 #'
 #' @importFrom dplyr between case_when
 #' @export
-range_test = function(x, sensor.range, user.range) {
-  case_when(
+rtqc_range = function(x, sensor.range, user.range) {
+  rtqc_factor(case_when(
     is.na(x) ~ NA_integer_,
     !between(x, sensor.range[1], sensor.range[2]) ~ 4L,
     !between(x, user.range[1], user.range[2]) ~ 3L,
     TRUE ~ 1L
-  )
+  ))
 }
 
 
@@ -85,24 +111,25 @@ range_test = function(x, sensor.range, user.range) {
 #' https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
 #' for more information.
 #'
-#' @inheritParams range_test
-#' @param spike.threshold A length-2 numeric vector identifying reasonable
-#'   magnitudes of difference between adjacent data points. Typically
-#'   specific to location and/or climate and based on expert judgment.
+#' @inheritParams rtqc_range
+#' @param spike.threshold A length-2 numeric vector identifying
+#'   reasonable magnitudes of difference between adjacent data points.
+#'   Typically specific to location and/or climate and based on expert
+#'   judgment.
 #'
 #' @examples
 #' fake.data = c(rnorm(10, 10,3), 25, rnorm(10, 10,3))
-#' spike_test(fake.data, c(5, 10))
+#' rtqc_spike(fake.data, c(5, 10))
 #'
 #' @importFrom dplyr case_when lag lead
 #' @export
-spike_test = function(x, spike.threshold) {
-  case_when(
+rtqc_spike = function(x, spike.threshold) {
+  rtqc_factor(case_when(
    is.na(x) | is.na(lag(x)) | is.na(lead(x)) ~ NA_integer_,
    abs(x - 0.5 * (lag(x) + lead(x))) > spike.threshold[2] ~ 4L,
    abs(x - 0.5 * (lag(x) + lead(x))) > spike.threshold[1] ~ 3L,
    TRUE ~ 1L
-  )
+  ))
 }
 
 
@@ -112,7 +139,7 @@ spike_test = function(x, spike.threshold) {
 #' https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
 #' for more information.
 #'
-#' @inheritParams range_test
+#' @inheritParams rtqc_range
 #' @param n.dev The number of standard deviations to test against.
 #' @param n.prior the number of prior observations to use for computing
 #'   the standard deviation. For example, to compute standard deviations
@@ -120,18 +147,18 @@ spike_test = function(x, spike.threshold) {
 #'
 #' @examples
 #' fake.data = c(rnorm(10,10), rnorm(10, 50), rnorm(10,10))
-#' rate_test(fake.data, 2, 5)
+#' rtqc_rate(fake.data, 2, 5)
 #'
 #' @importFrom slider slide_dbl
 #' @importFrom dplyr lag case_when
 #' @export
-rate_test = function(x, n.dev, n.prior) {
+rtqc_rate = function(x, n.dev, n.prior) {
   xsd = slide_dbl(x, sd, .before = n.prior, .complete = TRUE)
-  case_when(
+  rtqc_factor(case_when(
     is.na(xsd) | is.na(x) ~ NA_integer_,
     abs(x - lag(x)) > n.dev * xsd ~ 3L,
     TRUE ~ 1L
-    )
+    ))
 }
 
 
@@ -141,36 +168,45 @@ rate_test = function(x, n.dev, n.prior) {
 #' https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
 #' for more information.
 #'
-#' @inheritParams range_test
-#' @param rep.threshold A length-2 numeric vector identifying reasonable
-#'   magnitudes of difference between adjacent data points. Typically
+#' @inheritParams rtqc_range
+#' @param rep.threshold A length-2 integer vector identifying reasonable
+#'   counts of repeated values before a data point is considered suspect
+#'   or indicates sensor failure. Typically
 #'   specific to location and/or climate and based on expert judgment.
-#' @param tol Numerical tolerance to flag observations as repeated values.
+#' @param tol Numerical tolerance to consider adjacent observations as
+#'   repeated values.
 #'
 #' @examples
-#' fake.data = c(rnorm(10, 10, 2), rep(10.0, 3), rnorm(10, 10, 2), rep(7.0, 8))
-#' flat_test(fake.data, c(4, 6), 0.01)
-#' flat_test(fake.data, c(3, 9), 0.01)
+#' fake.data = c(rnorm(10, 10, 2), rep(10.0, 3), rnorm(10, 10, 2),
+#'   rep(7.0, 8))
+#' # flag data as "suspect" when 4 observations in a row differ by
+#' # less than 0.01, and as "fail" when 6 observations in a row
+#' # differ by less than 0.01.
+#' rtqc_flat(fake.data, c(4, 6), 0.01)
+#' # as above, but 3 repeated observations signals "suspect" while
+#' # 9 observations signals "fail".
+#' rtqc_flat(fake.data, c(3, 9), 0.01)
 #'
 #' @importFrom dplyr lag lead case_when
 #' @export
-flat_test = function(x, rep.threshold, tol) {
+rtqc_flat = function(x, rep.threshold, tol) {
+  rep.threshold = as.integer(rep.threshold)
   xx = data.frame(x = x)
   for (i in 1:max(rep.threshold))
-    xx[sprintf("lag%d", i)] = abs(x - lag(x, i))
-  suspect = rowSums(xx[1 + 1:rep.threshold[1]]) < rep.threshold[1] * tol
-  fail = rowSums(xx[1 + 1:rep.threshold[2]]) < rep.threshold[2] * tol
-  case_when(
+    xx[sprintf("lag%d", i)] = abs(x - lag(x, i)) < tol
+  suspect = as.integer(rowSums(xx[1 + 1:rep.threshold[1]])) + 1L
+  fail = as.integer(rowSums(xx[1 + 1:rep.threshold[2]])) + 1L
+  rtqc_factor(case_when(
     is.na(x) | (is.na(fail) & is.na(suspect))  ~ NA_integer_,
-    fail & !is.na(fail) ~ 4L,
-    suspect & !is.na(suspect) ~ 3L,
+    (fail == rep.threshold[2]) & !is.na(fail) ~ 4L,
+    (suspect == rep.threshold[1]) & !is.na(suspect) ~ 3L,
     TRUE ~ 1L
-  )
+  ))
 }
 
 
 
 
-attenuated_test = function(x, var.threshold, n.prior) {
+rtqc_attenuation = function(x, var.threshold, n.prior) {
 
 }
