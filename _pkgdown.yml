@@ -1,0 +1,71 @@
+reference:
+
+- title: Data Flagging
+  desc: >
+    A variety of outlier and anomaly detection functions are described
+    below. Additional functions for aggregating the results of anomaly
+    detection tests, and aggregating data quality flags, are also
+    provided.
+  contents:
+  - aggregate_flags()
+  - aggregate_tests()
+
+- subtitle: Outlier detection
+  desc: >
+    All outlier detection functions follow a similar template of inputs
+    and outputs. All outlier detection functions accept the following 
+    arguments:
+    1. a vector of data values;
+    2. a logical "mask" used to restrict the calculation of certain
+      parameters to a subset of the data; and
+    3. A specification of thresholds that discriminate between 
+        non-outliers, "mild" outliers, and "extreme" outliers.
+    All functions return an ordered factor tagging each data value
+    as a non-outlier (1), a mild outlier (2), or an extreme outlier (3).
+    Some outlier detection functions can alternatively return the actual
+    test statistic or score used to classify the data by specifying the
+    argument `return.score = TRUE`.
+  contents:
+  - starts_with("outlier_")
+
+
+- subtitle: Real-time quality control
+  desc: >
+    All real-time quality control functions accept a vector of data
+    values, and may additionally require parameters such as
+    - A set of "user thresholds" defining some expected behavior based
+      on expert judgment.
+    - A set of "sensor thresholds" defining some expected behavior based
+      on sensor design or manufacturer guidelines.
+    - Test-specific parameters.
+    All functions return an ordered factor tagging each data value
+    as "pass" (1), "suspect" (2), or "fail" (3). Note that not
+    all tests are capable of producing any of the three outcomes;
+    for example, the "gap test" only returns "pass" or "fail" flags,
+    and the "rate of change test" only returns "pass" or "suspect" flags.
+  contents:
+  - starts_with("rtqc_")
+
+
+- title: Smoothing
+  desc: >
+    Functions for smoothing data (e.g., tidal filtering)
+    are provided.
+  contents:
+  - starts_with("smooth_")
+
+
+ - title: Adjustment
+  desc: >
+    Functions for adjusting data, e.g., offset or drift over time, are
+    provided.
+  contents:
+    - starts_with("adjust_")
+
+ - title: Gap Filling
+  desc: >
+    Functions for filling data gaps, e.g., via linear interpolation or
+    time-series modeling, are provided.
+  contents:
+    - starts_with("gapfill_")
+
