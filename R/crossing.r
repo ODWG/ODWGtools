@@ -24,8 +24,8 @@ NULL
 multivariate_test = function(x, y, n.dev, n.prior) {
   n.dev = rep(n.dev, length.out = 2)
   n.prior = rep(n.prior, length.out = 2)
-  xf = rate_test(x, n.dev[1], n.prior[1])
-  yf = rate_test(y, n.dev[2], n.prior[2])
+  xf = rtqc_rate(x, n.dev[1], n.prior[1])
+  yf = rtqc_rate(y, n.dev[2], n.prior[2])
   case_when(
     is.na(x) ~ NA_integer_,
     (xf != 1L & yf == 1L) ~ 3L,
