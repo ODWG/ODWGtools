@@ -1,0 +1,56 @@
+---
+title: "Real-Time Quality Control"
+author: "Michael Koohafkan"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Real-time quality control}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+]
+This vignette describes functions available for real-time quality control,
+i.e., the detection of data values outside some specification based
+on test procedures.
+
+## General structure and output
+
+All real-time quality control functions accept a vector of data
+values, and may additionally require parameters such as
+
+- A set of "user thresholds" defining some expected behavior based
+  on expert judgment.
+- A set of "sensor thresholds" defining some expected behavior based
+  on sensor design or manufacturer guidelines.
+- Test-specific parameters.
+
+All functions return an ordered factor tagging each data value
+as "pass" (1), "suspect" (2), or "fail" (3). Note that not
+all tests are capable of producing any of the three outcomes;
+for example, the "gap test" only returns "pass" or "fail" flags,
+and the "rate of change test" only returns "pass" or "suspect" flags.
+
+## Available real-time quality control functions
+
+`ODWGtools` provides the following functions for real-time quality control:
+
+ - `rtqc_gap()`: Test for data gaps.
+ - `rtqc_range()`: Test that all data values fall within a specified range.
+ - `rtqc_spike()`: Test for postive/negative spikes in the data.
+ - `rtqc_rate()`: Test for extreme rate of change in data values.
+ - `rtqc_flat()`: Test for repeated values or data flat-lining.
+ - `rtqc_attenuation()`: Test signal attenuation (decrease in variance).
+
+## Example Application
+
+We use the sample dataset `bdl` (Belden's Landing salinity data) to
+demonstrate the outlier detection functions.
+
+```{r}
+data(bdl)
+
+bdl["gap"] = rtqc_gap(bdl$time, "15 min", "is")
+bdl["flat.test"] = rtqc_flat(bdl$value, c(5, 10), 0.1)
+
+
+```
