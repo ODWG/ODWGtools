@@ -125,8 +125,8 @@ aggregate_tests = function(..., by = c("highest", "lowest", "majority"),
 #'
 #' A set of rules for handling flags during data aggregation. This
 #' function is intended to be called within an aggregation statement,
-#' e.g. within a call to `dplyr::summarize` to average 15-minute data
-#' into hourly data, etc.
+#' e.g. within a call to [`dplyr::summarize()`] to average 15-minute
+#' data into hourly data, etc.
 #'
 #' @param flags a vector of QAQC Flag codes.
 #' @return A single representative QAQC Flag code.

@@ -8,7 +8,7 @@ NULL
 #' https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
 #' for more information.
 #'
-#' @inheritParams rate_test
+#' @inheritParams rtqc_rate
 #' @param y A vector of coincident observations, e.g. from a separate sensor
 #'   or nearby station.
 #'

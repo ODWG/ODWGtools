@@ -9,7 +9,7 @@
 
 
 #' Belden's Landing Historical Data
-#' 
+#'
 #' Historical electrical conductivity data collected at 
 #' Belden's Landing.
 #'

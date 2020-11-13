@@ -4,7 +4,7 @@
 #' @param s A string
 #' @return A `difftime` object.
 #'
-#' @keywords internal 
+#' @keywords internal
 string_to_difftime = function(s) {
   value = as.numeric(strsplit(s, " ")[[c(1, 1)]])
   increment = strsplit(s, " ")[[c(1, 2)]]
@@ -30,12 +30,14 @@ water_year = function(x) {
 
 #' EC to PSU
 #'
-#' Convert from Electrical Conductivity (microsiemens) to to Practical Salinity Units (PSU)
+#' Convert from Electrical Conductivity (microsiemens) to to Practical
+#' Salinity Units (PSU)
 #'
 #' @details Conversion follows the equation described in
-#'   Wagner, R. J., Boulger Jr, R. W., Oblinger, C. J., & Smith, B. A. (2006). 
-#'   Guidelines and standard procedures for continuous water-quality monitors:
-#'   station operation, record computation, and data reporting. No. 1-D3.
+#'   Wagner, R. J., Boulger Jr, R. W., Oblinger, C. J.,
+#'   & Smith, B. A. (2006). Guidelines and standard procedures for
+#'   continuous water-quality monitors: station operation, record
+#'   computation, and data reporting. No. 1-D3.
 #'
 #' @param ec Electrical Conductivity, in microsiemens.
 #' @return Salinity, in PSU.
@@ -51,6 +53,7 @@ ec_to_psu <- function(ec) {
   seaEC = 53.087 * 1000
   R = ec / seaEC
 
-  S = K1 + (K2 * R ^ (1 / 2)) + (K3 * R) + (K4 * R ^ (3 / 2)) + (K5 * R ^ 2) + (K6 * R ^ (5 / 2))
+  S = K1 + (K2 * R ^ (1 / 2)) + (K3 * R) + (K4 * R ^ (3 / 2)) +
+    (K5 * R ^ 2) + (K6 * R ^ (5 / 2))
   return(S)
 }
