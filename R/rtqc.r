@@ -112,22 +112,32 @@ rtqc_range = function(x, sensor.range, user.range) {
 #' for more information.
 #'
 #' @inheritParams rtqc_range
-#' @param spike.threshold A length-2 numeric vector identifying
-#'   reasonable magnitudes of difference between adjacent data points.
-#'   Typically specific to location and/or climate and based on expert
-#'   judgment.
+#' @param spike.threshold A length-2 list specifying "suspect"
+#'   and "fail" thresholds. Each threshold can be either a single
+#'   value (static threshold) or a vector of same length as `x`
+#'   (dynamic threshold). Thresholds are typically specific to
+#'   location and/or climate and based on expert judgment.
 #'
 #' @examples
-#' fake.data = c(rnorm(10, 10,3), 25, rnorm(10, 10,3))
-#' rtqc_spike(fake.data, c(5, 10))
+#' fake.data = c(1, 1.1, 1, 1.2, 1, 1.3, 1, 1.4, 1, 1.5, 1)
+#' rtqc_spike(fake.data, c(0.15, 0.25))
 #'
 #' @importFrom dplyr case_when lag lead
 #' @export
 rtqc_spike = function(x, spike.threshold) {
+  spike.threshold = as.list(spike.threshold)
+  if (length(spike.threshold) != 2L) {
+    stop("\"spike.threshold\" must be a ",
+      "two-element vector or list.")
+  }
+  if (!all(sapply(spike.threshold, length) %in% c(1L, length(x)))) {
+    stop("Elements of \"spike.threshold\" must be single ",
+      "values or vectors of same length as  \"x\".")
+  }
   rtqc_factor(case_when(
    is.na(x) | is.na(lag(x)) | is.na(lead(x)) ~ NA_integer_,
-   abs(x - 0.5 * (lag(x) + lead(x))) > spike.threshold[2] ~ 4L,
-   abs(x - 0.5 * (lag(x) + lead(x))) > spike.threshold[1] ~ 3L,
+   abs(x - 0.5 * (lag(x) + lead(x))) > spike.threshold[[2]] ~ 4L,
+   abs(x - 0.5 * (lag(x) + lead(x))) > spike.threshold[[1]] ~ 3L,
    TRUE ~ 1L
   ))
 }
