@@ -24,8 +24,9 @@ ignore NA values.}
 thresholds for "mild" and "extreme" outliers.}
 
 \item{return.score}{if \code{TRUE}, return the numeric outlier score.
-If FALSE, return an ordered factor classifying the observations as one of
-"not outlier" (1), "mild outlier" (2), or "extreme outlier" (3).}
+If FALSE, return an ordered factor classifying the observations
+as one of "not outlier" (1), "mild outlier" (2), or
+"extreme outlier" (3).}
 
 \item{...}{Additional arguments to \code{dbscan::lof}, namely
 \code{k}.}

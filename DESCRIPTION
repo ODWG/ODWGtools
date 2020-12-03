@@ -32,6 +32,7 @@ Collate:
     'ODWGtools.r'
     'adjust.r'
     'aggregate.r'
+    'anomaly.r'
     'rtqc.r'
     'crossing.r'
     'gapfill.r'

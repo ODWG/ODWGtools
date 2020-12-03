@@ -28,7 +28,7 @@ multivariate_test = function(x, y, n.dev, n.prior) {
   yf = rtqc_rate(y, n.dev[2], n.prior[2])
   case_when(
     is.na(x) ~ NA_integer_,
-    (xf != 1L & yf == 1L) ~ 3L,
+    (xf != 1L) & (yf == 1L) ~ 3L,
     TRUE ~ 1L
   )
 }
@@ -38,13 +38,14 @@ multivariate_test = function(x, y, n.dev, n.prior) {
 #' Perform regional regression of two stations.
 #'
 #' @param x,y Vectors of station data used for regression.
-#' @param season Optional vector identifying specific 
+#' @param season Optional vector identifying specific
 #'   seasons or periods
 #' @param plot If `TRUE`, print diagnostic plots.
 #'
 #'
-#'
-#'
+#' @importFrom stats lm predict
+#' @importFrom graphics lines
+#' @export
 regional_regression = function(x, y, season = NULL, plot = FALSE) {
   d = data.frame(x = x, y = y)
   m = lm(y ~ x, d)
@@ -52,8 +53,8 @@ regional_regression = function(x, y, season = NULL, plot = FALSE) {
   d["yhat"] = predict(m, data = d)
 
   if(plot){
-    plot(d[1:2], type = "p")
-    lines(d[c(1,3)], col = "blue")
+    plot(d[c("x", "y")], type = "p")
+    lines(d[c("x", "yhat")], col = "blue")
   }
 
 }

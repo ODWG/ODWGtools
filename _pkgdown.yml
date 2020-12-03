@@ -15,11 +15,13 @@ reference:
     All outlier detection functions follow a similar template of inputs
     and outputs. All outlier detection functions accept the following 
     arguments:
+
     1. a vector of data values;
     2. a logical "mask" used to restrict the calculation of certain
       parameters to a subset of the data; and
     3. A specification of thresholds that discriminate between 
         non-outliers, "mild" outliers, and "extreme" outliers.
+    
     All functions return an ordered factor tagging each data value
     as a non-outlier (1), a mild outlier (2), or an extreme outlier (3).
     Some outlier detection functions can alternatively return the actual
@@ -33,11 +35,13 @@ reference:
   desc: >
     All real-time quality control functions accept a vector of data
     values, and may additionally require parameters such as
+    
     - A set of "user thresholds" defining some expected behavior based
       on expert judgment.
     - A set of "sensor thresholds" defining some expected behavior based
       on sensor design or manufacturer guidelines.
     - Test-specific parameters.
+    
     All functions return an ordered factor tagging each data value
     as "pass" (1), "suspect" (2), or "fail" (3). Note that not
     all tests are capable of producing any of the three outcomes;

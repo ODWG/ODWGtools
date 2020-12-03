@@ -9,10 +9,11 @@ rtqc_spike(x, spike.threshold)
 \arguments{
 \item{x}{A vector of values.}
 
-\item{spike.threshold}{A length-2 numeric vector identifying
-reasonable magnitudes of difference between adjacent data points.
-Typically specific to location and/or climate and based on expert
-judgment.}
+\item{spike.threshold}{A length-2 list specifying "suspect"
+and "fail" thresholds. Each threshold can be either a single
+value (static threshold) or a vector of same length as \code{x}
+(dynamic threshold). Thresholds are typically specific to
+location and/or climate and based on expert judgment.}
 }
 \description{
 Perform a spike test. See
@@ -20,7 +21,7 @@ https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
 for more information.
 }
 \examples{
-fake.data = c(rnorm(10, 10,3), 25, rnorm(10, 10,3))
-rtqc_spike(fake.data, c(5, 10))
+fake.data = c(1, 1.1, 1, 1.2, 1, 1.3, 1, 1.4, 1, 1.5, 1))
+rtqc_spike(fake.data, c(1.2, 1.3))
 
 }

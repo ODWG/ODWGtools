@@ -33,8 +33,9 @@ outlier_flags = function() {
 #' @param threshold A length-two vector identifying
 #'  thresholds for "mild" and "extreme" outliers.
 #' @param return.score if `TRUE`, return the numeric outlier score.
-#'   If FALSE, return an ordered factor classifying the observations as one of
-#'   "not outlier" (1), "mild outlier" (2), or "extreme outlier" (3).
+#'   If FALSE, return an ordered factor classifying the observations
+#'   as one of "not outlier" (1), "mild outlier" (2), or
+#'   "extreme outlier" (3).
 #' @return A  vector the same length as `x` containing numeric
 #'   scores or ordered factors.
 #'
@@ -44,7 +45,7 @@ outlier_flags = function() {
 #'   outliers.
 #'
 #' @examples
-#' x = seq(0, 34, by = 0.25)*pi     
+#' x = seq(0, 34, by = 0.25)*pi
 #' noise = rlnorm(length(x), meanlog = 1, sdlog = 3)
 #' y=sin(x) + noise
 #' mask = noise < 1
