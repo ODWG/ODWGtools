@@ -40,7 +40,7 @@ argument `return.score = TRUE`.
    t-test. Note that for sample sizes greater than 30, the t-test
    (t-distribution) approach is equivalent to the z-score 
    (normal distribution) approach.
- - `outlier_chisq()`: outlier detection based on the $\Chi^2$
+ - `outlier_chisq()`: outlier detection based on the $\chi^2$
    distribution.
 
 ## Non-parametric approaches
