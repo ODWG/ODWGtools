@@ -5,18 +5,19 @@
 \title{LOF outlier detection}
 \usage{
 outlier_lof(
-  x,
-  mask = !is.na(x),
+  xs,
+  mask = !Reduce("|", lapply(xs, is.na)),
   threshold = c(1.5, 2),
   return.score = FALSE,
   ...
 )
 }
 \arguments{
-\item{x}{A vector of data.}
+\item{xs}{A dataframe or list of vectors
+(which will be coerced to a numeric matrix).}
 
 \item{mask}{A logical mask that identifies a subgroup of \code{x}
-to compute non-parametric statistics on. Useful when a subset
+to compute statistics on. Useful when a subset
 of quality-assured data is available. Default action is to
 ignore NA values.}
 
@@ -46,9 +47,9 @@ noise = rlnorm(length(x), meanlog = 1, sdlog = 3)
 y=sin(x) + noise
 mask = noise < 1
 
-outlier_lof(y)
-outlier_lof(y, mask)
-outlier_lof(y, mask, threshold = c(1, 2))
-outlier_lof(y, return.score = TRUE)
+outlier_lof(list(y))
+outlier_lof(list(x, y), mask)
+outlier_lof(list(x, y), mask, threshold = c(1, 2))
+outlier_lof(list(x, y), return.score = TRUE)
 
 }

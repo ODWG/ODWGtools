@@ -15,7 +15,7 @@ outlier_tscore(
 \item{x}{A vector of data.}
 
 \item{mask}{A logical mask that identifies a subgroup of \code{x}
-to compute non-parametric statistics on. Useful when a subset
+to compute statistics on. Useful when a subset
 of quality-assured data is available. Default action is to
 ignore NA values.}
 
