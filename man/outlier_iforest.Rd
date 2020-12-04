@@ -45,7 +45,7 @@ outliers.
 \examples{
 x = seq(0, 34, by = 0.25)*pi
 noise = rlnorm(length(x), meanlog = 1, sdlog = 3)
-y=sin(x) + noise
+y = sin(x) + noise
 mask = noise < 1
 
 outlier_iforest(list(y))
