@@ -21,7 +21,7 @@ https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
 for more information.
 }
 \examples{
-fake.data = c(1, 1.1, 1, 1.2, 1, 1.3, 1, 1.4, 1, 1.5, 1))
-rtqc_spike(fake.data, c(1.2, 1.3))
+fake.data = c(1, 1.1, 1, 1.2, 1, 1.3, 1, 1.4, 1, 1.5, 1)
+rtqc_spike(fake.data, c(0.15, 0.25))
 
 }
