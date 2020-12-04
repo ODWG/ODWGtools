@@ -147,10 +147,12 @@
         <th colspan="2">
           <h3 id="section-outlier-detection" class="hasAnchor"><a href="#section-outlier-detection" class="anchor"></a>Outlier detection</h3>
           <p class="section-desc">
-<p>All outlier detection functions follow a similar template of inputs and outputs. All outlier detection functions accept the following arguments: 1. a vector of data values; 2. a logical “mask” used to restrict the calculation of certain parameters to a subset of the data; and</p>
+<p>All outlier detection functions follow a similar template of inputs and outputs. All outlier detection functions accept the following arguments:</p>
 <ol>
-<li>A specification of thresholds that discriminate between non-outliers, “mild” outliers, and “extreme” outliers. All functions return an ordered factor tagging each data value as a non-outlier (1), a mild outlier (2), or an extreme outlier (3). Some outlier detection functions can alternatively return the actual test statistic or score used to classify the data by specifying the argument <code>return.score = TRUE</code>.</li>
+<li>a vector of data values; 2. a logical “mask” used to restrict the calculation of certain parameters to a subset of the data; and</li>
+<li>A specification of thresholds that discriminate between non-outliers, “mild” outliers, and “extreme” outliers.</li>
 </ol>
+<p>All functions return an ordered factor tagging each data value as a non-outlier (1), a mild outlier (2), or an extreme outlier (3). Some outlier detection functions can alternatively return the actual test statistic or score used to classify the data by specifying the argument <code>return.score = TRUE</code>.</p>
 </p>
         </th>
       </tr>
@@ -207,8 +209,9 @@
         <th colspan="2">
           <h3 id="section-real-time-quality-control" class="hasAnchor"><a href="#section-real-time-quality-control" class="anchor"></a>Real-time quality control</h3>
           <p class="section-desc">
-<p>All real-time quality control functions accept a vector of data values, and may additionally require parameters such as - A set of “user thresholds” defining some expected behavior based on expert judgment.</p>
+<p>All real-time quality control functions accept a vector of data values, and may additionally require parameters such as</p>
 <ul>
+<li>A set of “user thresholds” defining some expected behavior based on expert judgment.</li>
 <li>A set of “sensor thresholds” defining some expected behavior based on sensor design or manufacturer guidelines.</li>
 <li>Test-specific parameters. All functions return an ordered factor tagging each data value as “pass” (1), “suspect” (2), or “fail” (3). Note that not all tests are capable of producing any of the three outcomes; for example, the “gap test” only returns “pass” or “fail” flags, and the “rate of change test” only returns “pass” or “suspect” flags.</li>
 </ul>

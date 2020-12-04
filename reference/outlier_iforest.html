@@ -157,8 +157,9 @@ thresholds for "mild" and "extreme" outliers.</p></td>
     <tr>
       <th>return.score</th>
       <td><p>if <code>TRUE</code>, return the numeric outlier score.
-If FALSE, return an ordered factor classifying the observations as one of
-"not outlier" (1), "mild outlier" (2), or "extreme outlier" (3).</p></td>
+If FALSE, return an ordered factor classifying the observations
+as one of "not outlier" (1), "mild outlier" (2), or
+"extreme outlier" (3).</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -182,11 +183,11 @@ outliers.</p>
 <span class='va'>mask</span> <span class='op'>=</span> <span class='va'>noise</span> <span class='op'>&lt;</span> <span class='fl'>1</span>
 
 <span class='fu'>outlier_iforest</span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: solitude</span></div><div class='output co'>#&gt; INFO  [21:19:09.573] Building Isolation Forest ...  
-#&gt; INFO  [21:19:10.828] done 
-#&gt; INFO  [21:19:10.839] Computing depth of terminal nodes ...  
-#&gt; INFO  [21:19:11.655] done 
-#&gt; INFO  [21:19:11.668] Completed growing isolation forest </div><div class='output co'>#&gt;   [1] not outlier     not outlier     not outlier     not outlier    
+</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: solitude</span></div><div class='output co'>#&gt; INFO  [15:52:29.281] Building Isolation Forest ...  
+#&gt; INFO  [15:52:30.326] done 
+#&gt; INFO  [15:52:30.336] Computing depth of terminal nodes ...  
+#&gt; INFO  [15:52:31.062] done 
+#&gt; INFO  [15:52:31.073] Completed growing isolation forest </div><div class='output co'>#&gt;   [1] not outlier     not outlier     not outlier     not outlier    
 #&gt;   [5] not outlier     not outlier     not outlier     not outlier    
 #&gt;   [9] not outlier     not outlier     not outlier     not outlier    
 #&gt;  [13] not outlier     not outlier     not outlier     not outlier    
@@ -222,11 +223,11 @@ outliers.</p>
 #&gt; [133] not outlier     not outlier     not outlier     not outlier    
 #&gt; [137] not outlier    
 #&gt; Levels: not outlier &lt; mild outlier &lt; extreme outlier</div><div class='input'><span class='fu'>outlier_iforest</span><span class='op'>(</span><span class='va'>y</span>, <span class='va'>mask</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; INFO  [21:19:11.695] Building Isolation Forest ...  
-#&gt; INFO  [21:19:11.701] done 
-#&gt; INFO  [21:19:11.703] Computing depth of terminal nodes ...  
-#&gt; INFO  [21:19:12.005] done 
-#&gt; INFO  [21:19:12.013] Completed growing isolation forest </div><div class='output co'>#&gt;   [1] not outlier not outlier not outlier not outlier not outlier not outlier
+</div><div class='output co'>#&gt; INFO  [15:52:31.099] Building Isolation Forest ...  
+#&gt; INFO  [15:52:31.108] done 
+#&gt; INFO  [15:52:31.113] Computing depth of terminal nodes ...  
+#&gt; INFO  [15:52:31.385] done 
+#&gt; INFO  [15:52:31.392] Completed growing isolation forest </div><div class='output co'>#&gt;   [1] not outlier not outlier not outlier not outlier not outlier not outlier
 #&gt;   [7] not outlier not outlier not outlier not outlier not outlier not outlier
 #&gt;  [13] not outlier not outlier not outlier not outlier not outlier not outlier
 #&gt;  [19] not outlier not outlier not outlier not outlier not outlier not outlier
@@ -250,11 +251,11 @@ outliers.</p>
 #&gt; [127] not outlier not outlier not outlier not outlier not outlier not outlier
 #&gt; [133] not outlier not outlier not outlier not outlier not outlier
 #&gt; Levels: not outlier &lt; mild outlier &lt; extreme outlier</div><div class='input'><span class='fu'>outlier_iforest</span><span class='op'>(</span><span class='va'>y</span>, <span class='va'>mask</span>, threshold <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; INFO  [21:19:12.034] Building Isolation Forest ...  
-#&gt; INFO  [21:19:12.041] done 
-#&gt; INFO  [21:19:12.043] Computing depth of terminal nodes ...  
-#&gt; INFO  [21:19:12.313] done 
-#&gt; INFO  [21:19:12.321] Completed growing isolation forest </div><div class='output co'>#&gt;   [1] not outlier not outlier not outlier not outlier not outlier not outlier
+</div><div class='output co'>#&gt; INFO  [15:52:31.411] Building Isolation Forest ...  
+#&gt; INFO  [15:52:31.417] done 
+#&gt; INFO  [15:52:31.419] Computing depth of terminal nodes ...  
+#&gt; INFO  [15:52:31.647] done 
+#&gt; INFO  [15:52:31.654] Completed growing isolation forest </div><div class='output co'>#&gt;   [1] not outlier not outlier not outlier not outlier not outlier not outlier
 #&gt;   [7] not outlier not outlier not outlier not outlier not outlier not outlier
 #&gt;  [13] not outlier not outlier not outlier not outlier not outlier not outlier
 #&gt;  [19] not outlier not outlier not outlier not outlier not outlier not outlier
@@ -278,11 +279,11 @@ outliers.</p>
 #&gt; [127] not outlier not outlier not outlier not outlier not outlier not outlier
 #&gt; [133] not outlier not outlier not outlier not outlier not outlier
 #&gt; Levels: not outlier &lt; mild outlier &lt; extreme outlier</div><div class='input'><span class='fu'>outlier_iforest</span><span class='op'>(</span><span class='va'>y</span>, return.score <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; INFO  [21:19:12.341] Building Isolation Forest ...  
-#&gt; INFO  [21:19:12.347] done 
-#&gt; INFO  [21:19:12.348] Computing depth of terminal nodes ...  
-#&gt; INFO  [21:19:12.615] done 
-#&gt; INFO  [21:19:12.625] Completed growing isolation forest </div><div class='output co'>#&gt;   [1] 0.5398205 0.5398205 0.5406532 0.5410700 0.5402367 0.5410700 0.5398205
+</div><div class='output co'>#&gt; INFO  [15:52:31.671] Building Isolation Forest ...  
+#&gt; INFO  [15:52:31.676] done 
+#&gt; INFO  [15:52:31.678] Computing depth of terminal nodes ...  
+#&gt; INFO  [15:52:31.907] done 
+#&gt; INFO  [15:52:31.916] Completed growing isolation forest </div><div class='output co'>#&gt;   [1] 0.5398205 0.5398205 0.5406532 0.5410700 0.5402367 0.5410700 0.5398205
 #&gt;   [8] 0.5799298 0.5402367 0.5398205 0.5406532 0.5406532 0.5402367 0.5398205
 #&gt;  [15] 0.5398205 0.5410700 0.5662394 0.5593003 0.5398205 0.9151891 0.5398205
 #&gt;  [22] 0.5410700 0.5402367 0.5398205 0.5688637 0.5398205 0.5398205 0.5653673
