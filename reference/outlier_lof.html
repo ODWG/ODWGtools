@@ -128,8 +128,8 @@
     </div>
 
     <pre class="usage"><span class='fu'>outlier_lof</span><span class='op'>(</span>
-  <span class='va'>x</span>,
-  mask <span class='op'>=</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>,
+  <span class='va'>xs</span>,
+  mask <span class='op'>=</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/funprog.html'>Reduce</a></span><span class='op'>(</span><span class='st'>"|"</span>, <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='va'>xs</span>, <span class='va'>is.na</span><span class='op'>)</span><span class='op'>)</span>,
   threshold <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1.5</span>, <span class='fl'>2</span><span class='op'>)</span>,
   return.score <span class='op'>=</span> <span class='cn'>FALSE</span>,
   <span class='va'>...</span>
@@ -139,13 +139,14 @@
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>A vector of data.</p></td>
+      <th>xs</th>
+      <td><p>A dataframe or list of vectors
+(which will be coerced to a numeric matrix).</p></td>
     </tr>
     <tr>
       <th>mask</th>
       <td><p>A logical mask that identifies a subgroup of <code>x</code>
-to compute non-parametric statistics on. Useful when a subset
+to compute statistics on. Useful when a subset
 of quality-assured data is available. Default action is to
 ignore NA values.</p></td>
     </tr>
@@ -181,7 +182,7 @@ outliers and 2.0 for "extreme" outliers.</p>
 <span class='va'>y</span><span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/Trig.html'>sin</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>+</span> <span class='va'>noise</span>
 <span class='va'>mask</span> <span class='op'>=</span> <span class='va'>noise</span> <span class='op'>&lt;</span> <span class='fl'>1</span>
 
-<span class='fu'>outlier_lof</span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span>
+<span class='fu'>outlier_lof</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>Loading required namespace: dbscan</span></div><div class='output co'>#&gt;   [1] not outlier     not outlier     not outlier     not outlier    
 #&gt;   [5] mild outlier    mild outlier    not outlier     not outlier    
 #&gt;   [9] not outlier     not outlier     not outlier     not outlier    
@@ -217,102 +218,83 @@ outliers and 2.0 for "extreme" outliers.</p>
 #&gt; [129] mild outlier    not outlier     mild outlier    not outlier    
 #&gt; [133] not outlier     not outlier     not outlier     not outlier    
 #&gt; [137] not outlier    
-#&gt; Levels: not outlier &lt; mild outlier &lt; extreme outlier</div><div class='input'><span class='fu'>outlier_lof</span><span class='op'>(</span><span class='va'>y</span>, <span class='va'>mask</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   [1] not outlier     not outlier     mild outlier    mild outlier   
-#&gt;   [5] not outlier     not outlier     not outlier     not outlier    
-#&gt;   [9] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [13] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [17] not outlier     mild outlier    not outlier     not outlier    
-#&gt;  [21] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [25] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [29] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [33] mild outlier    not outlier     not outlier     not outlier    
-#&gt;  [37] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [41] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [45] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [49] not outlier     mild outlier    extreme outlier not outlier    
-#&gt;  [53] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [57] not outlier     not outlier     mild outlier    not outlier    
-#&gt;  [61] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [65] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [69] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [73] not outlier     not outlier     mild outlier    extreme outlier
-#&gt;  [77] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [81] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [85] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [89] not outlier     mild outlier    not outlier     not outlier    
-#&gt;  [93] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [97] not outlier     mild outlier    not outlier     mild outlier   
-#&gt; [101] not outlier     not outlier     not outlier     not outlier    
-#&gt; [105] not outlier     not outlier     mild outlier    not outlier    
-#&gt; [109] not outlier     not outlier     not outlier     not outlier    
-#&gt; [113] not outlier     not outlier     not outlier     not outlier    
-#&gt; [117] not outlier     not outlier     not outlier     not outlier    
-#&gt; [121] not outlier     not outlier     not outlier     not outlier    
-#&gt; [125] not outlier     not outlier     not outlier     not outlier    
-#&gt; [129] not outlier     not outlier     not outlier     not outlier    
-#&gt; [133] not outlier     not outlier     not outlier     not outlier    
-#&gt; [137] not outlier    
-#&gt; Levels: not outlier &lt; mild outlier &lt; extreme outlier</div><div class='input'><span class='fu'>outlier_lof</span><span class='op'>(</span><span class='va'>y</span>, <span class='va'>mask</span>, threshold <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   [1] mild outlier    mild outlier    mild outlier    mild outlier   
-#&gt;   [5] mild outlier    not outlier     not outlier     not outlier    
-#&gt;   [9] not outlier     not outlier     mild outlier    mild outlier   
-#&gt;  [13] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [17] not outlier     mild outlier    not outlier     not outlier    
-#&gt;  [21] not outlier     mild outlier    not outlier     mild outlier   
-#&gt;  [25] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [29] not outlier     mild outlier    not outlier     mild outlier   
-#&gt;  [33] mild outlier    not outlier     not outlier     not outlier    
-#&gt;  [37] not outlier     not outlier     not outlier     mild outlier   
-#&gt;  [41] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [45] not outlier     not outlier     not outlier     mild outlier   
-#&gt;  [49] not outlier     mild outlier    extreme outlier not outlier    
-#&gt;  [53] mild outlier    not outlier     not outlier     not outlier    
-#&gt;  [57] not outlier     mild outlier    mild outlier    mild outlier   
-#&gt;  [61] not outlier     not outlier     mild outlier    not outlier    
-#&gt;  [65] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [69] mild outlier    not outlier     not outlier     not outlier    
-#&gt;  [73] not outlier     not outlier     mild outlier    extreme outlier
-#&gt;  [77] not outlier     not outlier     not outlier     mild outlier   
-#&gt;  [81] not outlier     mild outlier    not outlier     not outlier    
-#&gt;  [85] mild outlier    not outlier     not outlier     not outlier    
-#&gt;  [89] mild outlier    mild outlier    not outlier     not outlier    
-#&gt;  [93] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [97] not outlier     mild outlier    not outlier     mild outlier   
-#&gt; [101] not outlier     not outlier     not outlier     mild outlier   
-#&gt; [105] not outlier     not outlier     mild outlier    mild outlier   
-#&gt; [109] not outlier     not outlier     not outlier     not outlier    
-#&gt; [113] mild outlier    not outlier     mild outlier    not outlier    
-#&gt; [117] not outlier     not outlier     not outlier     not outlier    
-#&gt; [121] not outlier     not outlier     not outlier     not outlier    
-#&gt; [125] not outlier     not outlier     not outlier     not outlier    
-#&gt; [129] not outlier     not outlier     not outlier     not outlier    
-#&gt; [133] not outlier     mild outlier    not outlier     not outlier    
-#&gt; [137] not outlier    
-#&gt; Levels: not outlier &lt; mild outlier &lt; extreme outlier</div><div class='input'><span class='fu'>outlier_lof</span><span class='op'>(</span><span class='va'>y</span>, return.score <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   [1]  1.0828501  0.9849167  0.9613808  1.2014796  1.6164007  1.5807164
-#&gt;   [7]  1.0058533  1.0133167  1.1563932  1.0110473  0.9448089  0.9367136
-#&gt;  [13]  1.1073547  0.9070709  1.6969236  1.1819839  0.9826209  1.2014796
-#&gt;  [19]  0.9826209  1.0582541  1.0248121  1.0769525  1.9881511  1.2311038
-#&gt;  [25]  1.1071850  1.0419946  0.9078279  0.9571434  1.7353696  1.1684665
-#&gt;  [31]  1.2110418  1.0120753  1.4809488  1.1267769  0.9432792  1.0024078
-#&gt;  [37]  4.4937141  0.9935460  0.9452044  1.2305754  1.1114487  1.0900893
-#&gt;  [43]  0.9922693  1.0813390  0.9950682  1.0501091  0.9768079  1.1047280
-#&gt;  [49]  1.0240229  1.2014796  1.3736187  0.9809034  1.8684626  4.3009242
-#&gt;  [55]  1.1114487  0.9613808  1.4494470  1.0150138  1.0238392  1.0386941
-#&gt;  [61]  1.1563932  1.1734381  1.4530157  1.8365342  0.9674765  0.9416990
-#&gt;  [67]  0.9808865  0.9318016  1.0149813  1.1701984  1.5116676  2.4214728
-#&gt;  [73]  1.0864542  0.9416990  1.0446729  2.0687044  1.0283342  0.9569077
-#&gt;  [79]  1.6399976  1.0390922  1.4494470  1.0828832  0.9685280  0.9912541
-#&gt;  [85]  1.0398758  0.9768932  1.1819839  0.9569077  0.9783607  1.2014796
-#&gt;  [91]  1.1830693  0.9064036  4.4288001  1.0419946  0.9366570 33.9648547
-#&gt;  [97]  1.0738806  1.8457164  0.9366570  1.8475692  0.9318016  0.8885728
-#&gt; [103]  1.2627863  1.1422980  1.1164730  0.9766162  1.5349466  0.9673113
-#&gt; [109]  1.0497623  1.5727300  1.7396920  1.0211210  1.0104935  1.0075439
-#&gt; [115]  0.9831949  6.6581652  0.8993676  0.9538680  1.7396920  2.1560195
-#&gt; [121]  1.0442964  0.9517712  1.0633868  1.8091547  1.0073891  1.4512876
-#&gt; [127]  1.0158768  1.3802857  1.7396920  1.0116874  1.7396920  1.0296497
-#&gt; [133]  0.9867166  1.1971078  0.9309406  1.0240229  0.9851134</div><div class='input'>
+#&gt; Levels: not outlier &lt; mild outlier &lt; extreme outlier</div><div class='input'><span class='fu'>outlier_lof</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span><span class='op'>)</span>, <span class='va'>mask</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   [1] not outlier not outlier not outlier not outlier not outlier &lt;NA&gt;       
+#&gt;   [7] &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        not outlier not outlier not outlier
+#&gt;  [13] &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        not outlier
+#&gt;  [19] &lt;NA&gt;        &lt;NA&gt;        not outlier not outlier &lt;NA&gt;        not outlier
+#&gt;  [25] &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        not outlier
+#&gt;  [31] &lt;NA&gt;        not outlier not outlier &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;       
+#&gt;  [37] &lt;NA&gt;        not outlier &lt;NA&gt;        not outlier &lt;NA&gt;        &lt;NA&gt;       
+#&gt;  [43] &lt;NA&gt;        &lt;NA&gt;        not outlier &lt;NA&gt;        &lt;NA&gt;        not outlier
+#&gt;  [49] not outlier not outlier not outlier &lt;NA&gt;        not outlier &lt;NA&gt;       
+#&gt;  [55] &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        not outlier not outlier not outlier
+#&gt;  [61] &lt;NA&gt;        &lt;NA&gt;        not outlier &lt;NA&gt;        not outlier &lt;NA&gt;       
+#&gt;  [67] not outlier &lt;NA&gt;        not outlier &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;       
+#&gt;  [73] &lt;NA&gt;        &lt;NA&gt;        not outlier not outlier &lt;NA&gt;        not outlier
+#&gt;  [79] &lt;NA&gt;        not outlier &lt;NA&gt;        not outlier &lt;NA&gt;        not outlier
+#&gt;  [85] not outlier &lt;NA&gt;        &lt;NA&gt;        not outlier not outlier not outlier
+#&gt;  [91] &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;       
+#&gt;  [97] &lt;NA&gt;        not outlier &lt;NA&gt;        not outlier &lt;NA&gt;        not outlier
+#&gt; [103] &lt;NA&gt;        not outlier &lt;NA&gt;        &lt;NA&gt;        not outlier not outlier
+#&gt; [109] &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        not outlier &lt;NA&gt;       
+#&gt; [115] not outlier &lt;NA&gt;        not outlier not outlier &lt;NA&gt;        &lt;NA&gt;       
+#&gt; [121] &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;       
+#&gt; [127] &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        not outlier
+#&gt; [133] not outlier not outlier &lt;NA&gt;        not outlier &lt;NA&gt;       
+#&gt; Levels: not outlier &lt; mild outlier &lt; extreme outlier</div><div class='input'><span class='fu'>outlier_lof</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span><span class='op'>)</span>, <span class='va'>mask</span>, threshold <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   [1] not outlier  mild outlier mild outlier mild outlier not outlier 
+#&gt;   [6] &lt;NA&gt;         &lt;NA&gt;         &lt;NA&gt;         &lt;NA&gt;         mild outlier
+#&gt;  [11] mild outlier mild outlier &lt;NA&gt;         &lt;NA&gt;         &lt;NA&gt;        
+#&gt;  [16] &lt;NA&gt;         &lt;NA&gt;         mild outlier &lt;NA&gt;         &lt;NA&gt;        
+#&gt;  [21] not outlier  not outlier  &lt;NA&gt;         mild outlier &lt;NA&gt;        
+#&gt;  [26] &lt;NA&gt;         &lt;NA&gt;         &lt;NA&gt;         &lt;NA&gt;         not outlier 
+#&gt;  [31] &lt;NA&gt;         mild outlier mild outlier &lt;NA&gt;         &lt;NA&gt;        
+#&gt;  [36] &lt;NA&gt;         &lt;NA&gt;         mild outlier &lt;NA&gt;         not outlier 
+#&gt;  [41] &lt;NA&gt;         &lt;NA&gt;         &lt;NA&gt;         &lt;NA&gt;         mild outlier
+#&gt;  [46] &lt;NA&gt;         &lt;NA&gt;         not outlier  not outlier  mild outlier
+#&gt;  [51] not outlier  &lt;NA&gt;         not outlier  &lt;NA&gt;         &lt;NA&gt;        
+#&gt;  [56] &lt;NA&gt;         &lt;NA&gt;         mild outlier mild outlier not outlier 
+#&gt;  [61] &lt;NA&gt;         &lt;NA&gt;         mild outlier &lt;NA&gt;         mild outlier
+#&gt;  [66] &lt;NA&gt;         mild outlier &lt;NA&gt;         mild outlier &lt;NA&gt;        
+#&gt;  [71] &lt;NA&gt;         &lt;NA&gt;         &lt;NA&gt;         &lt;NA&gt;         mild outlier
+#&gt;  [76] mild outlier &lt;NA&gt;         mild outlier &lt;NA&gt;         mild outlier
+#&gt;  [81] &lt;NA&gt;         not outlier  &lt;NA&gt;         not outlier  mild outlier
+#&gt;  [86] &lt;NA&gt;         &lt;NA&gt;         mild outlier mild outlier mild outlier
+#&gt;  [91] &lt;NA&gt;         &lt;NA&gt;         &lt;NA&gt;         &lt;NA&gt;         &lt;NA&gt;        
+#&gt;  [96] &lt;NA&gt;         &lt;NA&gt;         mild outlier &lt;NA&gt;         mild outlier
+#&gt; [101] &lt;NA&gt;         mild outlier &lt;NA&gt;         mild outlier &lt;NA&gt;        
+#&gt; [106] &lt;NA&gt;         not outlier  not outlier  &lt;NA&gt;         &lt;NA&gt;        
+#&gt; [111] &lt;NA&gt;         &lt;NA&gt;         mild outlier &lt;NA&gt;         mild outlier
+#&gt; [116] &lt;NA&gt;         mild outlier mild outlier &lt;NA&gt;         &lt;NA&gt;        
+#&gt; [121] &lt;NA&gt;         &lt;NA&gt;         &lt;NA&gt;         &lt;NA&gt;         &lt;NA&gt;        
+#&gt; [126] &lt;NA&gt;         &lt;NA&gt;         &lt;NA&gt;         &lt;NA&gt;         &lt;NA&gt;        
+#&gt; [131] &lt;NA&gt;         mild outlier mild outlier mild outlier &lt;NA&gt;        
+#&gt; [136] mild outlier &lt;NA&gt;        
+#&gt; Levels: not outlier &lt; mild outlier &lt; extreme outlier</div><div class='input'><span class='fu'>outlier_lof</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span><span class='op'>)</span>, return.score <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   [1]  1.1102370  0.9894070  1.0421169  1.0242588  0.9117285  0.9646395
+#&gt;   [7]  1.5603264  1.0703319  1.4045858  0.9874825  1.0218778  0.9951101
+#&gt;  [13]  0.9667388  1.1211882  1.0315683  1.7765690  1.0385748  0.8938647
+#&gt;  [19]  1.0519223  1.0283698  1.0278727  1.0586029  1.2214534  1.0012392
+#&gt;  [25]  1.0731106  1.8450394  1.0391902  0.9819887  1.1428110  0.9341395
+#&gt;  [31]  0.9897880  0.9747605  1.0825141  1.0792026  1.0659316  1.1794647
+#&gt;  [37]  1.6916414  1.2361147  1.2585646  1.2917501  1.3266333  1.2067087
+#&gt;  [43]  1.3885000  1.1251200  1.0481770  1.1033491  1.2943416  0.9593992
+#&gt;  [49]  0.9207858  1.0348624  0.9720867  1.4583952  0.9709516  4.2874870
+#&gt;  [55]  1.3266333  1.0118947  1.2240822  1.0093848  0.9907633  1.0123552
+#&gt;  [61]  1.1183636  1.4008203  0.9453512  1.2933537  1.0331664  1.1239986
+#&gt;  [67]  1.0568333  1.0261892  1.0014351  1.0299433  1.8973056  1.1059878
+#&gt;  [73]  0.9494949  1.0174133  1.0636362  1.0423481  1.0081456  1.0423481
+#&gt;  [79]  1.3560630  1.0307544  1.2240822  0.9222959  1.1386487  0.9440730
+#&gt;  [85]  1.0280171  1.0673240  1.0617177  1.0036693  1.0036693  1.0221464
+#&gt;  [91]  1.0121623  1.0328419  1.3897752  1.1703000  1.0137100 33.8592759
+#&gt;  [97]  1.4260662  1.0231841  1.0095072  0.9448149  1.6040756  0.9219252
+#&gt; [103]  1.1642059  1.0839400  1.1831537  1.4568276  1.0998328  1.0769281
+#&gt; [109]  1.0719208  1.3683496  1.6868222  1.0719208  1.0505132  1.4258804
+#&gt; [115]  0.9753882  6.6359821  1.0408877  0.9895000  1.6868222  0.9425270
+#&gt; [121]  0.9920550  1.1082407  1.7134208  0.9672459  1.0434735  1.9620654
+#&gt; [127]  1.1492859  1.0904811  1.6868222  1.2843468  1.6868222  0.9995745
+#&gt; [133]  1.0109641  0.9937494  0.9937494  1.0021245  2.2583921</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
