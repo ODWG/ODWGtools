@@ -57,3 +57,39 @@ ec_to_psu <- function(ec) {
     (K5 * R ^ 2) + (K6 * R ^ (5 / 2))
   return(S)
 }
+
+#' List to Numeric Data Frame
+#'
+#' Utility function to convert a list of vectors to a numeric dataframe.
+#'
+#' @param xs A list of equal-length vectors.
+#' @return A dataframe.
+#'
+#' @keywords internal
+list_to_ndf = function(xs) {
+  if (!is.list(xs)) {
+    stop("\"xs\" must be a dataframe of list of vectors.")
+  } else if (!Reduce(identical, lapply(xs, length))) {
+    stop("Elements of \"xs\" must be equal length.")
+  }
+  # check if elements are coercible
+  nas = sapply(xs, function(x) sum(is.na(x)))
+  new.nas = sapply(xs, function(x) sum(is.na(as.numeric(x))))
+  if (any(new.nas > nas)) {
+    stop("Elements of \"xs\" must be convertible to numeric.")
+  }
+  as.data.frame(lapply(xs, as.numeric))
+}
+
+#' Inverse Which
+#'
+#' Convert output of [`base::which()`] to a logical vector.
+#'
+#' @param i A vector of indices.
+#' @param len The length of the original vector.
+#' @return A logical vector.
+#'
+#' @keywords internal
+invwhich = function(i, len) {
+  `[<-`(logical(len), i, TRUE)
+}
