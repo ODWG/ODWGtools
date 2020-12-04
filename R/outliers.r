@@ -27,7 +27,7 @@ outlier_flags = function() {
 #'
 #' @param x A vector of data.
 #' @param mask A logical mask that identifies a subgroup of `x`
-#'  to compute non-parametric statistics on. Useful when a subset
+#'  to compute statistics on. Useful when a subset
 #'  of quality-assured data is available. Default action is to
 #'  ignore NA values.
 #' @param threshold A length-two vector identifying
@@ -105,7 +105,7 @@ outlier_tukey = function(x, mask = !is.na(x),
 #' @importFrom dplyr if_else between case_when
 #' @importFrom stats qnorm sd
 #' @export
-outlier_tscore = function(x, mask = !is.na(x), 
+outlier_tscore = function(x, mask = !is.na(x),
   threshold = c(0.9, 0.95), return.score = FALSE) {
   n = length(x)
   score = (x - mean(x[mask])) / (sd(x[mask]) / sqrt(n))
@@ -219,7 +219,9 @@ outlier_mad = function(x, mask = !is.na(x),
 #'
 #' Performs outlier detection using an Isolation Forest.
 #'
-#' @inheritParams outlier_tscore
+#' @param xs A dataframe or list of vectors
+#'   (which will be coerced to a numeric matrix).
+#' @inheritParams outlier_tukey
 #' @param ... Additional arguments to `solitude::isolationForest$new()`.
 #'   note that the argument `sample_size` will be overwritten to use the
 #'   number of unmasked data points, i.e. `length(which(mask))`.
@@ -235,30 +237,33 @@ outlier_mad = function(x, mask = !is.na(x),
 #' y=sin(x) + noise
 #' mask = noise < 1
 #'
-#' outlier_iforest(y)
-#' outlier_iforest(y, mask)
-#' outlier_iforest(y, mask, threshold = c(1, 2))
-#' outlier_iforest(y, return.score = TRUE)
+#' outlier_iforest(list(y))
+#' outlier_iforest(list(x, y))
+#' outlier_iforest(list(x, y), mask)
+#' outlier_iforest(list(x, y), mask, threshold = c(1, 2))
+#' outlier_iforest(list(x, y), return.score = TRUE)
 #'
 #' @importFrom dplyr if_else between case_when
 #' @importFrom stats predict na.omit
 #' @export
-outlier_iforest = function(x, mask = !is.na(x),
+outlier_iforest = function(xs, mask = !Reduce("|", lapply(xs, is.na)),
   threshold = c(0.8, 0.9), return.score = FALSE, ...) {
   if (!requireNamespace("solitude"))
     stop("Could not find package \"solitude\"")
-  d = data.frame(x = x[mask])
+  p = list_to_ndf(xs)
+  d = p[mask, ]
+  p.omit = na.omit(p)
+  na.mask = invwhich(as.vector(attr(p.omit, "na.action")), nrow(p))
   mod = solitude::isolationForest$new(sample_size = nrow(d), ...)
   mod$fit(d)
-  p = data.frame(x = x)
-  score = mod$predict(na.omit(p))$anomaly_score
+  score = mod$predict(p.omit)$anomaly_score
   p["score"] = NA_real_
-  p[!is.na(p$x), "score"] = score
+  p[!na.mask, "score"] = score
   if (return.score) {
     p$score
   } else {
     outlier_factor(case_when(
-      is.na(x) ~ NA_character_,
+      is.na(p$score) ~ NA_character_,
       p$score > threshold[2] ~ "extreme outlier",
       p$score > threshold[1] ~ "mild outlier",
       TRUE ~ "not outlier"
@@ -271,7 +276,7 @@ outlier_iforest = function(x, mask = !is.na(x),
 #'
 #' Performs outlier detection using Local Outlier Factor algorithm.
 #'
-#' @inheritParams outlier_tscore
+#' @inheritParams outlier_iforest
 #' @param ... Additional arguments to `dbscan::lof`, namely
 #'   `k`.
 #'
@@ -286,26 +291,27 @@ outlier_iforest = function(x, mask = !is.na(x),
 #' y=sin(x) + noise
 #' mask = noise < 1
 #'
-#' outlier_lof(y)
-#' outlier_lof(y, mask)
-#' outlier_lof(y, mask, threshold = c(1, 2))
-#' outlier_lof(y, return.score = TRUE)
+#' outlier_lof(list(y))
+#' outlier_lof(list(x, y), mask)
+#' outlier_lof(list(x, y), mask, threshold = c(1, 2))
+#' outlier_lof(list(x, y), return.score = TRUE)
 #'
 #' @importFrom dplyr if_else between case_when
 #' @export
-outlier_lof = function(x, mask = !is.na(x),
+outlier_lof = function(xs, mask = !Reduce("|", lapply(xs, is.na)),
   threshold = c(1.5, 2), return.score = FALSE, ...) {
   if (!requireNamespace("dbscan"))
     stop("Could not find package \"dbscan\"")
-  xx = as.matrix(x[mask])
+  # need double comma to avoid vector coercion
+  xx = as.matrix(list_to_ndf(xs)[mask, ])
   lof.omit = dbscan::lof(xx, ...)
-  score = rep(NA, length(x))
+  score = rep(NA_real_, nrow(xx))
   score[mask] = lof.omit
   if (return.score) {
     score
   } else {
     outlier_factor(case_when(
-      is.na(x) ~ NA_character_,
+      is.na(score) ~ NA_character_,
       score > threshold[2] ~ "extreme outlier",
       score > threshold[1] ~ "mild outlier",
       TRUE ~ "not outlier"
