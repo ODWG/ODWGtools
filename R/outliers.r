@@ -234,7 +234,7 @@ outlier_mad = function(x, mask = !is.na(x),
 #' @examples
 #' x = seq(0, 34, by = 0.25)*pi
 #' noise = rlnorm(length(x), meanlog = 1, sdlog = 3)
-#' y=sin(x) + noise
+#' y = sin(x) + noise
 #' mask = noise < 1
 #'
 #' outlier_iforest(list(y))
@@ -251,7 +251,7 @@ outlier_iforest = function(xs, mask = !Reduce("|", lapply(xs, is.na)),
   if (!requireNamespace("solitude"))
     stop("Could not find package \"solitude\"")
   p = list_to_ndf(xs)
-  d = p[mask, ]
+  d = subset(p, mask)
   p.omit = na.omit(p)
   na.mask = invwhich(as.vector(attr(p.omit, "na.action")), nrow(p))
   mod = solitude::isolationForest$new(sample_size = nrow(d), ...)
@@ -303,7 +303,7 @@ outlier_lof = function(xs, mask = !Reduce("|", lapply(xs, is.na)),
   if (!requireNamespace("dbscan"))
     stop("Could not find package \"dbscan\"")
   # need double comma to avoid vector coercion
-  xx = as.matrix(list_to_ndf(xs)[mask, ])
+  xx = as.matrix(subset(list_to_ndf(xs), mask))
   lof.omit = dbscan::lof(xx, ...)
   score = rep(NA_real_, nrow(xx))
   score[mask] = lof.omit
