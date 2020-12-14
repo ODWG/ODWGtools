@@ -1,3 +1,6 @@
+#' @include ODWGtools.r
+NULL
+
 #' Daily Tidal Mean
 #'
 #' Compute the daily low-tide or high-tide average.

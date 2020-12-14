@@ -1,3 +1,10 @@
+#' @include ODWGtools.r
+NULL
+
+## TODO: correct `mask` arguments so that the mask is
+## the IGNORED subgroup
+
+
 #' Adjust for Known Drift
 #'
 #' Adjust a regular time series for a known drift over a

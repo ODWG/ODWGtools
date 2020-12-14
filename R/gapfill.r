@@ -1,3 +1,6 @@
+#' @include aggregate.r
+NULL
+
 #' Contiguous Blocks of Discrete Values
 #'
 #' Identify contiguous periods of discrete values (i.e. QAQC Flags).
