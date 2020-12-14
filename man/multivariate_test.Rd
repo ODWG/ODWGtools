@@ -9,8 +9,8 @@ multivariate_test(x, y, n.dev, n.prior)
 \arguments{
 \item{x}{A vector of values.}
 
-\item{y}{A vector of coincident observations, e.g. from a separate sensor
-or nearby station.}
+\item{y}{A vector of coincident observations, e.g. from a separate
+sensor or nearby station.}
 
 \item{n.dev}{The number of standard deviations to test against.}
 

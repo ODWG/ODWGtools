@@ -4,7 +4,7 @@
 \alias{smooth_godin}
 \title{Godin Smoother}
 \usage{
-smooth_godin(x, increment, kind = c("mean", "max", "min"))
+smooth_godin(x, increment, kind = c("mean", "max", "min", "median"), ...)
 }
 \arguments{
 \item{x}{A vector of values.}

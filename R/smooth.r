@@ -1,3 +1,6 @@
+#' @include util.r
+NULL
+
 #' Godin Smoother
 #'
 #' Apply a Godin filter to a vector of data.
@@ -18,12 +21,14 @@
 #' @importFrom slider slide_dbl
 #' @importFrom dplyr lag lead
 #' @export
-smooth_godin = function(x, increment, kind = c("mean", "max", "min")) {
-  kind = match.arg(kind, c("mean", "max", "min"))
+smooth_godin = function(x, increment,
+  kind = c("mean", "max", "min", "median"), ...) {
+  kind = match.arg(kind, c("mean", "max", "min", "median"))
   roll_fun = switch(kind,
     "mean" = mean,
     "max" = max,
-    "min" = min
+    "min" = min,
+    "median" = median
   )
   increment = string_to_difftime(increment)
   inc.units = units(increment)
@@ -40,14 +45,18 @@ smooth_godin = function(x, increment, kind = c("mean", "max", "min")) {
   offset = as.numeric(as.difftime(1L, units = "hours"),
     units = inc.units) / as.numeric(increment)
 
-  (slide_dbl(lag(x, offset), roll_fun, .complete = TRUE,
-    .before = w24.before, .after = w24.after) +
-   slide_dbl(lead(x, offset), roll_fun, .complete = TRUE,
-     .before = w24.before, .after = w24.after) +
-   slide_dbl(x, roll_fun, .complete = TRUE,
-     .before = w25.before, .after = w25.after)) / 3.0
+  x1 = slide_dbl(lag(x, offset), roll_fun, .complete = TRUE,
+    .before = w24.before, .after = w24.after, ...)
+  x2 = slide_dbl(lead(x, offset), roll_fun, .complete = TRUE,
+    .before = w24.before, .after = w24.after, ...)
+  x3 = slide_dbl(x, roll_fun, .complete = TRUE,
+    .before = w25.before, .after = w25.after, ...)
+
+  (x1 + x2 + x3) / 3.0
 }
 
+#' Lanczos Filter
+#'
 smooth_lanczos = function(x, increment, cutoff, window) {
   increment = string_to_difftime(increment)
   inc.units = units(increment)
@@ -57,3 +66,4 @@ smooth_lanczos = function(x, increment, cutoff, window) {
 
   cutoff
 }
+

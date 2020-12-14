@@ -1,3 +1,6 @@
+#' @include util.r
+NULL
+
 #' Real-time Quality Control Factor
 #'
 #' Convert real-time quality control labels to ordered factor.

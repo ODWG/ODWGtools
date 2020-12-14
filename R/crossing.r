@@ -9,8 +9,8 @@ NULL
 #' for more information.
 #'
 #' @inheritParams rtqc_rate
-#' @param y A vector of coincident observations, e.g. from a separate sensor
-#'   or nearby station.
+#' @param y A vector of coincident observations, e.g. from a separate
+#'   sensor or nearby station.
 #'
 #' @examples
 #' fake.data1 = c(rnorm(10,10), rnorm(10, 50), rnorm(10, 10))

@@ -4,21 +4,31 @@
 \alias{outlier_mad}
 \title{Median absolute deviation test for outliers}
 \usage{
-outlier_mad(x, mask = !is.na(x), threshold = c(1.5, 3), return.score = FALSE)
+outlier_mad(
+  x,
+  mask = is.na(x),
+  threshold = c(1.5, 3),
+  k = 1/qnorm(0.75),
+  return.score = FALSE
+)
 }
 \arguments{
 \item{x}{A vector of data.}
 
 \item{mask}{A logical mask that identifies a subgroup of \code{x}
-to compute statistics on. Useful when a subset
+to ignore when computing statistics. Useful when a subset
 of quality-assured data is available. Default action is to
-ignore NA values.}
+mask NA values.}
 
 \item{threshold}{A length-two vector identifying
 thresholds for "mild" and "extreme" outliers.}
 
+\item{k}{A scale factor, defined as the reciprocal of the 75th
+percentile of the underlying distribution of the data. Default
+assumes a normal distribution.}
+
 \item{return.score}{if \code{TRUE}, return the numeric outlier score.
-If FALSE, return an ordered factor classifying the observations
+If \code{FALSE}, return an ordered factor classifying the observations
 as one of "not outlier" (1), "mild outlier" (2), or
 "extreme outlier" (3).}
 }
@@ -26,16 +36,16 @@ as one of "not outlier" (1), "mild outlier" (2), or
 Performs a median absolute deviation (MAD) test for outliers.
 }
 \details{
-the values of \code{threshold} identify the multiplier of the
-median distance used to identify mild and extreme outliers.
-Default values are 1.5 for "mild" outliers and 3.0 for "extreme"
-outliers.
+the values of \code{threshold} identify the thresholds used to
+identify mild and extreme outliers, as a multiple of
+\code{k * median(x)}. Default values are 1.5 for "mild" outliers and
+3.0 for "extreme" outliers.
 }
 \examples{
 x = seq(0, 34, by = 0.25)*pi
-noise = rlnorm(length(x), meanlog = 1, sdlog = 3)
-y=sin(x) + noise
-mask = noise < 1
+noise = rnorm(length(x), mean = 1, sd = 3)
+y = sin(x) + noise
+mask = noise > 1
 
 outlier_mad(y)
 outlier_mad(y, mask)
