@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -129,7 +129,7 @@
 
     <pre class="usage"><span class='fu'>outlier_chisq</span><span class='op'>(</span>
   <span class='va'>x</span>,
-  mask <span class='op'>=</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>,
+  mask <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>,
   threshold <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.9</span>, <span class='fl'>0.95</span><span class='op'>)</span>,
   return.score <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
@@ -144,9 +144,9 @@
     <tr>
       <th>mask</th>
       <td><p>A logical mask that identifies a subgroup of <code>x</code>
-to compute statistics on. Useful when a subset
+to ignore when computing statistics. Useful when a subset
 of quality-assured data is available. Default action is to
-ignore NA values.</p></td>
+mask NA values.</p></td>
     </tr>
     <tr>
       <th>threshold</th>
@@ -156,7 +156,7 @@ thresholds for "mild" and "extreme" outliers.</p></td>
     <tr>
       <th>return.score</th>
       <td><p>if <code>TRUE</code>, return the numeric outlier score.
-If FALSE, return an ordered factor classifying the observations
+If <code>FALSE</code>, return an ordered factor classifying the observations
 as one of "not outlier" (1), "mild outlier" (2), or
 "extreme outlier" (3).</p></td>
     </tr>
@@ -171,9 +171,9 @@ for "extreme" outliers.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>x</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>34</span>, by <span class='op'>=</span> <span class='fl'>0.25</span><span class='op'>)</span><span class='op'>*</span><span class='va'>pi</span>
-<span class='va'>noise</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Lognormal.html'>rlnorm</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, meanlog <span class='op'>=</span> <span class='fl'>1</span>, sdlog <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
-<span class='va'>y</span><span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/Trig.html'>sin</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>+</span> <span class='va'>noise</span>
-<span class='va'>mask</span> <span class='op'>=</span> <span class='va'>noise</span> <span class='op'>&lt;</span> <span class='fl'>1</span>
+<span class='va'>noise</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, mean <span class='op'>=</span> <span class='fl'>1</span>, sd <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
+<span class='va'>y</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Trig.html'>sin</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>+</span> <span class='va'>noise</span>
+<span class='va'>mask</span> <span class='op'>=</span> <span class='va'>noise</span> <span class='op'>&gt;</span> <span class='fl'>1</span>
 
 <span class='fu'>outlier_chisq</span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;   [1] not outlier not outlier not outlier not outlier not outlier not outlier
@@ -200,106 +200,82 @@ for "extreme" outliers.</p>
 #&gt; [127] not outlier not outlier not outlier not outlier not outlier not outlier
 #&gt; [133] not outlier not outlier not outlier not outlier not outlier
 #&gt; Levels: not outlier &lt; mild outlier &lt; extreme outlier</div><div class='input'><span class='fu'>outlier_chisq</span><span class='op'>(</span><span class='va'>y</span>, <span class='va'>mask</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   [1] extreme outlier not outlier     extreme outlier not outlier    
-#&gt;   [5] not outlier     not outlier     extreme outlier extreme outlier
-#&gt;   [9] extreme outlier not outlier     extreme outlier not outlier    
-#&gt;  [13] not outlier     extreme outlier not outlier     not outlier    
-#&gt;  [17] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [21] extreme outlier not outlier     not outlier     not outlier    
-#&gt;  [25] extreme outlier not outlier     not outlier     not outlier    
-#&gt;  [29] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [33] extreme outlier not outlier     not outlier     not outlier    
-#&gt;  [37] extreme outlier extreme outlier not outlier     not outlier    
-#&gt;  [41] extreme outlier not outlier     extreme outlier not outlier    
-#&gt;  [45] not outlier     extreme outlier not outlier     not outlier    
-#&gt;  [49] extreme outlier not outlier     not outlier     extreme outlier
-#&gt;  [53] extreme outlier not outlier     not outlier     not outlier    
-#&gt;  [57] not outlier     not outlier     not outlier     extreme outlier
-#&gt;  [61] extreme outlier extreme outlier not outlier     extreme outlier
-#&gt;  [65] not outlier     extreme outlier not outlier     extreme outlier
-#&gt;  [69] not outlier     not outlier     extreme outlier not outlier    
-#&gt;  [73] not outlier     not outlier     extreme outlier extreme outlier
-#&gt;  [77] not outlier     extreme outlier extreme outlier not outlier    
-#&gt;  [81] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [85] not outlier     not outlier     extreme outlier not outlier    
-#&gt;  [89] not outlier     extreme outlier not outlier     not outlier    
-#&gt;  [93] not outlier     extreme outlier not outlier     extreme outlier
-#&gt;  [97] not outlier     not outlier     not outlier     not outlier    
-#&gt; [101] not outlier     not outlier     not outlier     extreme outlier
-#&gt; [105] not outlier     extreme outlier not outlier     extreme outlier
-#&gt; [109] not outlier     not outlier     not outlier     not outlier    
-#&gt; [113] not outlier     extreme outlier extreme outlier not outlier    
-#&gt; [117] not outlier     not outlier     not outlier     not outlier    
-#&gt; [121] not outlier     not outlier     not outlier     extreme outlier
-#&gt; [125] not outlier     not outlier     extreme outlier extreme outlier
-#&gt; [129] extreme outlier extreme outlier not outlier     extreme outlier
-#&gt; [133] extreme outlier extreme outlier not outlier     not outlier    
-#&gt; [137] not outlier    
+</div><div class='output co'>#&gt;   [1] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt;   [7] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt;  [13] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt;  [19] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt;  [25] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt;  [31] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt;  [37] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt;  [43] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt;  [49] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt;  [55] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt;  [61] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt;  [67] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt;  [73] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt;  [79] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt;  [85] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt;  [91] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt;  [97] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt; [103] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt; [109] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt; [115] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt; [121] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt; [127] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt; [133] not outlier not outlier not outlier not outlier not outlier
 #&gt; Levels: not outlier &lt; mild outlier &lt; extreme outlier</div><div class='input'><span class='fu'>outlier_chisq</span><span class='op'>(</span><span class='va'>y</span>, <span class='va'>mask</span>, threshold <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.8</span>, <span class='fl'>0.9</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   [1] extreme outlier not outlier     extreme outlier not outlier    
-#&gt;   [5] not outlier     not outlier     extreme outlier extreme outlier
-#&gt;   [9] extreme outlier not outlier     extreme outlier not outlier    
-#&gt;  [13] not outlier     extreme outlier not outlier     not outlier    
-#&gt;  [17] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [21] extreme outlier not outlier     not outlier     not outlier    
-#&gt;  [25] extreme outlier not outlier     not outlier     not outlier    
-#&gt;  [29] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [33] extreme outlier not outlier     not outlier     not outlier    
-#&gt;  [37] extreme outlier extreme outlier not outlier     not outlier    
-#&gt;  [41] extreme outlier not outlier     extreme outlier not outlier    
-#&gt;  [45] not outlier     extreme outlier not outlier     not outlier    
-#&gt;  [49] extreme outlier not outlier     not outlier     extreme outlier
-#&gt;  [53] extreme outlier not outlier     not outlier     not outlier    
-#&gt;  [57] not outlier     not outlier     not outlier     extreme outlier
-#&gt;  [61] extreme outlier extreme outlier not outlier     extreme outlier
-#&gt;  [65] not outlier     extreme outlier not outlier     extreme outlier
-#&gt;  [69] not outlier     not outlier     extreme outlier not outlier    
-#&gt;  [73] not outlier     not outlier     extreme outlier extreme outlier
-#&gt;  [77] not outlier     extreme outlier extreme outlier not outlier    
-#&gt;  [81] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [85] not outlier     not outlier     extreme outlier not outlier    
-#&gt;  [89] not outlier     extreme outlier not outlier     not outlier    
-#&gt;  [93] not outlier     extreme outlier not outlier     extreme outlier
-#&gt;  [97] not outlier     not outlier     not outlier     not outlier    
-#&gt; [101] not outlier     not outlier     not outlier     extreme outlier
-#&gt; [105] not outlier     extreme outlier not outlier     extreme outlier
-#&gt; [109] not outlier     not outlier     not outlier     not outlier    
-#&gt; [113] not outlier     extreme outlier extreme outlier not outlier    
-#&gt; [117] not outlier     not outlier     not outlier     not outlier    
-#&gt; [121] not outlier     not outlier     not outlier     extreme outlier
-#&gt; [125] not outlier     not outlier     extreme outlier extreme outlier
-#&gt; [129] extreme outlier extreme outlier not outlier     extreme outlier
-#&gt; [133] extreme outlier extreme outlier not outlier     not outlier    
-#&gt; [137] not outlier    
+</div><div class='output co'>#&gt;   [1] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt;   [7] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt;  [13] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt;  [19] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt;  [25] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt;  [31] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt;  [37] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt;  [43] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt;  [49] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt;  [55] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt;  [61] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt;  [67] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt;  [73] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt;  [79] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt;  [85] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt;  [91] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt;  [97] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt; [103] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt; [109] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt; [115] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt; [121] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt; [127] not outlier not outlier not outlier not outlier not outlier not outlier
+#&gt; [133] not outlier not outlier not outlier not outlier not outlier
 #&gt; Levels: not outlier &lt; mild outlier &lt; extreme outlier</div><div class='input'><span class='fu'>outlier_chisq</span><span class='op'>(</span><span class='va'>y</span>, return.score <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   [1] 8.270324e-01 1.002012e-01 7.822660e+00 1.012290e-01 1.043641e-01
-#&gt;   [6] 1.041809e-01 1.987423e-04 3.192036e-02 6.650056e+00 9.683235e-02
-#&gt;  [11] 5.185865e-03 1.027649e-01 1.042976e-01 6.197071e-04 1.030997e-01
-#&gt;  [16] 9.315358e-02 1.039574e-01 1.023477e-01 1.014755e-01 9.982255e-02
-#&gt;  [21] 7.667772e-03 8.046007e-02 1.060380e-01 1.015675e-01 3.624896e-02
-#&gt;  [26] 8.146383e-02 9.901567e-02 9.671605e-02 9.586450e-02 8.183899e-02
-#&gt;  [31] 9.921401e-02 9.867299e-02 1.259977e-02 1.017498e-01 8.039861e-02
-#&gt;  [36] 1.004114e-01 1.211465e-02 8.494585e+00 1.070779e-01 9.864986e-02
-#&gt;  [41] 2.998218e+01 1.026650e-01 1.012235e-02 9.834077e-02 1.023018e-01
-#&gt;  [46] 4.178683e+00 1.074306e-01 1.067138e-01 2.438721e-03 1.027201e-01
-#&gt;  [51] 1.016823e-01 5.508544e-02 4.580677e+01 1.058445e-01 1.080420e-01
-#&gt;  [56] 9.911249e-02 1.038195e-01 1.017002e-01 9.995751e-02 1.287714e-01
-#&gt;  [61] 5.589947e-02 7.112601e-02 1.080607e-01 1.904755e-02 8.921452e-02
-#&gt;  [66] 6.078429e-02 9.711776e-02 4.033634e-02 1.045680e-01 1.071867e-01
-#&gt;  [71] 4.692535e-02 1.061439e-01 1.049607e-01 9.261919e-02 1.959321e-02
-#&gt;  [76] 7.291072e-02 1.043353e-01 6.577866e-02 6.827055e-03 1.063108e-01
-#&gt;  [81] 1.030608e-01 1.025620e-01 9.996382e-02 9.138936e-02 1.049476e-01
-#&gt;  [86] 1.070634e-01 4.834923e-02 1.069827e-01 1.022230e-01 7.222700e-02
-#&gt;  [91] 9.879823e-02 1.026387e-01 1.046072e-01 7.937845e-01 8.529914e-02
-#&gt;  [96] 5.633037e+00 7.988402e-02 1.022856e-01 1.018476e-01 9.644944e-02
-#&gt; [101] 1.049732e-01 9.877295e-02 1.051908e-01 5.908057e-03 1.007038e-01
-#&gt; [106] 2.064882e-03 9.819829e-02 2.429111e+00 1.041666e-01 1.066572e-01
-#&gt; [111] 1.044045e-01 1.057603e-01 9.924425e-02 1.593969e-02 5.311824e-02
-#&gt; [116] 1.015589e-01 1.042454e-01 1.065461e-01 1.080925e-01 1.070510e-01
-#&gt; [121] 1.030830e-01 1.013656e-01 9.696467e-02 7.016732e-02 1.048355e-01
-#&gt; [126] 1.033514e-01 5.614316e-02 4.191034e-02 1.767491e-02 6.567139e-01
-#&gt; [131] 1.007764e-01 6.534004e-02 4.084358e-02 1.230341e+01 1.080876e-01
-#&gt; [136] 9.712528e-02 1.012285e-01</div><div class='input'>
+</div><div class='output co'>#&gt;   [1] 2.772037e-02 1.266003e-02 9.719711e-01 2.962280e-02 2.929216e-02
+#&gt;   [6] 1.516655e+00 1.691936e-02 2.260291e-01 2.181057e+00 1.436629e-01
+#&gt;  [11] 1.221679e+00 4.000287e-01 9.042048e-02 1.825153e+00 7.587321e-02
+#&gt;  [16] 3.094239e-01 6.601371e-01 1.792849e+00 2.533262e+00 8.300513e-01
+#&gt;  [21] 7.724695e+00 8.707923e-02 4.389216e-01 1.135204e-01 6.427370e-01
+#&gt;  [26] 1.565078e+00 2.679336e-01 8.670671e-01 1.289895e+00 7.639112e-01
+#&gt;  [31] 1.824201e-01 1.574066e-01 4.304182e-01 7.980120e-01 5.202738e-02
+#&gt;  [36] 1.573758e-01 7.462782e+00 1.117468e+00 1.049742e+00 6.508581e-01
+#&gt;  [41] 5.370454e-01 2.991149e-02 5.041270e-01 6.567188e-01 6.911952e-01
+#&gt;  [46] 2.327749e-01 7.372058e-01 7.376153e-03 1.534823e+00 4.701280e+00
+#&gt;  [51] 1.244007e-01 2.953449e+00 2.830031e-01 1.262602e-01 8.556859e-01
+#&gt;  [56] 3.427147e-01 5.081392e-01 9.379375e-01 6.985486e-02 2.041057e-01
+#&gt;  [61] 7.405380e-01 2.794901e+00 1.363654e-02 1.552572e-02 5.070491e-01
+#&gt;  [66] 1.983590e-01 1.014561e-02 3.980512e+00 3.009587e-01 2.074022e-01
+#&gt;  [71] 1.497793e-01 3.469713e+00 2.385980e+00 5.427923e+00 3.651818e-01
+#&gt;  [76] 1.405766e-01 3.669347e-01 1.647105e-01 3.073677e-01 9.679123e-01
+#&gt;  [81] 1.602495e+00 2.362051e-01 4.109976e-02 1.350084e+00 1.652124e-01
+#&gt;  [86] 2.843449e+00 1.293230e+00 3.371901e-02 1.401343e-01 3.708147e-02
+#&gt;  [91] 1.164828e-01 4.746384e+00 7.255313e-02 4.700128e-02 1.466708e+00
+#&gt;  [96] 4.043434e-01 1.635389e+00 4.025037e-02 6.753176e-03 3.504161e+00
+#&gt; [101] 5.308320e-02 3.645603e-02 6.460663e-01 7.872417e-01 8.118525e-05
+#&gt; [106] 5.153059e-02 3.930438e-01 1.197362e+00 3.357932e+00 1.028017e-02
+#&gt; [111] 1.593801e-01 8.112612e-02 4.389889e+00 2.957677e-02 4.658043e-01
+#&gt; [116] 3.823007e-01 3.387800e-01 8.817434e-01 1.240015e-06 1.876993e+00
+#&gt; [121] 5.637383e+00 1.354041e+00 1.708942e-06 3.746648e-01 4.634978e-04
+#&gt; [126] 1.467629e+00 1.217127e+00 2.869035e-01 1.777134e+00 2.307861e+00
+#&gt; [131] 9.600995e-01 2.103118e+00 6.482555e-01 1.017618e+00 1.785937e+00
+#&gt; [136] 3.033443e-02 8.430916e-01</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
