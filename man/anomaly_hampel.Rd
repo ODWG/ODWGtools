@@ -4,15 +4,15 @@
 \alias{anomaly_hampel}
 \title{Hampel Filter}
 \usage{
-anomaly_hampel(x, mask = is.na(x), size = c(5L, 5L), ...)
+anomaly_hampel(x, mask = !is.na(x), size = c(5L, 5L), ...)
 }
 \arguments{
 \item{x}{A vector of data.}
 
-\item{mask}{A logical mask that identifies a subgroup of \code{x}
-to ignore when computing statistics. Useful when a subset
-of quality-assured data is available. Default action is to
-mask NA values.}
+\item{mask}{A logical vector that defines which values in \code{x}
+will used when computing statistics. Useful when a subset
+of quality-assured data is available. Default mask is non-\code{NA}
+Values.}
 
 \item{size}{A two-element integer vector specifying the number of
 points before and after the current data point to include in the
@@ -32,7 +32,7 @@ over a moving window.
 x = seq(0, 34, by = 0.25)*pi
 noise = rnorm(length(x), mean = 1, sd = 3)
 y = sin(x) + noise
-mask = noise > 1
+mask = noise < 1
 
 anomaly_hampel(y, mask)
 

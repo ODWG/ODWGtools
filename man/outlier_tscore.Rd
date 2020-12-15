@@ -6,7 +6,7 @@
 \usage{
 outlier_tscore(
   x,
-  mask = is.na(x),
+  mask = !is.na(x),
   threshold = c(0.9, 0.95),
   return.score = FALSE
 )
@@ -14,10 +14,10 @@ outlier_tscore(
 \arguments{
 \item{x}{A vector of data.}
 
-\item{mask}{A logical mask that identifies a subgroup of \code{x}
-to ignore when computing statistics. Useful when a subset
-of quality-assured data is available. Default action is to
-mask NA values.}
+\item{mask}{A logical vector that defines which values in \code{x}
+will used when computing statistics. Useful when a subset
+of quality-assured data is available. Default mask is non-\code{NA}
+Values.}
 
 \item{threshold}{A length-two vector identifying
 thresholds for "mild" and "extreme" outliers.}

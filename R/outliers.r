@@ -26,10 +26,10 @@ outlier_flags = function() {
 #' Perform Tukey's test for mild and extreme outliers.
 #'
 #' @param x A vector of data.
-#' @param mask A logical mask that identifies a subgroup of `x`
-#'  to ignore when computing statistics. Useful when a subset
-#'  of quality-assured data is available. Default action is to
-#'  mask NA values.
+#' @param mask A logical vector that defines which values in `x`
+#' will used when computing statistics. Useful when a subset
+#'  of quality-assured data is available. Default mask is non-`NA`
+#'  Values.
 #' @param threshold A length-two vector identifying
 #'  thresholds for "mild" and "extreme" outliers.
 #' @param return.score if `TRUE`, return the numeric outlier score.
@@ -48,7 +48,7 @@ outlier_flags = function() {
 #' x = seq(0, 34, by = 0.25)*pi
 #' noise = rnorm(length(x), mean = 1, sd = 3)
 #' y = sin(x) + noise
-#' mask = noise > 1
+#' mask = noise < 1
 #'
 #' outlier_tukey(y)
 #' outlier_tukey(y, mask)
@@ -58,10 +58,10 @@ outlier_flags = function() {
 #' @importFrom dplyr if_else between case_when
 #' @importFrom stats quantile
 #' @export
-outlier_tukey = function(x, mask = is.na(x),
+outlier_tukey = function(x, mask = !is.na(x),
   threshold = c(1.5, 3), return.score = FALSE) {
-  lowerq = quantile(x[!mask])[2]
-  upperq = quantile(x[!mask])[4]
+  lowerq = quantile(x[mask])[2]
+  upperq = quantile(x[mask])[4]
   iqr = upperq - lowerq
   score = pmax(x - upperq, lowerq - x) / iqr
   if (return.score) {
@@ -105,10 +105,10 @@ outlier_tukey = function(x, mask = is.na(x),
 #' @importFrom dplyr if_else between case_when
 #' @importFrom stats qnorm sd
 #' @export
-outlier_tscore = function(x, mask = is.na(x),
+outlier_tscore = function(x, mask = !is.na(x),
   threshold = c(0.9, 0.95), return.score = FALSE) {
   n = length(x)
-  score = (x - mean(x[!mask])) / (sd(x[!mask]) / sqrt(n))
+  score = (x - mean(x[mask])) / (sd(x[mask]) / sqrt(n))
   if (return.score) {
     score
   } else {
@@ -137,7 +137,7 @@ outlier_tscore = function(x, mask = is.na(x),
 #' x = seq(0, 34, by = 0.25)*pi
 #' noise = rnorm(length(x), mean = 1, sd = 3)
 #' y = sin(x) + noise
-#' mask = noise > 1
+#' mask = noise < 1
 #'
 #' outlier_chisq(y)
 #' outlier_chisq(y, mask)
@@ -147,10 +147,10 @@ outlier_tscore = function(x, mask = is.na(x),
 #' @importFrom dplyr if_else between case_when
 #' @importFrom stats qchisq var
 #' @export
-outlier_chisq = function(x, mask = is.na(x),
+outlier_chisq = function(x, mask = !is.na(x),
   threshold = c(0.9, 0.95), return.score = FALSE) {
   df = length(x) - 1
-  score = (x - mean(x[!mask])) ^ 2 / var(x[!mask])
+  score = (x - mean(x[mask])) ^ 2 / var(x[mask])
   if (return.score) {
     score
   } else {
@@ -182,7 +182,7 @@ outlier_chisq = function(x, mask = is.na(x),
 #' x = seq(0, 34, by = 0.25)*pi
 #' noise = rnorm(length(x), mean = 1, sd = 3)
 #' y = sin(x) + noise
-#' mask = noise > 1
+#' mask = noise < 1
 #'
 #' outlier_mad(y)
 #' outlier_mad(y, mask)
@@ -192,10 +192,10 @@ outlier_chisq = function(x, mask = is.na(x),
 #' @importFrom dplyr if_else between case_when
 #' @importFrom stats median mad
 #' @export
-outlier_mad = function(x, mask = is.na(x),
+outlier_mad = function(x, mask = !is.na(x),
   threshold = c(1.5, 3), k = 1 / qnorm(0.75),
   return.score = FALSE) {
-  xx = x[!mask]
+  xx = x[mask]
   m = median(xx)
   m.scale = mad(x, m, constant = k)
   score = abs(x - m) / m.scale

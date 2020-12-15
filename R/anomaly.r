@@ -18,13 +18,13 @@ NULL
 #' x = seq(0, 34, by = 0.25)*pi
 #' noise = rnorm(length(x), mean = 1, sd = 3)
 #' y = sin(x) + noise
-#' mask = noise > 1
+#' mask = noise < 1
 #'
 #' anomaly_hampel(y, mask)
 #'
 #' @importFrom slider slide2_vec
 #' @export
-anomaly_hampel = function(x, mask = is.na(x), size = c(5L, 5L), ...) {
+anomaly_hampel = function(x, mask = !is.na(x), size = c(5L, 5L), ...) {
   f = function(x, mask, ...) {
     outlier_mad(x, mask, ...)[size[1] + 1L]
   }

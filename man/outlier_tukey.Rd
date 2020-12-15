@@ -4,15 +4,15 @@
 \alias{outlier_tukey}
 \title{Tukey's test for outliers}
 \usage{
-outlier_tukey(x, mask = is.na(x), threshold = c(1.5, 3), return.score = FALSE)
+outlier_tukey(x, mask = !is.na(x), threshold = c(1.5, 3), return.score = FALSE)
 }
 \arguments{
 \item{x}{A vector of data.}
 
-\item{mask}{A logical mask that identifies a subgroup of \code{x}
-to ignore when computing statistics. Useful when a subset
-of quality-assured data is available. Default action is to
-mask NA values.}
+\item{mask}{A logical vector that defines which values in \code{x}
+will used when computing statistics. Useful when a subset
+of quality-assured data is available. Default mask is non-\code{NA}
+Values.}
 
 \item{threshold}{A length-two vector identifying
 thresholds for "mild" and "extreme" outliers.}
@@ -39,7 +39,7 @@ outliers.
 x = seq(0, 34, by = 0.25)*pi
 noise = rnorm(length(x), mean = 1, sd = 3)
 y = sin(x) + noise
-mask = noise > 1
+mask = noise < 1
 
 outlier_tukey(y)
 outlier_tukey(y, mask)

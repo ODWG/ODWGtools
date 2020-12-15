@@ -21,7 +21,7 @@ NULL
 #' x = seq(0, 34, by = 0.25)*pi
 #' noise = rlnorm(length(x), meanlog = 1, sdlog = 3)
 #' y = sin(x) + noise
-#' mask = noise > 1
+#' mask = noise < 1
 #'
 #' outlier_iforest(list(y))
 #' outlier_iforest(list(x, y))
@@ -32,12 +32,12 @@ NULL
 #' @importFrom dplyr if_else between case_when
 #' @importFrom stats predict na.omit
 #' @export
-outlier_iforest = function(xs, mask = Reduce("|", lapply(xs, is.na)),
+outlier_iforest = function(xs, mask = !Reduce("|", lapply(xs, is.na)),
   threshold = c(0.8, 0.9), return.score = FALSE, ...) {
   if (!requireNamespace("solitude"))
     stop("Could not find package \"solitude\"")
   p = list_to_ndf(xs)
-  d = subset(p, !mask)
+  d = subset(p, mask)
   p.omit = na.omit(p)
   na.mask = invwhich(as.vector(attr(p.omit, "na.action")), nrow(p))
   mod = solitude::isolationForest$new(sample_size = nrow(d), ...)
@@ -75,7 +75,7 @@ outlier_iforest = function(xs, mask = Reduce("|", lapply(xs, is.na)),
 #' x = seq(0, 34, by = 0.25)*pi
 #' noise = rlnorm(length(x), meanlog = 1, sdlog = 3)
 #' y=sin(x) + noise
-#' mask = noise > 1
+#' mask = noise < 1
 #'
 #' outlier_lof(list(y))
 #' outlier_lof(list(x, y), mask)
@@ -84,16 +84,16 @@ outlier_iforest = function(xs, mask = Reduce("|", lapply(xs, is.na)),
 #'
 #' @importFrom dplyr if_else between case_when
 #' @export
-outlier_lof = function(xs, mask = Reduce("|", lapply(xs, is.na)),
+outlier_lof = function(xs, mask = !Reduce("|", lapply(xs, is.na)),
   threshold = c(1.5, 2), return.score = FALSE, ...) {
   if (!requireNamespace("dbscan"))
     stop("Could not find package \"dbscan\"")
 
   #REDO THIS
-  xx = as.matrix(subset(list_to_ndf(xs), !mask))
+  xx = as.matrix(subset(list_to_ndf(xs), mask))
   lof.omit = dbscan::lof(xx, ...)
   score = rep(NA_real_, nrow(xx))
-  score[!mask] = lof.omit
+  score[mask] = lof.omit
   if (return.score) {
     score
   } else {

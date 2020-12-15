@@ -6,7 +6,7 @@
 \usage{
 outlier_lof(
   xs,
-  mask = Reduce("|", lapply(xs, is.na)),
+  mask = !Reduce("|", lapply(xs, is.na)),
   threshold = c(1.5, 2),
   return.score = FALSE,
   ...
@@ -16,10 +16,10 @@ outlier_lof(
 \item{xs}{A dataframe or list of vectors
 (which will be coerced to a numeric matrix).}
 
-\item{mask}{A logical mask that identifies a subgroup of \code{x}
-to ignore when computing statistics. Useful when a subset
-of quality-assured data is available. Default action is to
-mask NA values.}
+\item{mask}{A logical vector that defines which values in \code{x}
+will used when computing statistics. Useful when a subset
+of quality-assured data is available. Default mask is non-\code{NA}
+Values.}
 
 \item{threshold}{A length-two vector identifying
 thresholds for "mild" and "extreme" outliers.}
@@ -45,7 +45,7 @@ outliers and 2.0 for "extreme" outliers.
 x = seq(0, 34, by = 0.25)*pi
 noise = rlnorm(length(x), meanlog = 1, sdlog = 3)
 y=sin(x) + noise
-mask = noise > 1
+mask = noise < 1
 
 outlier_lof(list(y))
 outlier_lof(list(x, y), mask)
