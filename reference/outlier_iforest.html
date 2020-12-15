@@ -129,7 +129,7 @@
 
     <pre class="usage"><span class='fu'>outlier_iforest</span><span class='op'>(</span>
   <span class='va'>xs</span>,
-  mask <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/funprog.html'>Reduce</a></span><span class='op'>(</span><span class='st'>"|"</span>, <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='va'>xs</span>, <span class='va'>is.na</span><span class='op'>)</span><span class='op'>)</span>,
+  mask <span class='op'>=</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/funprog.html'>Reduce</a></span><span class='op'>(</span><span class='st'>"|"</span>, <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='va'>xs</span>, <span class='va'>is.na</span><span class='op'>)</span><span class='op'>)</span>,
   threshold <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.8</span>, <span class='fl'>0.9</span><span class='op'>)</span>,
   return.score <span class='op'>=</span> <span class='cn'>FALSE</span>,
   <span class='va'>...</span>
@@ -145,10 +145,10 @@
     </tr>
     <tr>
       <th>mask</th>
-      <td><p>A logical mask that identifies a subgroup of <code>x</code>
-to ignore when computing statistics. Useful when a subset
-of quality-assured data is available. Default action is to
-mask NA values.</p></td>
+      <td><p>A logical vector that defines which values in <code>x</code>
+will used when computing statistics. Useful when a subset
+of quality-assured data is available. Default mask is non-<code>NA</code>
+Values.</p></td>
     </tr>
     <tr>
       <th>threshold</th>
@@ -181,14 +181,14 @@ outliers.</p>
     <pre class="examples"><div class='input'><span class='va'>x</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>34</span>, by <span class='op'>=</span> <span class='fl'>0.25</span><span class='op'>)</span><span class='op'>*</span><span class='va'>pi</span>
 <span class='va'>noise</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Lognormal.html'>rlnorm</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, meanlog <span class='op'>=</span> <span class='fl'>1</span>, sdlog <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
 <span class='va'>y</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Trig.html'>sin</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>+</span> <span class='va'>noise</span>
-<span class='va'>mask</span> <span class='op'>=</span> <span class='va'>noise</span> <span class='op'>&gt;</span> <span class='fl'>1</span>
+<span class='va'>mask</span> <span class='op'>=</span> <span class='va'>noise</span> <span class='op'>&lt;</span> <span class='fl'>1</span>
 
 <span class='fu'>outlier_iforest</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: solitude</span></div><div class='output co'>#&gt; INFO  [22:25:09.479] Building Isolation Forest ...  
-#&gt; INFO  [22:25:10.671] done 
-#&gt; INFO  [22:25:10.682] Computing depth of terminal nodes ...  
-#&gt; INFO  [22:25:11.464] done 
-#&gt; INFO  [22:25:11.478] Completed growing isolation forest </div><div class='output co'>#&gt;   [1] not outlier  not outlier  not outlier  not outlier  not outlier 
+</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: solitude</span></div><div class='output co'>#&gt; INFO  [16:12:17.361] Building Isolation Forest ...  
+#&gt; INFO  [16:12:18.595] done 
+#&gt; INFO  [16:12:18.606] Computing depth of terminal nodes ...  
+#&gt; INFO  [16:12:19.374] done 
+#&gt; INFO  [16:12:19.387] Completed growing isolation forest </div><div class='output co'>#&gt;   [1] not outlier  not outlier  not outlier  not outlier  not outlier 
 #&gt;   [6] not outlier  not outlier  not outlier  not outlier  not outlier 
 #&gt;  [11] not outlier  not outlier  not outlier  not outlier  not outlier 
 #&gt;  [16] not outlier  not outlier  not outlier  not outlier  not outlier 
@@ -217,11 +217,11 @@ outliers.</p>
 #&gt; [131] not outlier  not outlier  not outlier  not outlier  not outlier 
 #&gt; [136] not outlier  not outlier 
 #&gt; Levels: not outlier &lt; mild outlier &lt; extreme outlier</div><div class='input'><span class='fu'>outlier_iforest</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; INFO  [22:25:11.505] Building Isolation Forest ...  
-#&gt; INFO  [22:25:11.514] done 
-#&gt; INFO  [22:25:11.516] Computing depth of terminal nodes ...  
-#&gt; INFO  [22:25:11.796] done 
-#&gt; INFO  [22:25:11.805] Completed growing isolation forest </div><div class='output co'>#&gt;   [1] not outlier  not outlier  not outlier  not outlier  not outlier 
+</div><div class='output co'>#&gt; INFO  [16:12:19.413] Building Isolation Forest ...  
+#&gt; INFO  [16:12:19.423] done 
+#&gt; INFO  [16:12:19.426] Computing depth of terminal nodes ...  
+#&gt; INFO  [16:12:19.725] done 
+#&gt; INFO  [16:12:19.735] Completed growing isolation forest </div><div class='output co'>#&gt;   [1] not outlier  not outlier  not outlier  not outlier  not outlier 
 #&gt;   [6] not outlier  not outlier  not outlier  not outlier  not outlier 
 #&gt;  [11] not outlier  not outlier  not outlier  not outlier  not outlier 
 #&gt;  [16] not outlier  not outlier  not outlier  not outlier  not outlier 
@@ -250,11 +250,11 @@ outliers.</p>
 #&gt; [131] not outlier  not outlier  not outlier  not outlier  not outlier 
 #&gt; [136] not outlier  not outlier 
 #&gt; Levels: not outlier &lt; mild outlier &lt; extreme outlier</div><div class='input'><span class='fu'>outlier_iforest</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span><span class='op'>)</span>, <span class='va'>mask</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; INFO  [22:25:11.824] Building Isolation Forest ...  
-#&gt; INFO  [22:25:11.830] done 
-#&gt; INFO  [22:25:11.831] Computing depth of terminal nodes ...  
-#&gt; INFO  [22:25:12.075] done 
-#&gt; INFO  [22:25:12.083] Completed growing isolation forest </div><div class='output co'>#&gt;   [1] not outlier not outlier not outlier not outlier not outlier not outlier
+</div><div class='output co'>#&gt; INFO  [16:12:19.755] Building Isolation Forest ...  
+#&gt; INFO  [16:12:19.760] done 
+#&gt; INFO  [16:12:19.762] Computing depth of terminal nodes ...  
+#&gt; INFO  [16:12:20.068] done 
+#&gt; INFO  [16:12:20.075] Completed growing isolation forest </div><div class='output co'>#&gt;   [1] not outlier not outlier not outlier not outlier not outlier not outlier
 #&gt;   [7] not outlier not outlier not outlier not outlier not outlier not outlier
 #&gt;  [13] not outlier not outlier not outlier not outlier not outlier not outlier
 #&gt;  [19] not outlier not outlier not outlier not outlier not outlier not outlier
@@ -278,11 +278,11 @@ outliers.</p>
 #&gt; [127] not outlier not outlier not outlier not outlier not outlier not outlier
 #&gt; [133] not outlier not outlier not outlier not outlier not outlier
 #&gt; Levels: not outlier &lt; mild outlier &lt; extreme outlier</div><div class='input'><span class='fu'>outlier_iforest</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span><span class='op'>)</span>, <span class='va'>mask</span>, threshold <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; INFO  [22:25:12.101] Building Isolation Forest ...  
-#&gt; INFO  [22:25:12.108] done 
-#&gt; INFO  [22:25:12.110] Computing depth of terminal nodes ...  
-#&gt; INFO  [22:25:12.379] done 
-#&gt; INFO  [22:25:12.387] Completed growing isolation forest </div><div class='output co'>#&gt;   [1] not outlier not outlier not outlier not outlier not outlier not outlier
+</div><div class='output co'>#&gt; INFO  [16:12:20.094] Building Isolation Forest ...  
+#&gt; INFO  [16:12:20.099] done 
+#&gt; INFO  [16:12:20.101] Computing depth of terminal nodes ...  
+#&gt; INFO  [16:12:20.364] done 
+#&gt; INFO  [16:12:20.375] Completed growing isolation forest </div><div class='output co'>#&gt;   [1] not outlier not outlier not outlier not outlier not outlier not outlier
 #&gt;   [7] not outlier not outlier not outlier not outlier not outlier not outlier
 #&gt;  [13] not outlier not outlier not outlier not outlier not outlier not outlier
 #&gt;  [19] not outlier not outlier not outlier not outlier not outlier not outlier
@@ -306,11 +306,11 @@ outliers.</p>
 #&gt; [127] not outlier not outlier not outlier not outlier not outlier not outlier
 #&gt; [133] not outlier not outlier not outlier not outlier not outlier
 #&gt; Levels: not outlier &lt; mild outlier &lt; extreme outlier</div><div class='input'><span class='fu'>outlier_iforest</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span><span class='op'>)</span>, return.score <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; INFO  [22:25:12.412] Building Isolation Forest ...  
-#&gt; INFO  [22:25:12.419] done 
-#&gt; INFO  [22:25:12.421] Computing depth of terminal nodes ...  
-#&gt; INFO  [22:25:12.654] done 
-#&gt; INFO  [22:25:12.672] Completed growing isolation forest </div><div class='output co'>#&gt;   [1] 0.5631930 0.6570447 0.5601630 0.5567201 0.5537250 0.5723817 0.5875774
+</div><div class='output co'>#&gt; INFO  [16:12:20.421] Building Isolation Forest ...  
+#&gt; INFO  [16:12:20.430] done 
+#&gt; INFO  [16:12:20.432] Computing depth of terminal nodes ...  
+#&gt; INFO  [16:12:20.694] done 
+#&gt; INFO  [16:12:20.704] Completed growing isolation forest </div><div class='output co'>#&gt;   [1] 0.5631930 0.6570447 0.5601630 0.5567201 0.5537250 0.5723817 0.5875774
 #&gt;   [8] 0.5640617 0.5541519 0.5486279 0.5520207 0.5701804 0.5759214 0.5469393
 #&gt;  [15] 0.5821687 0.5541519 0.5857690 0.5507459 0.5545791 0.5469393 0.5524463
 #&gt;  [22] 0.5623256 0.5503217 0.5452559 0.5515955 0.5482052 0.5482052 0.5584389
