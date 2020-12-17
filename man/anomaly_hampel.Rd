@@ -16,7 +16,7 @@ Values.}
 
 \item{size}{A two-element integer vector specifying the number of
 points before and after the current data point to include in the
-moving window. Default is \code{c(5L, 5L)}, i.e. an 11-element centered
+moving window. Default is \code{c(5L, 5L)}, i.e., an 11-element centered
 moving window.}
 
 \item{...}{Additional arguments to pass to \code{\link[=outlier_mad]{outlier_mad()}}.}

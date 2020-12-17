@@ -9,7 +9,7 @@ NULL
 #' @inheritParams outlier_mad
 #' @param size A two-element integer vector specifying the number of
 #'   points before and after the current data point to include in the
-#'   moving window. Default is `c(5L, 5L)`, i.e. an 11-element centered
+#'   moving window. Default is `c(5L, 5L)`, i.e., an 11-element centered
 #'   moving window.
 #' @param ... Additional arguments to pass to [`outlier_mad()`].
 #' @return A vector of flags or scores.

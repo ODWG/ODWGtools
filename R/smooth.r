@@ -13,6 +13,8 @@ NULL
 #' @param kind what values to filter. Default is the original Godin
 #'  filter which averages the data. Other options are to use the `max`
 #'  or `min` values of each window.
+#' @param ... Additional arguments to `mean()`, `max()`, `min()`,
+#'   or `median()`, depending on the argument `kind`.
 #' @return A vector of same length as x.
 #'
 #' @details The Godin filter is defined
@@ -45,12 +47,12 @@ smooth_godin = function(x, increment,
   offset = as.numeric(as.difftime(1L, units = "hours"),
     units = inc.units) / as.numeric(increment)
 
-  x1 = slide_dbl(lag(x, offset), roll_fun, .complete = TRUE,
-    .before = w24.before, .after = w24.after, ...)
-  x2 = slide_dbl(lead(x, offset), roll_fun, .complete = TRUE,
-    .before = w24.before, .after = w24.after, ...)
-  x3 = slide_dbl(x, roll_fun, .complete = TRUE,
-    .before = w25.before, .after = w25.after, ...)
+  x1 = slide_dbl(lag(x, offset), roll_fun, ...,
+    .complete = TRUE, .before = w24.before, .after = w24.after)
+  x2 = slide_dbl(lead(x, offset), roll_fun, ...,
+    .complete = TRUE, .before = w24.before, .after = w24.after)
+  x3 = slide_dbl(x, roll_fun, ...,
+    .complete = TRUE, .before = w25.before, .after = w25.after)
 
   (x1 + x2 + x3) / 3.0
 }
