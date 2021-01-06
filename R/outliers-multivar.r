@@ -48,7 +48,7 @@ outlier_iforest = function(xs, mask = !Reduce("|", lapply(xs, is.na)),
   if (return.score) {
     p$score
   } else {
-    outlier_factor(case_when(
+    .outlier_factor(case_when(
       is.na(p$score) ~ NA_character_,
       p$score > threshold[2] ~ "extreme outlier",
       p$score > threshold[1] ~ "mild outlier",
@@ -97,7 +97,7 @@ outlier_lof = function(xs, mask = !Reduce("|", lapply(xs, is.na)),
   if (return.score) {
     score
   } else {
-    outlier_factor(case_when(
+    .outlier_factor(case_when(
       is.na(score) ~ NA_character_,
       score > threshold[2] ~ "extreme outlier",
       score > threshold[1] ~ "mild outlier",

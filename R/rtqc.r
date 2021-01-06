@@ -9,7 +9,7 @@ NULL
 #' @return A vector or ordered factors.
 #'
 #' @keywords internal
-rtqc_factor = function(x) {
+.rtqc_factor = function(x) {
   factor(x, c(1L, 3L, 4L), c("pass", "suspect", "fail"),
     ordered = TRUE)
 }
@@ -20,8 +20,8 @@ rtqc_factor = function(x) {
 #' and ranks.
 #'
 #' @export
-rtqc_flags = function() {
-  f = rtqc_factor(NA)
+list_rtqc_flags = function() {
+  f = .rtqc_factor(NA)
   data.frame(flag = levels(f), rank = seq_along(levels(f)))
 }
 
@@ -69,7 +69,7 @@ rtqc_gap = function(x, increment, condition = c("is", "less than",
     "less than" = `<`
   )
   x.diff = diff(x)
-  rtqc_factor(c(NA_integer_, case_when(
+  .rtqc_factor(c(NA_integer_, case_when(
     is.na(x.diff) ~ NA_integer_,
     con.fun(x.diff, increment) ~ 1L,
     TRUE ~ 4L
@@ -99,7 +99,7 @@ rtqc_gap = function(x, increment, condition = c("is", "less than",
 #' @importFrom dplyr between case_when
 #' @export
 rtqc_range = function(x, sensor.range, user.range) {
-  rtqc_factor(case_when(
+  .rtqc_factor(case_when(
     is.na(x) ~ NA_integer_,
     !between(x, sensor.range[1], sensor.range[2]) ~ 4L,
     !between(x, user.range[1], user.range[2]) ~ 3L,
@@ -137,7 +137,7 @@ rtqc_spike = function(x, spike.threshold) {
     stop("Elements of \"spike.threshold\" must be single ",
       "values or vectors of same length as  \"x\".")
   }
-  rtqc_factor(case_when(
+  .rtqc_factor(case_when(
    is.na(x) | is.na(lag(x)) | is.na(lead(x)) ~ NA_integer_,
    abs(x - 0.5 * (lag(x) + lead(x))) > spike.threshold[[2]] ~ 4L,
    abs(x - 0.5 * (lag(x) + lead(x))) > spike.threshold[[1]] ~ 3L,
@@ -167,7 +167,7 @@ rtqc_spike = function(x, spike.threshold) {
 #' @export
 rtqc_rate = function(x, n.dev, n.prior) {
   xsd = slide_dbl(x, sd, .before = n.prior, .complete = TRUE)
-  rtqc_factor(case_when(
+  .rtqc_factor(case_when(
     is.na(xsd) | is.na(x) ~ NA_integer_,
     abs(x - lag(x)) > n.dev * xsd ~ 3L,
     TRUE ~ 1L
@@ -209,7 +209,7 @@ rtqc_flat = function(x, rep.threshold, tol) {
     xx[sprintf("lag%d", i)] = abs(x - lag(x, i)) < tol
   suspect = as.integer(rowSums(xx[1 + 1:rep.threshold[1]])) + 1L
   fail = as.integer(rowSums(xx[1 + 1:rep.threshold[2]])) + 1L
-  rtqc_factor(case_when(
+  .rtqc_factor(case_when(
     is.na(x) | (is.na(fail) & is.na(suspect))  ~ NA_integer_,
     (fail == rep.threshold[2]) & !is.na(fail) ~ 4L,
     (suspect == rep.threshold[1]) & !is.na(suspect) ~ 3L,

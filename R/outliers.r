@@ -6,7 +6,7 @@
 #' @return A vector or ordered factors.
 #'
 #' @keywords internal
-outlier_factor = function(x) {
+.outlier_factor = function(x) {
   factor(x, c("not outlier", "mild outlier", "extreme outlier"),
     ordered = TRUE)
 }
@@ -16,8 +16,8 @@ outlier_factor = function(x) {
 #' Return a data frame of outlier flags and ranks.
 #'
 #' @export
-outlier_flags = function() {
-  f = outlier_factor(NA)
+list_outlier_flags = function() {
+  f = .outlier_factor(NA)
   data.frame(flag = levels(f), rank = seq_along(levels(f)))
 }
 
@@ -67,7 +67,7 @@ outlier_tukey = function(x, mask = !is.na(x),
   if (return.score) {
     score
   } else {
-    outlier_factor(case_when(
+    .outlier_factor(case_when(
       is.na(x) ~ NA_character_,
       score > threshold[2] ~ "extreme outlier",
       score > threshold[1] ~ "mild outlier",
@@ -112,7 +112,7 @@ outlier_tscore = function(x, mask = !is.na(x),
   if (return.score) {
     score
   } else {
-    outlier_factor(case_when(
+    .outlier_factor(case_when(
       is.na(x) ~ NA_character_,
       abs(score) > qt(threshold[2], n - 1) ~ "extreme outlier",
       abs(score) > qt(threshold[1], n - 1) ~ "mild outlier",
@@ -154,7 +154,7 @@ outlier_chisq = function(x, mask = !is.na(x),
   if (return.score) {
     score
   } else {
-    outlier_factor(case_when(
+    .outlier_factor(case_when(
       is.na(x) ~ NA_character_,
       abs(score) > qchisq(threshold[2], df) ~ "extreme outlier",
       abs(score) > qchisq(threshold[1], df) ~ "mild outlier",
@@ -202,7 +202,7 @@ outlier_mad = function(x, mask = !is.na(x),
   if (return.score) {
     score
   } else {
-    outlier_factor(case_when(
+    .outlier_factor(case_when(
       is.na(x) ~ NA_character_,
       score > threshold[2] ~ "extreme outlier",
       score > threshold[1] ~ "mild outlier",
