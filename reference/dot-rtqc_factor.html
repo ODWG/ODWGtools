@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Adjust for Known Drift — adjust_known • ODWGtools</title>
+<title>Real-time Quality Control Factor — .rtqc_factor • ODWGtools</title>
 
 
 <!-- jquery -->
@@ -39,11 +39,8 @@
 
 
 
-<meta property="og:title" content="Adjust for Known Drift — adjust_known" />
-<meta property="og:description" content="Adjust a regular time series for a known drift over a
-known period. The drift is assumed to increase linearly
-in time from 0 at the beginning of the time series to
-the specified drift value at the end of the time series." />
+<meta property="og:title" content="Real-time Quality Control Factor — .rtqc_factor" />
+<meta property="og:description" content="Convert real-time quality control labels to ordered factor." />
 
 
 
@@ -121,63 +118,30 @@ the specified drift value at the end of the time series." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Adjust for Known Drift</h1>
+    <h1>Real-time Quality Control Factor</h1>
     
-    <div class="hidden name"><code>adjust_known.Rd</code></div>
+    <div class="hidden name"><code>dot-rtqc_factor.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Adjust a regular time series for a known drift over a
-known period. The drift is assumed to increase linearly
-in time from 0 at the beginning of the time series to
-the specified drift value at the end of the time series.</p>
+    <p>Convert real-time quality control labels to ordered factor.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>adjust_known</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>mask</span>, <span class='va'>drift</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>.rtqc_factor</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A vector of data with missing values.</p></td>
-    </tr>
-    <tr>
-      <th>mask</th>
-      <td><p>A logical mask that identifies a subgroup of <code>x</code>
-to correct for drift. Values outside the subgroup are ignored.
-If no mask is specified,
-no overall trend is assumed.</p></td>
-    </tr>
-    <tr>
-      <th>drift</th>
-      <td><p>The drift value to correct for. The drift
-is assumed to occur at the last element of the masked vector
-<code>x</code> and linearly shrink to zero at the first element of
-the masked vector <code>x</code>.</p></td>
+      <td><p>A vector of integers.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The vector <code>x</code> with corrected values for the subgroup
-specified by <code>mask</code>.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <p>A vector or ordered factors.</p>
 
-    <p>This function assumes that <code>mask</code> specifies a
-contiguous block, and that the time series values are
-equally spaced. No consideration is given to noncontiguous
-masks or unequal-interval time series.</p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>x</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>100</span>, <span class='fl'>10</span>, <span class='fl'>0.1</span><span class='op'>)</span> <span class='op'>+</span> <span class='fl'>0.025</span> <span class='op'>*</span> <span class='op'>(</span><span class='fl'>0</span><span class='op'>:</span><span class='fl'>99</span><span class='op'>)</span>
-<span class='va'>newx</span> <span class='op'>=</span> <span class='fu'>adjust_known</span><span class='op'>(</span><span class='va'>x</span>, drift <span class='op'>=</span> <span class='fl'>99</span><span class='op'>*</span><span class='fl'>0.025</span><span class='op'>)</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, type <span class='op'>=</span> <span class='st'>'l'</span><span class='op'>)</span>
-  <span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>newx</span>, col <span class='op'>=</span> <span class='st'>'red'</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
