@@ -59,13 +59,13 @@ smooth_godin = function(x, increment,
 
 #' Lanczos Filter
 #'
-smooth_lanczos = function(x, increment, cutoff, window) {
-  increment = string_to_difftime(increment)
-  inc.units = units(increment)
-
-  cutoff = string_to_difftime(cutoff)
-  inc.units = units(cutoff)
-
-  cutoff
-}
+#smooth_lanczos = function(x, increment, cutoff, window) {
+#  increment = string_to_difftime(increment)
+#  inc.units = units(increment)
+#
+#  cutoff = string_to_difftime(cutoff)
+#  inc.units = units(cutoff)
+#
+#  cutoff
+#}
 
