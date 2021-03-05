@@ -7,7 +7,9 @@
 #'
 #' @keywords internal
 .outlier_factor = function(x) {
-  factor(x, c("not outlier", "mild outlier", "extreme outlier"),
+  factor(x, c(1L, 2L, 3L, 4L),
+    c("not outlier", "not evaluated", "mild outlier",
+      "extreme outlier"),
     ordered = TRUE)
 }
 
@@ -69,9 +71,9 @@ outlier_tukey = function(x, mask = !is.na(x),
   } else {
     .outlier_factor(case_when(
       is.na(x) ~ NA_character_,
-      score > threshold[2] ~ "extreme outlier",
-      score > threshold[1] ~ "mild outlier",
-      TRUE ~ "not outlier"
+      score > threshold[2] ~ 4L,
+      score > threshold[1] ~ 3L,
+      TRUE ~ 1L
     ))
   }
 }
@@ -114,9 +116,9 @@ outlier_tscore = function(x, mask = !is.na(x),
   } else {
     .outlier_factor(case_when(
       is.na(x) ~ NA_character_,
-      abs(score) > qt(threshold[2], n - 1) ~ "extreme outlier",
-      abs(score) > qt(threshold[1], n - 1) ~ "mild outlier",
-      TRUE ~ "not outlier"
+      abs(score) > qt(threshold[2], n - 1) ~ 4L,
+      abs(score) > qt(threshold[1], n - 1) ~ 3L,
+      TRUE ~ 1L
     ))
   }
 }
@@ -156,9 +158,9 @@ outlier_chisq = function(x, mask = !is.na(x),
   } else {
     .outlier_factor(case_when(
       is.na(x) ~ NA_character_,
-      abs(score) > qchisq(threshold[2], df) ~ "extreme outlier",
-      abs(score) > qchisq(threshold[1], df) ~ "mild outlier",
-      TRUE ~ "not outlier"
+      abs(score) > qchisq(threshold[2], df) ~ 4L,
+      abs(score) > qchisq(threshold[1], df) ~ 3L,
+      TRUE ~ 1L
     ))
   }
 }
@@ -204,9 +206,9 @@ outlier_mad = function(x, mask = !is.na(x),
   } else {
     .outlier_factor(case_when(
       is.na(x) ~ NA_character_,
-      score > threshold[2] ~ "extreme outlier",
-      score > threshold[1] ~ "mild outlier",
-      TRUE ~ "not outlier"
+      score > threshold[2] ~ 4L,
+      score > threshold[1] ~ 3L,
+      TRUE ~ 1L
     ))
   }
 }
