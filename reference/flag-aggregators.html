@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Rate test — rtqc_rate • ODWGtools</title>
+<title>Flag Aggregators — flag-aggregators • ODWGtools</title>
 
 
 <!-- jquery -->
@@ -39,10 +39,8 @@
 
 
 
-<meta property="og:title" content="Rate test — rtqc_rate" />
-<meta property="og:description" content="Perform a rate of change test. See
-https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
-for more information." />
+<meta property="og:title" content="Flag Aggregators — flag-aggregators" />
+<meta property="og:description" content="Helper functions for aggregating flags." />
 
 
 
@@ -120,48 +118,52 @@ for more information." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Rate test</h1>
+    <h1>Flag Aggregators</h1>
     
-    <div class="hidden name"><code>rtqc_rate.Rd</code></div>
+    <div class="hidden name"><code>flag-aggregators.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Perform a rate of change test. See
-https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
-for more information.</p>
+    <p>Helper functions for aggregating flags.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>rtqc_rate</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>n.dev</span>, <span class='va'>n.prior</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>.highest</span><span class='op'>(</span><span class='va'>...</span>, <span class='va'>na.rm</span><span class='op'>)</span>
+
+<span class='fu'>.lowest</span><span class='op'>(</span><span class='va'>...</span>, <span class='va'>na.rm</span><span class='op'>)</span>
+
+<span class='fu'>.majority</span><span class='op'>(</span><span class='va'>...</span>, <span class='va'>na.rm</span><span class='op'>)</span>
+
+<span class='fu'>.odwg</span><span class='op'>(</span><span class='va'>...</span>, <span class='va'>na.rm</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>A vector of values.</p></td>
+      <th>na.rm</th>
+      <td><p>Logical indicating whether missing flags should be
+ignored when calculating the aggregate flag.</p></td>
     </tr>
     <tr>
-      <th>n.dev</th>
-      <td><p>The number of standard deviations to test against.</p></td>
-    </tr>
-    <tr>
-      <th>n.prior</th>
-      <td><p>the number of prior observations to use for computing
-the standard deviation. For example, to compute standard deviations
-over the previous 25 hours from 15-minute data use <code>n.prior = 100</code>.</p></td>
+      <th>m</th>
+      <td><p>A matrix of flags</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>fake.data</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>10</span>,<span class='fl'>10</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>50</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>10</span>,<span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>rtqc_rate</span><span class='op'>(</span><span class='va'>fake.data</span>, <span class='fl'>2</span>, <span class='fl'>5</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    pass    suspect pass    suspect
-#&gt; [10] pass    suspect pass    pass    pass    pass    pass    pass    pass   
-#&gt; [19] pass    pass    suspect pass    pass    pass    pass    suspect pass   
-#&gt; [28] pass    suspect pass   
-#&gt; Levels: pass &lt; not evaluated &lt; suspect &lt; fail</div><div class='input'>
-</div></pre>
+    <p>An integer vector with same length as rows of <code>m</code>.</p>
+    <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
+
+    
+<ul>
+<li><p><code>.highest</code>: Highest flag value</p></li>
+<li><p><code>.lowest</code>: Lowest flag value</p></li>
+<li><p><code>.majority</code>: Majority flag value</p></li>
+<li><p><code>.odwg</code>: ODWG recommended method. Uses
+<code>.highest</code> when a flag value of 4 is present, otherwise
+uses <code>.majority</code>.</p></li>
+</ul>
+
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

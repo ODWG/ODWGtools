@@ -175,95 +175,9 @@ outliers.</p>
 <span class='va'>mask</span> <span class='op'>=</span> <span class='va'>noise</span> <span class='op'>&lt;</span> <span class='fl'>1</span>
 
 <span class='fu'>outlier_tukey</span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   [1] not outlier not outlier not outlier not outlier not outlier not outlier
-#&gt;   [7] not outlier not outlier not outlier not outlier not outlier not outlier
-#&gt;  [13] not outlier not outlier not outlier not outlier not outlier not outlier
-#&gt;  [19] not outlier not outlier not outlier not outlier not outlier not outlier
-#&gt;  [25] not outlier not outlier not outlier not outlier not outlier not outlier
-#&gt;  [31] not outlier not outlier not outlier not outlier not outlier not outlier
-#&gt;  [37] not outlier not outlier not outlier not outlier not outlier not outlier
-#&gt;  [43] not outlier not outlier not outlier not outlier not outlier not outlier
-#&gt;  [49] not outlier not outlier not outlier not outlier not outlier not outlier
-#&gt;  [55] not outlier not outlier not outlier not outlier not outlier not outlier
-#&gt;  [61] not outlier not outlier not outlier not outlier not outlier not outlier
-#&gt;  [67] not outlier not outlier not outlier not outlier not outlier not outlier
-#&gt;  [73] not outlier not outlier not outlier not outlier not outlier not outlier
-#&gt;  [79] not outlier not outlier not outlier not outlier not outlier not outlier
-#&gt;  [85] not outlier not outlier not outlier not outlier not outlier not outlier
-#&gt;  [91] not outlier not outlier not outlier not outlier not outlier not outlier
-#&gt;  [97] not outlier not outlier not outlier not outlier not outlier not outlier
-#&gt; [103] not outlier not outlier not outlier not outlier not outlier not outlier
-#&gt; [109] not outlier not outlier not outlier not outlier not outlier not outlier
-#&gt; [115] not outlier not outlier not outlier not outlier not outlier not outlier
-#&gt; [121] not outlier not outlier not outlier not outlier not outlier not outlier
-#&gt; [127] not outlier not outlier not outlier not outlier not outlier not outlier
-#&gt; [133] not outlier not outlier not outlier not outlier not outlier
-#&gt; Levels: not outlier &lt; mild outlier &lt; extreme outlier</div><div class='input'><span class='fu'>outlier_tukey</span><span class='op'>(</span><span class='va'>y</span>, <span class='va'>mask</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   [1] mild outlier    not outlier     not outlier     not outlier    
-#&gt;   [5] not outlier     not outlier     not outlier     mild outlier   
-#&gt;   [9] not outlier     mild outlier    not outlier     mild outlier   
-#&gt;  [13] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [17] not outlier     mild outlier    not outlier     not outlier    
-#&gt;  [21] not outlier     extreme outlier mild outlier    not outlier    
-#&gt;  [25] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [29] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [33] mild outlier    not outlier     mild outlier    not outlier    
-#&gt;  [37] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [41] mild outlier    not outlier     not outlier     not outlier    
-#&gt;  [45] not outlier     not outlier     mild outlier    not outlier    
-#&gt;  [49] not outlier     not outlier     mild outlier    mild outlier   
-#&gt;  [53] not outlier     not outlier     mild outlier    mild outlier   
-#&gt;  [57] not outlier     not outlier     mild outlier    not outlier    
-#&gt;  [61] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [65] not outlier     mild outlier    extreme outlier mild outlier   
-#&gt;  [69] not outlier     not outlier     not outlier     mild outlier   
-#&gt;  [73] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [77] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [81] not outlier     mild outlier    mild outlier    not outlier    
-#&gt;  [85] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [89] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [93] not outlier     not outlier     not outlier     not outlier    
-#&gt;  [97] not outlier     mild outlier    mild outlier    not outlier    
-#&gt; [101] mild outlier    not outlier     not outlier     not outlier    
-#&gt; [105] not outlier     not outlier     mild outlier    not outlier    
-#&gt; [109] not outlier     not outlier     not outlier     not outlier    
-#&gt; [113] not outlier     not outlier     not outlier     not outlier    
-#&gt; [117] mild outlier    mild outlier    not outlier     mild outlier   
-#&gt; [121] not outlier     mild outlier    not outlier     not outlier    
-#&gt; [125] not outlier     not outlier     not outlier     not outlier    
-#&gt; [129] not outlier     not outlier     not outlier     not outlier    
-#&gt; [133] mild outlier    not outlier     mild outlier    not outlier    
-#&gt; [137] not outlier    
-#&gt; Levels: not outlier &lt; mild outlier &lt; extreme outlier</div><div class='input'><span class='fu'>outlier_tukey</span><span class='op'>(</span><span class='va'>y</span>, <span class='va'>mask</span>, threshold <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   [1] not outlier  not outlier  not outlier  not outlier  not outlier 
-#&gt;   [6] not outlier  not outlier  not outlier  not outlier  mild outlier
-#&gt;  [11] not outlier  not outlier  not outlier  not outlier  not outlier 
-#&gt;  [16] not outlier  not outlier  not outlier  not outlier  not outlier 
-#&gt;  [21] not outlier  mild outlier mild outlier not outlier  not outlier 
-#&gt;  [26] not outlier  not outlier  not outlier  not outlier  not outlier 
-#&gt;  [31] not outlier  not outlier  mild outlier not outlier  not outlier 
-#&gt;  [36] not outlier  not outlier  not outlier  not outlier  not outlier 
-#&gt;  [41] not outlier  not outlier  not outlier  not outlier  not outlier 
-#&gt;  [46] not outlier  mild outlier not outlier  not outlier  not outlier 
-#&gt;  [51] mild outlier not outlier  not outlier  not outlier  not outlier 
-#&gt;  [56] mild outlier not outlier  not outlier  not outlier  not outlier 
-#&gt;  [61] not outlier  not outlier  not outlier  not outlier  not outlier 
-#&gt;  [66] not outlier  mild outlier not outlier  not outlier  not outlier 
-#&gt;  [71] not outlier  mild outlier not outlier  not outlier  not outlier 
-#&gt;  [76] not outlier  not outlier  not outlier  not outlier  not outlier 
-#&gt;  [81] not outlier  mild outlier not outlier  not outlier  not outlier 
-#&gt;  [86] not outlier  not outlier  not outlier  not outlier  not outlier 
-#&gt;  [91] not outlier  not outlier  not outlier  not outlier  not outlier 
-#&gt;  [96] not outlier  not outlier  mild outlier mild outlier not outlier 
-#&gt; [101] not outlier  not outlier  not outlier  not outlier  not outlier 
-#&gt; [106] not outlier  mild outlier not outlier  not outlier  not outlier 
-#&gt; [111] not outlier  not outlier  not outlier  not outlier  not outlier 
-#&gt; [116] not outlier  mild outlier mild outlier not outlier  mild outlier
-#&gt; [121] not outlier  mild outlier not outlier  not outlier  not outlier 
-#&gt; [126] not outlier  not outlier  not outlier  not outlier  not outlier 
-#&gt; [131] not outlier  not outlier  not outlier  not outlier  mild outlier
-#&gt; [136] not outlier  not outlier 
-#&gt; Levels: not outlier &lt; mild outlier &lt; extreme outlier</div><div class='input'><span class='fu'>outlier_tukey</span><span class='op'>(</span><span class='va'>y</span>, return.score <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error: must be a character vector, not an integer vector.</span></div><div class='input'><span class='fu'>outlier_tukey</span><span class='op'>(</span><span class='va'>y</span>, <span class='va'>mask</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error: must be a character vector, not an integer vector.</span></div><div class='input'><span class='fu'>outlier_tukey</span><span class='op'>(</span><span class='va'>y</span>, <span class='va'>mask</span>, threshold <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error: must be a character vector, not an integer vector.</span></div><div class='input'><span class='fu'>outlier_tukey</span><span class='op'>(</span><span class='va'>y</span>, return.score <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;   [1]  0.207140006 -0.446666367 -0.086798182 -0.217560196 -0.354543455
 #&gt;   [6] -0.259742816 -0.361933488  0.201362594 -0.381597035  0.733419991
 #&gt;  [11] -0.468564813  0.192867226 -0.359066924  0.434333835  0.742228945

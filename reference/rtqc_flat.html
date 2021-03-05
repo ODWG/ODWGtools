@@ -165,15 +165,15 @@ repeated values.</p></td>
 </div><div class='output co'>#&gt;  [1] &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    pass    pass    pass    pass    pass   
 #&gt; [10] pass    pass    pass    pass    pass    pass    pass    pass    pass   
 #&gt; [19] pass    pass    pass    pass    pass    pass    pass    pass    suspect
-#&gt; [28] pass    fail    pass    pass   
-#&gt; Levels: pass &lt; suspect &lt; fail</div><div class='input'><span class='co'># as above, but 3 repeated observations signals "suspect" while</span>
+#&gt; [28] suspect fail    fail    fail   
+#&gt; Levels: pass &lt; not evaluated &lt; suspect &lt; fail</div><div class='input'><span class='co'># as above, but 3 repeated observations signals "suspect" while</span>
 <span class='co'># 9 observations signals "fail".</span>
 <span class='fu'>rtqc_flat</span><span class='op'>(</span><span class='va'>fake.data</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>9</span><span class='op'>)</span>, <span class='fl'>0.01</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;  [1] &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    pass    pass    pass    pass    pass    pass   
 #&gt; [10] pass    pass    pass    suspect pass    pass    pass    pass    pass   
-#&gt; [19] pass    pass    pass    pass    pass    pass    pass    suspect pass   
-#&gt; [28] pass    pass    pass    pass   
-#&gt; Levels: pass &lt; suspect &lt; fail</div><div class='input'>
+#&gt; [19] pass    pass    pass    pass    pass    pass    pass    suspect suspect
+#&gt; [28] suspect suspect suspect suspect
+#&gt; Levels: pass &lt; not evaluated &lt; suspect &lt; fail</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
