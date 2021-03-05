@@ -1,78 +1,86 @@
 #' @include ODWGtools.r
 NULL
 
-#' Daily Tidal Mean
+#' Aggregate Quality Control Factor
 #'
-#' Compute the daily low-tide or high-tide average.
+#' Convert aggregate quality control labels to ordered factor.
 #'
-#' @param x A vector of values from a single day.
-#' @param y A vector of water surface elevations from a single day.
-#' @param tide Return the high-tide ("high") or low-tide ("low")
-#'  average.
-#' @param smooth If `TRUE`, A loess smoother will be applied to the
-#'   data prior to detecting the water surface elevation minimums
-#'   or maximums.
-#' @param neighborhood The neighborhood (number of points) used to
-#'   determine the `span` argument to [`stats::loess()`]. A time
-#'   window of 6 hours was found to work well with tidal data, which
-#'   corresponds to 24 points for 15-minute data or 6 points for
-#'   hourly data.
-#' @param family The `family` argument to [`stats::loess()`]. The
-#'   default family "symmetric" was found to work well with 15-minute
-#'   tidal data.
-#' @param degree The `degree` argument to [`stats::loess()`]. The
-#'   default degree of 2 was found to work well with 15-minute
-#'   tidal data.
-#' @param ... Additional arguments to [`stats::loess()`].Note that
-#'   the value of `span` is computed from the argument `neighborhood`.
-#' @param plot If `TRUE`, printdiagnostic plots of the loess smoothing.
-#' @return The daily tidal mean of `x`, i.e. the average of high-
-#'   or low-tide values for the day.
+#' @param x A vector of integers.
+#' @return A vector or ordered factors.
 #'
-#' @importFrom stats loess predict
-#' @importFrom graphics lines
-#' @importFrom dplyr lag lead
+#' @keywords internal
+.aggregate_factor = function(x) {
+  factor(x, c(1L, 2L, 3L, 4L),
+  c("provisionally approved", "not evaluated", "in need of review",
+    "rejected"),
+    ordered = TRUE)
+}
+
+#' Aggregate Quality Control Flags
+#'
+#' Return a data frame of aggregate quality control flags
+#' and ranks.
+#'
 #' @export
-daily_tidal_mean = function(x, y, tide = c("high", "low"),
-  smooth = TRUE, neighborhood = 24, family = "symmetric",
-    degree = 2, ..., plot = FALSE) {
-  tide = match.arg(tide, c("high", "low"))
-  if (tide == "high") {
-    compare.fun = `>=`
-  } else {
-    compare.fun = `<=`
+list_aggregate_flags = function() {
+  f = .aggregate_factor(NA)
+  data.frame(flag = levels(f), rank = seq_along(levels(f)))
+}
+
+
+#' Flag Aggregators
+#'
+#' Helper functions for aggregating flags.
+#'
+#' @param m A matrix of flags
+#' @param na.rm Logical indicating whether missing flags should be
+#'   ignored when calculating the aggregate flag.
+#' @return An integer vector with same length as rows of `m`.
+#'
+#' @name flag-aggregators
+#' @keywords internal
+NULL
+
+#' @describeIn flag-aggregators Highest flag value
+#' @keywords internal
+.highest = function(..., na.rm) {
+  pmax.int(..., na.rm = na.rm)
+}
+
+#' @describeIn flag-aggregators Lowest flag value
+#' @keywords internal
+.lowest = function(..., na.rm) {
+  pmin.int(..., na.rm = na.rm)
+}
+
+#' @describeIn flag-aggregators Majority flag value
+#' @importFrom purrr map_if map_int
+#' @keywords internal
+.majority = function(..., na.rm) {
+  m = cbind(...)
+  tbls = apply(m, 1, table, useNA = "always")
+  if (na.rm) {
+    tbls = map_if(tbls, ~ any(is.na(names(.x))),
+      ~ .x[!is.na(names(.x))])
   }
-  span = neighborhood / length(y)
-  # apply smoothing if specified
-  if (smooth) {
-    d = data.frame(t = seq_along(y), y = y)
-    if (plot) {
-      plot(y, type = "l")
-    }
-    y = tryCatch({
-      ysmooth = predict(loess(y ~ t, data = d, span = span,
-        degree = degree, family = family))
-      if (sqrt(mean((d$y - y) ^ 2)) > 0.05) {
-        warning("RMSE of loess-smoothed stage is greater than 0.05")
-      }
-      ysmooth
-    }, error = function(e) {
-      warning(paste(e))
-      NA
-    })
-    if (plot) {
-      tryCatch(lines(y, col = "red", lty = 2),
-        error = function(e) warning(paste(e)))
-    }
+  map_int(tbls, ~ as.integer(names(which.max(.x))))
+}
+
+#' @describeIn flag-aggregators ODWG recommended method. Uses
+#'  `.highest` when a flag value of 4 is present, otherwise
+#'  uses `.majority`.
+#' @importFrom purrr map_if map_int
+#' @keywords internal
+.odwg = function(..., na.rm) {
+  m = cbind(...)
+  tbls = apply(m, 1, table, useNA = "always")
+  if (na.rm) {
+    tbls = map_if(tbls, ~ any(is.na(names(.x))),
+      ~ .x[!is.na(names(.x))])
   }
-  select.points = compare.fun(y, lead(y, n = 1, default = NA)) &
-    compare.fun(y, lag(y, n = 1, default = NA))
-  if (all(is.na(select.points))) {
-    warning("Could not identify low/high tide locations.")
-    NA
-  } else {
-    mean(x[select.points], na.rm = TRUE)
-  }
+  tbls = map_if(tbls, ~ "4" %in% names(.x),
+    ~ .x["4"])
+  map_int(tbls, ~ as.integer(names(which.max(.x))))
 }
 
 #' Aggregate Test Results
@@ -96,32 +104,26 @@ daily_tidal_mean = function(x, y, tide = c("high", "low"),
 #' aggregate_tests(flags[,1], flags[,2], flags[,3])
 #' aggregate_tests(flags[,1], flags[,2], flags[,3], by = "majority")
 #'
-#' @importFrom purrr pmap_int map_chr
-#' @importFrom dplyr if_else
+#' @importFrom purrr map_lgl
 #' @export
-aggregate_tests = function(..., by = c("highest", "lowest", "majority"),
-  na.rm = TRUE) {
-
-  by = match.arg(by, c("highest", "lowest", "majority"))
-  colclasses = map_chr(list(...), class)
-  if (any(colclasses != "integer"))
-    stop("Data vector is not an integer (function argument(s) ",
-      paste(which(colclasses != "integer"), collapse = ", "), ")")
+aggregate_tests = function(..., by = c("odwg", "highest", "lowest",
+  "majority"), na.rm = TRUE) {
+  by = match.arg(by, c("odwg", "highest", "lowest", "majority"))
   fun = switch(by,
-    highest = function(..., na.rm) {
-      r = suppressWarnings(max(..., na.rm = na.rm))
-      if_else(is.finite(r), as.integer(r), NA_integer_)
-    },
-    lowest = function(..., na.rm) {
-      r = suppressWarnings(min(..., na.rm = na.rm))
-      if_else(is.finite(r), as.integer(r), NA_integer_)
-    },
-    majority = function(..., na.rm) {
-      as.integer(names(which.max(table(c(...),
-        useNA = if (na.rm) "no" else "ifany"))))
-    }
-  )
-  pmap_int(list(..., na.rm = na.rm), fun)
+    "highest" = .highest,
+    "lowest" = .lowest,
+    "majority" = .majority,
+    "odwg" = .odwg
+   )
+  is_ordered = function(x) {
+    is.ordered(x) || is.integer(x)
+  }
+  colclasses = map_lgl(list(...), is_ordered)
+  if (!all(colclasses)) {
+    stop("Data vector is not ordered (function argument(s) ",
+      paste(which(!colclasses), collapse = ", "), ")")
+  }
+  .aggregate_factor(fun(..., na.rm = na.rm))
 }
 
 #' Aggregate QAQC Flags
