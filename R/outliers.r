@@ -70,7 +70,7 @@ outlier_tukey = function(x, mask = !is.na(x),
     score
   } else {
     .outlier_factor(case_when(
-      is.na(x) ~ NA_character_,
+      is.na(x) ~ NA_integer_,
       score > threshold[2] ~ 4L,
       score > threshold[1] ~ 3L,
       TRUE ~ 1L
@@ -115,7 +115,7 @@ outlier_tscore = function(x, mask = !is.na(x),
     score
   } else {
     .outlier_factor(case_when(
-      is.na(x) ~ NA_character_,
+      is.na(x) ~ NA_integer_,
       abs(score) > qt(threshold[2], n - 1) ~ 4L,
       abs(score) > qt(threshold[1], n - 1) ~ 3L,
       TRUE ~ 1L
@@ -157,7 +157,7 @@ outlier_chisq = function(x, mask = !is.na(x),
     score
   } else {
     .outlier_factor(case_when(
-      is.na(x) ~ NA_character_,
+      is.na(x) ~ NA_integer_,
       abs(score) > qchisq(threshold[2], df) ~ 4L,
       abs(score) > qchisq(threshold[1], df) ~ 3L,
       TRUE ~ 1L
@@ -205,7 +205,7 @@ outlier_mad = function(x, mask = !is.na(x),
     score
   } else {
     .outlier_factor(case_when(
-      is.na(x) ~ NA_character_,
+      is.na(x) ~ NA_integer_,
       score > threshold[2] ~ 4L,
       score > threshold[1] ~ 3L,
       TRUE ~ 1L
