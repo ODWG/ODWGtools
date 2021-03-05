@@ -10,7 +10,8 @@ NULL
 #'
 #' @keywords internal
 .rtqc_factor = function(x) {
-  factor(x, c(1L, 3L, 4L), c("pass", "suspect", "fail"),
+  factor(x, c(1L, 2L, 3L, 4L),
+    c("pass", "not evaluated", "suspect", "fail"),
     ordered = TRUE)
 }
 
@@ -211,8 +212,8 @@ rtqc_flat = function(x, rep.threshold, tol) {
   fail = as.integer(rowSums(xx[1 + 1:rep.threshold[2]])) + 1L
   .rtqc_factor(case_when(
     is.na(x) | (is.na(fail) & is.na(suspect))  ~ NA_integer_,
-    (fail == rep.threshold[2]) & !is.na(fail) ~ 4L,
-    (suspect == rep.threshold[1]) & !is.na(suspect) ~ 3L,
+    (fail >= rep.threshold[2]) & !is.na(fail) ~ 4L,
+    (suspect >= rep.threshold[1]) & !is.na(suspect) ~ 3L,
     TRUE ~ 1L
   ))
 }
