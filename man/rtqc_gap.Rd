@@ -21,7 +21,7 @@ must be exactly the supplied increment. "less than" or
 least the specified increment, respectively.}
 }
 \value{
-An integer vector of test flags.
+An ordered factor of test flags of same length as \code{x}.
 }
 \description{
 Perform a data gap test. See

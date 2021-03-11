@@ -4,20 +4,20 @@
 \alias{rtqc_range}
 \title{Range Test}
 \usage{
-rtqc_range(x, sensor.range, user.range)
+rtqc_range(x, user.range, sensor.range)
 }
 \arguments{
 \item{x}{A vector of values.}
 
-\item{sensor.range}{A length-2 numeric vector identifying the sensor
-measurement range.}
-
 \item{user.range}{A length-2 numeric vector identifying a reasonable
 measurement range for the provided data \code{x}. Typically specific to
 location and/or climate and based on expert judgment.}
+
+\item{sensor.range}{A length-2 numeric vector identifying the sensor
+measurement range.}
 }
 \value{
-An integer vector of test flags.
+An ordered factor of test flags of same length as \code{x}.
 }
 \description{
 Perform a range test. See
@@ -27,6 +27,6 @@ for more information.
 \examples{
 fake.data = c(rnorm(3, 10), rep(c(-5, 30), each =  3),
   rep(c(5, 20), each = 3))
-rtqc_range(fake.data, c(0, 25), c(7, 15))
+rtqc_range(fake.data, c(7, 15), c(0, 25))
 
 }

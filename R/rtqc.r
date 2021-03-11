@@ -43,7 +43,7 @@ list_rtqc_flags = function() {
 #'   must be exactly the supplied increment. "less than" or
 #'   "greater than" specify that the interval must be at most or at
 #'   least the specified increment, respectively.
-#' @return An integer vector of test flags.
+#' @return An ordered factor of test flags of same length as `x`.
 #'
 #' @examples
 #' # Application to 15-minute data:
@@ -90,16 +90,16 @@ rtqc_gap = function(x, increment, condition = c("is", "less than",
 #' @param user.range A length-2 numeric vector identifying a reasonable
 #'   measurement range for the provided data `x`. Typically specific to
 #'   location and/or climate and based on expert judgment.
-#' @return An integer vector of test flags.
+#' @return An ordered factor of test flags of same length as `x`.
 #'
 #' @examples
 #' fake.data = c(rnorm(3, 10), rep(c(-5, 30), each =  3),
 #'   rep(c(5, 20), each = 3))
-#' rtqc_range(fake.data, c(0, 25), c(7, 15))
+#' rtqc_range(fake.data, c(7, 15), c(0, 25))
 #'
 #' @importFrom dplyr between case_when
 #' @export
-rtqc_range = function(x, sensor.range, user.range) {
+rtqc_range = function(x, user.range, sensor.range) {
   .rtqc_factor(case_when(
     is.na(x) ~ NA_integer_,
     !between(x, sensor.range[1], sensor.range[2]) ~ 4L,
@@ -107,7 +107,6 @@ rtqc_range = function(x, sensor.range, user.range) {
     TRUE ~ 1L
   ))
 }
-
 
 #' Spike test
 #'
@@ -121,6 +120,7 @@ rtqc_range = function(x, sensor.range, user.range) {
 #'   value (static threshold) or a vector of same length as `x`
 #'   (dynamic threshold). Thresholds are typically specific to
 #'   location and/or climate and based on expert judgment.
+#' @return An ordered factor of test flags of same length as `x`.
 #'
 #' @examples
 #' fake.data = c(1, 1.1, 1, 1.2, 1, 1.3, 1, 1.4, 1, 1.5, 1)
@@ -147,7 +147,49 @@ rtqc_spike = function(x, spike.threshold) {
 }
 
 
-#' Rate test
+#' Spike Test (Alternate)
+#'
+#' Perform a spike test. This is a variant of the test described in
+#' https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
+#' which checks the absolute difference between the current measurement
+#' and the previous/next measurements.
+#'
+#' @inheritParams rtqc_range
+#' @param spike.threshold A length-2 list specifying "suspect"
+#'   and "fail" thresholds. Each threshold can be either a single
+#'   value (static threshold) or a vector of same length as `x`
+#'   (dynamic threshold). Thresholds are typically specific to
+#'   location and/or climate and based on expert judgment.
+#' @return An ordered factor of test flags of same length as `x`.
+#'
+#' @examples
+#' fake.data = c(1, 1.1, 1, 1.2, 1, 1.3, 1, 1.4, 1, 1.5, 1)
+#' rtqc_spike(fake.data, c(0.15, 0.25))
+#'
+#' @importFrom dplyr case_when lag lead
+#' @export
+rtqc_spike_alt = function(x, spike.threshold) {
+  spike.threshold = as.list(spike.threshold)
+  if (length(spike.threshold) != 2L) {
+    stop("\"spike.threshold\" must be a ",
+      "two-element vector or list.")
+  }
+  if (!all(sapply(spike.threshold, length) %in% c(1L, length(x)))) {
+    stop("Elements of \"spike.threshold\" must be single ",
+      "values or vectors of same length as  \"x\".")
+  }
+  .rtqc_factor(case_when(
+   is.na(x) | is.na(lag(x)) | is.na(lead(x)) ~ NA_integer_,
+   abs(x - lag(x)) > spike.threshold[[2]] &
+     abs(x - lead(x)) > spike.threshold[[2]]  ~ 4L,
+   abs(x - lag(x)) > spike.threshold[[1]] &
+     abs(x - lead(x)) > spike.threshold[[1]]  ~ 3L,
+   TRUE ~ 1L
+  ))
+}
+
+
+#' Rate Test
 #'
 #' Perform a rate of change test. See
 #' https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
@@ -158,6 +200,9 @@ rtqc_spike = function(x, spike.threshold) {
 #' @param n.prior the number of prior observations to use for computing
 #'   the standard deviation. For example, to compute standard deviations
 #'   over the previous 25 hours from 15-minute data use `n.prior = 100`.
+#' @param ... Other arguments to pass to [`stats::sd()`], i.e.,
+#'   the argument `na.rm`.
+#' @return An ordered factor of test flags of same length as `x`.
 #'
 #' @examples
 #' fake.data = c(rnorm(10,10), rnorm(10, 50), rnorm(10,10))
@@ -165,9 +210,11 @@ rtqc_spike = function(x, spike.threshold) {
 #'
 #' @importFrom slider slide_dbl
 #' @importFrom dplyr lag case_when
+#' @importFrom stats sd
 #' @export
-rtqc_rate = function(x, n.dev, n.prior) {
-  xsd = slide_dbl(x, sd, .before = n.prior, .complete = TRUE)
+rtqc_rate = function(x, n.dev, n.prior, ...) {
+  xsd = slide_dbl(x, sd, ..., .before = n.prior, .after = -1L,
+    .complete = TRUE)
   .rtqc_factor(case_when(
     is.na(xsd) | is.na(x) ~ NA_integer_,
     abs(x - lag(x)) > n.dev * xsd ~ 3L,
@@ -175,8 +222,42 @@ rtqc_rate = function(x, n.dev, n.prior) {
     ))
 }
 
+#' Rate Test (Alternate)
+#'
+#' Perform a rate of change test. This is a variant of the test
+#' described in
+#' https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
+#' which checks the absolute rate of change over a given number
+#' of observations.
+#'
+#' @inheritParams rtqc_range
+#' @param threshold The absolute rate of change over a set of
+#'   observations. A rate of change above this value will flag
+#'   the final data point in the set.
+#' @param n.prior the number of prior observations to calculate the
+#'   rate of change over, excluding the current observation.
+#' @return An ordered factor of test flags of same length as `x`.
+#'
+#' @examples
+#' fake.data = c(rnorm(10,10), rnorm(10, 50), rnorm(10,10))
+#' rtqc_rate_alt(fake.data, 20, 3)
+#'
+#' @importFrom dplyr case_when
+#' @importFrom slider slide_dbl
+#' @importFrom stats sd coef lm
+#' @export
+rtqc_rate_alt = function(x, threshold, n.prior) {
+  xy = tibble(x = x, n = seq(length(x)))
+  xsd = slide_dbl(xy, ~ coef(lm(x ~ n, .x))["n"],
+    .before = n.prior, .after = 0, .complete = TRUE)
+  .rtqc_factor(case_when(
+    is.na(xsd) | is.na(x) ~ NA_integer_,
+    abs(xsd) > threshold ~ 3L,
+    TRUE ~ 1L
+  ))
+}
 
-#' Flat line test
+#' Flat Line Test
 #'
 #' Perform a flat line test. See
 #' https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
@@ -189,6 +270,7 @@ rtqc_rate = function(x, n.dev, n.prior) {
 #'   specific to location and/or climate and based on expert judgment.
 #' @param tol Numerical tolerance to consider adjacent observations as
 #'   repeated values.
+#' @return An ordered factor of test flags of same length as `x`.
 #'
 #' @examples
 #' fake.data = c(rnorm(10, 10, 2), rep(10.0, 3), rnorm(10, 10, 2),
@@ -201,7 +283,7 @@ rtqc_rate = function(x, n.dev, n.prior) {
 #' # 9 observations signals "fail".
 #' rtqc_flat(fake.data, c(3, 9), 0.01)
 #'
-#' @importFrom dplyr lag lead case_when
+#' @importFrom dplyr lag case_when
 #' @export
 rtqc_flat = function(x, rep.threshold, tol) {
   rep.threshold = as.integer(rep.threshold)
@@ -219,8 +301,56 @@ rtqc_flat = function(x, rep.threshold, tol) {
 }
 
 
-
-
-rtqc_attenuation = function(x, var.threshold, n.prior) {
-
+#' Attenuation Test
+#'
+#' Perform a signal attenuation test. See
+#' https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
+#' for more information.
+#'
+#' @inheritParams rtqc_range
+#' @param threshold A length-2 vector specifying "suspect" and "fail"
+#'   thresholds for the minimum standard deviation of a set of
+#'   observations.
+#' @inheritParams rtqc_rate_alt
+#' @param ... Other arguments to pass to [`stats::sd()`], i.e.,
+#'   the argument `na.rm`.
+#' @return An ordered factor of test flags of same length as `x`.
+#'
+#' @examples
+#' fake.data = map(seq(2, 0.2, by = -0.2), ~rnorm(10, sd = .x)) %>%
+#'   unlist()
+#' rtqc_attenuation(fake.data, c(0.8, 0.4), 5)
+#'
+#' @importFrom dplyr case_when
+#' @importFrom slider slide_dbl
+#' @importFrom stats sd
+#' @export
+rtqc_attenuation = function(x, threshold, n.obs, ...) {
+  xsd = slide_dbl(x, sd, ..., .before = n.obs - 1L, .after = 0L,
+    .complete = TRUE)
+  .rtqc_factor(case_when(
+    is.na(xsd) | is.na(x) ~ NA_integer_,
+    xsd < threshold[2] ~ 4L,
+    xsd < threshold[1] ~ 3L,
+    TRUE ~ 1L
+  ))
 }
+
+
+#rtqc_control = function(x, n.dev, n.prior, ...) {
+#  xm = slide_dbl(x, mean, ..., .before = n.prior, .after = -1L,
+#    .complete = TRUE)
+#  xsd = slide_dbl(x, sd, ..., .before = n.prior, .after = -1L,
+#    .complete = TRUE)
+#
+#  d = tibble(n = seq(length(x)), x = x, m = xm, s = xsd)
+#
+#ggplot(d) + aes(x = n) +
+#  geom_step(aes(y = m), color = "blue") +
+#  geom_step(aes(y = m + s), color = "blue", linetype = "dashed") +
+#  geom_step(aes(y = m - s), color = "blue", linetype = "dashed") +
+#  geom_point(aes(y = x))
+#  
+#
+#
+#}

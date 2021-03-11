@@ -2,7 +2,7 @@
 % Please edit documentation in R/rtqc.r
 \name{rtqc_flat}
 \alias{rtqc_flat}
-\title{Flat line test}
+\title{Flat Line Test}
 \usage{
 rtqc_flat(x, rep.threshold, tol)
 }
@@ -16,6 +16,9 @@ specific to location and/or climate and based on expert judgment.}
 
 \item{tol}{Numerical tolerance to consider adjacent observations as
 repeated values.}
+}
+\value{
+An ordered factor of test flags of same length as \code{x}.
 }
 \description{
 Perform a flat line test. See

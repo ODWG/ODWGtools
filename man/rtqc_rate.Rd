@@ -2,9 +2,9 @@
 % Please edit documentation in R/rtqc.r
 \name{rtqc_rate}
 \alias{rtqc_rate}
-\title{Rate test}
+\title{Rate Test}
 \usage{
-rtqc_rate(x, n.dev, n.prior)
+rtqc_rate(x, n.dev, n.prior, ...)
 }
 \arguments{
 \item{x}{A vector of values.}
@@ -14,6 +14,12 @@ rtqc_rate(x, n.dev, n.prior)
 \item{n.prior}{the number of prior observations to use for computing
 the standard deviation. For example, to compute standard deviations
 over the previous 25 hours from 15-minute data use \code{n.prior = 100}.}
+
+\item{...}{Other arguments to pass to \code{\link[stats:sd]{stats::sd()}}, i.e.,
+the argument \code{na.rm}.}
+}
+\value{
+An ordered factor of test flags of same length as \code{x}.
 }
 \description{
 Perform a rate of change test. See
