@@ -131,7 +131,7 @@ https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
 for more information.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>rtqc_range</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>sensor.range</span>, <span class='va'>user.range</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>rtqc_range</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>user.range</span>, <span class='va'>sensor.range</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -141,26 +141,26 @@ for more information.</p>
       <td><p>A vector of values.</p></td>
     </tr>
     <tr>
-      <th>sensor.range</th>
-      <td><p>A length-2 numeric vector identifying the sensor
-measurement range.</p></td>
-    </tr>
-    <tr>
       <th>user.range</th>
       <td><p>A length-2 numeric vector identifying a reasonable
 measurement range for the provided data <code>x</code>. Typically specific to
 location and/or climate and based on expert judgment.</p></td>
     </tr>
+    <tr>
+      <th>sensor.range</th>
+      <td><p>A length-2 numeric vector identifying the sensor
+measurement range.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An integer vector of test flags.</p>
+    <p>An ordered factor of test flags of same length as <code>x</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>fake.data</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>10</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>5</span>, <span class='fl'>30</span><span class='op'>)</span>, each <span class='op'>=</span>  <span class='fl'>3</span><span class='op'>)</span>,
   <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='fl'>20</span><span class='op'>)</span>, each <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>rtqc_range</span><span class='op'>(</span><span class='va'>fake.data</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>25</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>7</span>, <span class='fl'>15</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>rtqc_range</span><span class='op'>(</span><span class='va'>fake.data</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>7</span>, <span class='fl'>15</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>25</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;  [1] pass    pass    pass    fail    fail    fail    fail    fail    fail   
 #&gt; [10] suspect suspect suspect suspect suspect suspect
 #&gt; Levels: pass &lt; not evaluated &lt; suspect &lt; fail</div><div class='input'>

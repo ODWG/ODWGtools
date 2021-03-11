@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Spike test — rtqc_spike • ODWGtools</title>
+<title>Rate Test (Alternate) — rtqc_rate_alt • ODWGtools</title>
 
 
 <!-- jquery -->
@@ -39,10 +39,12 @@
 
 
 
-<meta property="og:title" content="Spike test — rtqc_spike" />
-<meta property="og:description" content="Perform a spike test. See
+<meta property="og:title" content="Rate Test (Alternate) — rtqc_rate_alt" />
+<meta property="og:description" content="Perform a rate of change test. This is a variant of the test
+described in
 https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
-for more information." />
+which checks the absolute rate of change over a given number
+of observations." />
 
 
 
@@ -120,18 +122,20 @@ for more information." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Spike test</h1>
+    <h1>Rate Test (Alternate)</h1>
     
-    <div class="hidden name"><code>rtqc_spike.Rd</code></div>
+    <div class="hidden name"><code>rtqc_rate_alt.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Perform a spike test. See
+    <p>Perform a rate of change test. This is a variant of the test
+described in
 https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
-for more information.</p>
+which checks the absolute rate of change over a given number
+of observations.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>rtqc_spike</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>spike.threshold</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>rtqc_rate_alt</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>threshold</span>, <span class='va'>n.prior</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -141,12 +145,15 @@ for more information.</p>
       <td><p>A vector of values.</p></td>
     </tr>
     <tr>
-      <th>spike.threshold</th>
-      <td><p>A length-2 list specifying "suspect"
-and "fail" thresholds. Each threshold can be either a single
-value (static threshold) or a vector of same length as <code>x</code>
-(dynamic threshold). Thresholds are typically specific to
-location and/or climate and based on expert judgment.</p></td>
+      <th>threshold</th>
+      <td><p>The absolute rate of change over a set of
+observations. A rate of change above this value will flag
+the final data point in the set.</p></td>
+    </tr>
+    <tr>
+      <th>n.prior</th>
+      <td><p>the number of prior observations to calculate the
+rate of change over, excluding the current observation.</p></td>
     </tr>
     </table>
 
@@ -155,11 +162,9 @@ location and/or climate and based on expert judgment.</p></td>
     <p>An ordered factor of test flags of same length as <code>x</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>fake.data</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>1.1</span>, <span class='fl'>1</span>, <span class='fl'>1.2</span>, <span class='fl'>1</span>, <span class='fl'>1.3</span>, <span class='fl'>1</span>, <span class='fl'>1.4</span>, <span class='fl'>1</span>, <span class='fl'>1.5</span>, <span class='fl'>1</span><span class='op'>)</span>
-<span class='fu'>rtqc_spike</span><span class='op'>(</span><span class='va'>fake.data</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.15</span>, <span class='fl'>0.25</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] &lt;NA&gt;    pass    pass    suspect suspect fail    fail    fail    fail   
-#&gt; [10] fail    &lt;NA&gt;   
-#&gt; Levels: pass &lt; not evaluated &lt; suspect &lt; fail</div><div class='input'>
+    <pre class="examples"><div class='input'><span class='va'>fake.data</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>10</span>,<span class='fl'>10</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>50</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>10</span>,<span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>rtqc_rate_alt</span><span class='op'>(</span><span class='va'>fake.data</span>, <span class='fl'>20</span>, <span class='fl'>3</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in tibble(x = x, n = seq(length(x))): could not find function "tibble"</span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
