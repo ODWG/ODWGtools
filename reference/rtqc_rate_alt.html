@@ -40,9 +40,7 @@
 
 
 <meta property="og:title" content="Rate Test (Alternate) — rtqc_rate_alt" />
-<meta property="og:description" content="Perform a rate of change test. This is a variant of the test
-described in
-https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
+<meta property="og:description" content="Perform a rate of change test. This is a variant of rtqc_flat()
 which checks the absolute rate of change over a given number
 of observations." />
 
@@ -128,9 +126,7 @@ of observations." />
     </div>
 
     <div class="ref-description">
-    <p>Perform a rate of change test. This is a variant of the test
-described in
-https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
+    <p>Perform a rate of change test. This is a variant of <code><a href='rtqc_flat.html'>rtqc_flat()</a></code>
 which checks the absolute rate of change over a given number
 of observations.</p>
     </div>
@@ -164,7 +160,9 @@ rate of change over, excluding the current observation.</p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>fake.data</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>10</span>,<span class='fl'>10</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>50</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>10</span>,<span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'>rtqc_rate_alt</span><span class='op'>(</span><span class='va'>fake.data</span>, <span class='fl'>20</span>, <span class='fl'>3</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in tibble(x = x, n = seq(length(x))): could not find function "tibble"</span></div><div class='input'>
+</div><div class='output co'>#&gt;  [1] &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; pass pass pass pass pass pass pass pass pass pass pass pass
+#&gt; [16] pass pass pass pass pass pass pass pass pass pass pass pass pass pass pass
+#&gt; Levels: pass &lt; not evaluated &lt; suspect &lt; fail</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
