@@ -20,9 +20,7 @@ rate of change over, excluding the current observation.}
 An ordered factor of test flags of same length as \code{x}.
 }
 \description{
-Perform a rate of change test. This is a variant of the test
-described in
-https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
+Perform a rate of change test. This is a variant of \code{\link[=rtqc_flat]{rtqc_flat()}}
 which checks the absolute rate of change over a given number
 of observations.
 }

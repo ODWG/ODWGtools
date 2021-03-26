@@ -19,9 +19,12 @@ location and/or climate and based on expert judgment.}
 An ordered factor of test flags of same length as \code{x}.
 }
 \description{
-Perform a spike test. See
-https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
-for more information.
+Perform a spike test. For more information see
+U.S. Integrated Ocean Observing System, 2015. Manual for Real-Time
+Quality Control of In-situ Temperature and Salinity Data Version
+2.0: A Guide to Quality Control and Quality Assurance of In-situ
+Temperature and Salinity Observations. 56 pp.
+DOI: \href{https://doi.org/10.7289/V5V40SD4}{10.7289/V5V40SD4}.
 }
 \examples{
 fake.data = c(1, 1.1, 1, 1.2, 1, 1.3, 1, 1.4, 1, 1.5, 1)

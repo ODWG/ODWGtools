@@ -19,10 +19,9 @@ location and/or climate and based on expert judgment.}
 An ordered factor of test flags of same length as \code{x}.
 }
 \description{
-Perform a spike test. This is a variant of the test described in
-https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
-which checks the absolute difference between the current measurement
-and the previous/next measurements.
+Perform a spike test. This is a variant of \code{\link[=rtqc_spike]{rtqc_spike()}}
+which checks the absolute difference between the current
+measurement and the previous/next measurements.
 }
 \examples{
 fake.data = c(1, 1.1, 1, 1.2, 1, 1.3, 1, 1.4, 1, 1.5, 1)

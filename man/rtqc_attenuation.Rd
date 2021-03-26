@@ -13,6 +13,9 @@ rtqc_attenuation(x, threshold, n.obs, ...)
 thresholds for the minimum standard deviation of a set of
 observations.}
 
+\item{n.obs}{The number of observations, including the current
+observation, to use for calculating standard deviation.}
+
 \item{...}{Other arguments to pass to \code{\link[stats:sd]{stats::sd()}}, i.e.,
 the argument \code{na.rm}.}
 }
@@ -20,9 +23,12 @@ the argument \code{na.rm}.}
 An ordered factor of test flags of same length as \code{x}.
 }
 \description{
-Perform a signal attenuation test. See
-https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
-for more information.
+Perform a signal attenuation test. For more information see
+U.S. Integrated Ocean Observing System, 2015. Manual for Real-Time
+Quality Control of In-situ Temperature and Salinity Data Version
+2.0: A Guide to Quality Control and Quality Assurance of In-situ
+Temperature and Salinity Observations. 56 pp.
+DOI: \href{https://doi.org/10.7289/V5V40SD4}{10.7289/V5V40SD4}.
 }
 \examples{
 fake.data = map(seq(2, 0.2, by = -0.2), ~rnorm(10, sd = .x)) \%>\%

@@ -22,9 +22,12 @@ the argument \code{na.rm}.}
 An ordered factor of test flags of same length as \code{x}.
 }
 \description{
-Perform a rate of change test. See
-https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
-for more information.
+Perform a rate of change test. For more information see
+U.S. Integrated Ocean Observing System, 2015. Manual for Real-Time
+Quality Control of In-situ Temperature and Salinity Data Version
+2.0: A Guide to Quality Control and Quality Assurance of In-situ
+Temperature and Salinity Observations. 56 pp.
+DOI: \href{https://doi.org/10.7289/V5V40SD4}{10.7289/V5V40SD4}.
 }
 \examples{
 fake.data = c(rnorm(10,10), rnorm(10, 50), rnorm(10,10))

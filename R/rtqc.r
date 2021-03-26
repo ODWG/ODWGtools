@@ -29,9 +29,12 @@ list_rtqc_flags = function() {
 
 #' Gap Test
 #'
-#' Perform a data gap test. See
-#' https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
-#' for more information.
+#' Perform a data gap test. For more information see
+#' U.S. Integrated Ocean Observing System, 2015. Manual for Real-Time
+#' Quality Control of In-situ Temperature and Salinity Data Version
+#' 2.0: A Guide to Quality Control and Quality Assurance of In-situ
+#' Temperature and Salinity Observations. 56 pp.
+#' DOI: [10.7289/V5V40SD4](https://doi.org/10.7289/V5V40SD4).
 #'
 #' @param x A vector of timestamps.
 #' @param increment A character string defining the expected time
@@ -80,9 +83,12 @@ rtqc_gap = function(x, increment, condition = c("is", "less than",
 
 #' Range Test
 #'
-#' Perform a range test. See
-#' https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
-#' for more information.
+#' Perform a range test. For more information see
+#' U.S. Integrated Ocean Observing System, 2015. Manual for Real-Time
+#' Quality Control of In-situ Temperature and Salinity Data Version
+#' 2.0: A Guide to Quality Control and Quality Assurance of In-situ
+#' Temperature and Salinity Observations. 56 pp.
+#' DOI: [10.7289/V5V40SD4](https://doi.org/10.7289/V5V40SD4).
 #'
 #' @param x A vector of values.
 #' @param sensor.range A length-2 numeric vector identifying the sensor
@@ -110,9 +116,12 @@ rtqc_range = function(x, user.range, sensor.range) {
 
 #' Spike test
 #'
-#' Perform a spike test. See
-#' https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
-#' for more information.
+#' Perform a spike test. For more information see
+#' U.S. Integrated Ocean Observing System, 2015. Manual for Real-Time
+#' Quality Control of In-situ Temperature and Salinity Data Version
+#' 2.0: A Guide to Quality Control and Quality Assurance of In-situ
+#' Temperature and Salinity Observations. 56 pp.
+#' DOI: [10.7289/V5V40SD4](https://doi.org/10.7289/V5V40SD4).
 #'
 #' @inheritParams rtqc_range
 #' @param spike.threshold A length-2 list specifying "suspect"
@@ -149,10 +158,9 @@ rtqc_spike = function(x, spike.threshold) {
 
 #' Spike Test (Alternate)
 #'
-#' Perform a spike test. This is a variant of the test described in
-#' https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
-#' which checks the absolute difference between the current measurement
-#' and the previous/next measurements.
+#' Perform a spike test. This is a variant of [rtqc_spike()]
+#' which checks the absolute difference between the current
+#' measurement and the previous/next measurements.
 #'
 #' @inheritParams rtqc_range
 #' @param spike.threshold A length-2 list specifying "suspect"
@@ -191,9 +199,12 @@ rtqc_spike_alt = function(x, spike.threshold) {
 
 #' Rate Test
 #'
-#' Perform a rate of change test. See
-#' https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
-#' for more information.
+#' Perform a rate of change test. For more information see
+#' U.S. Integrated Ocean Observing System, 2015. Manual for Real-Time
+#' Quality Control of In-situ Temperature and Salinity Data Version
+#' 2.0: A Guide to Quality Control and Quality Assurance of In-situ
+#' Temperature and Salinity Observations. 56 pp.
+#' DOI: [10.7289/V5V40SD4](https://doi.org/10.7289/V5V40SD4).
 #'
 #' @inheritParams rtqc_range
 #' @param n.dev The number of standard deviations to test against.
@@ -224,9 +235,7 @@ rtqc_rate = function(x, n.dev, n.prior, ...) {
 
 #' Rate Test (Alternate)
 #'
-#' Perform a rate of change test. This is a variant of the test
-#' described in
-#' https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
+#' Perform a rate of change test. This is a variant of [rtqc_flat()]
 #' which checks the absolute rate of change over a given number
 #' of observations.
 #'
@@ -247,7 +256,7 @@ rtqc_rate = function(x, n.dev, n.prior, ...) {
 #' @importFrom stats sd coef lm
 #' @export
 rtqc_rate_alt = function(x, threshold, n.prior) {
-  xy = tibble(x = x, n = seq(length(x)))
+  xy = data.frame(x = x, n = seq(length(x)))
   xsd = slide_dbl(xy, ~ coef(lm(x ~ n, .x))["n"],
     .before = n.prior, .after = 0, .complete = TRUE)
   .rtqc_factor(case_when(
@@ -259,9 +268,12 @@ rtqc_rate_alt = function(x, threshold, n.prior) {
 
 #' Flat Line Test
 #'
-#' Perform a flat line test. See
-#' https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
-#' for more information.
+#' Perform a flat line test. For more information see
+#' U.S. Integrated Ocean Observing System, 2015. Manual for Real-Time
+#' Quality Control of In-situ Temperature and Salinity Data Version
+#' 2.0: A Guide to Quality Control and Quality Assurance of In-situ
+#' Temperature and Salinity Observations. 56 pp.
+#' DOI: [10.7289/V5V40SD4](https://doi.org/10.7289/V5V40SD4).
 #'
 #' @inheritParams rtqc_range
 #' @param rep.threshold A length-2 integer vector identifying reasonable
@@ -303,15 +315,19 @@ rtqc_flat = function(x, rep.threshold, tol) {
 
 #' Attenuation Test
 #'
-#' Perform a signal attenuation test. See
-#' https://cdn.ioos.noaa.gov/media/2017/12/qartod_temperature_salinity_manual.pdf
-#' for more information.
+#' Perform a signal attenuation test. For more information see
+#' U.S. Integrated Ocean Observing System, 2015. Manual for Real-Time
+#' Quality Control of In-situ Temperature and Salinity Data Version
+#' 2.0: A Guide to Quality Control and Quality Assurance of In-situ
+#' Temperature and Salinity Observations. 56 pp.
+#' DOI: [10.7289/V5V40SD4](https://doi.org/10.7289/V5V40SD4).
 #'
 #' @inheritParams rtqc_range
 #' @param threshold A length-2 vector specifying "suspect" and "fail"
 #'   thresholds for the minimum standard deviation of a set of
 #'   observations.
-#' @inheritParams rtqc_rate_alt
+#' @param n.obs The number of observations, including the current
+#'   observation, to use for calculating standard deviation.
 #' @param ... Other arguments to pass to [`stats::sd()`], i.e.,
 #'   the argument `na.rm`.
 #' @return An ordered factor of test flags of same length as `x`.
