@@ -333,9 +333,8 @@ rtqc_flat = function(x, rep.threshold, tol) {
 #' @return An ordered factor of test flags of same length as `x`.
 #'
 #' @examples
-#' fake.data = map(seq(2, 0.2, by = -0.2), ~rnorm(10, sd = .x)) %>%
-#'   unlist()
-#' rtqc_attenuation(fake.data, c(0.8, 0.4), 5)
+#' fake.data = sin(seq(0, 10, by = 0.1) * pi) * seq(10, 0, by = -0.1)
+#' rtqc_attenuation(fake.data, c(1, 0.5), 10)
 #'
 #' @importFrom dplyr case_when
 #' @importFrom slider slide_dbl

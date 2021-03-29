@@ -31,8 +31,7 @@ Temperature and Salinity Observations. 56 pp.
 DOI: \href{https://doi.org/10.7289/V5V40SD4}{10.7289/V5V40SD4}.
 }
 \examples{
-fake.data = map(seq(2, 0.2, by = -0.2), ~rnorm(10, sd = .x)) \%>\%
-  unlist()
-rtqc_attenuation(fake.data, c(0.8, 0.4), 5)
+fake.data = sin(seq(0, 10, by = 0.1) * pi) * seq(10, 0, by = -0.1)
+rtqc_attenuation(fake.data, c(1, 0.5), 10)
 
 }
