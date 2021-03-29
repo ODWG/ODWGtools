@@ -47,9 +47,11 @@ noise = rlnorm(length(x), meanlog = 1, sdlog = 3)
 y=sin(x) + noise
 mask = noise < 1
 
-outlier_lof(list(y))
-outlier_lof(list(x, y), mask)
-outlier_lof(list(x, y), mask, threshold = c(1, 2))
-outlier_lof(list(x, y), return.score = TRUE)
+if (require(dbscan)) {
+  outlier_lof(list(y))
+  outlier_lof(list(x, y), mask)
+  outlier_lof(list(x, y), mask, threshold = c(1, 2))
+  outlier_lof(list(x, y), return.score = TRUE)
+}
 
 }

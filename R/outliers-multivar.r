@@ -23,11 +23,13 @@ NULL
 #' y = sin(x) + noise
 #' mask = noise < 1
 #'
-#' outlier_iforest(list(y))
-#' outlier_iforest(list(x, y))
-#' outlier_iforest(list(x, y), mask)
-#' outlier_iforest(list(x, y), mask, threshold = c(1, 2))
-#' outlier_iforest(list(x, y), return.score = TRUE)
+#' if (requireNamespace("solitude", quietly = TRUE)) {
+#'   outlier_iforest(list(y))
+#'   outlier_iforest(list(x, y))
+#'   outlier_iforest(list(x, y), mask)
+#'   outlier_iforest(list(x, y), mask, threshold = c(1, 2))
+#'   outlier_iforest(list(x, y), return.score = TRUE)
+#' }
 #'
 #' @importFrom dplyr if_else between case_when
 #' @importFrom stats predict na.omit
@@ -77,10 +79,12 @@ outlier_iforest = function(xs, mask = !Reduce("|", lapply(xs, is.na)),
 #' y=sin(x) + noise
 #' mask = noise < 1
 #'
-#' outlier_lof(list(y))
-#' outlier_lof(list(x, y), mask)
-#' outlier_lof(list(x, y), mask, threshold = c(1, 2))
-#' outlier_lof(list(x, y), return.score = TRUE)
+#' if (requireNamespace(dbscan, quietly = TRUE)) {
+#'   outlier_lof(list(y))
+#'   outlier_lof(list(x, y), mask)
+#'   outlier_lof(list(x, y), mask, threshold = c(1, 2))
+#'   outlier_lof(list(x, y), return.score = TRUE)
+#' }
 #'
 #' @importFrom dplyr if_else between case_when
 #' @export

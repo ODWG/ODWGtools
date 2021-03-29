@@ -48,10 +48,12 @@ noise = rlnorm(length(x), meanlog = 1, sdlog = 3)
 y = sin(x) + noise
 mask = noise < 1
 
-outlier_iforest(list(y))
-outlier_iforest(list(x, y))
-outlier_iforest(list(x, y), mask)
-outlier_iforest(list(x, y), mask, threshold = c(1, 2))
-outlier_iforest(list(x, y), return.score = TRUE)
+if (require(solitude)) {
+  outlier_iforest(list(y))
+  outlier_iforest(list(x, y))
+  outlier_iforest(list(x, y), mask)
+  outlier_iforest(list(x, y), mask, threshold = c(1, 2))
+  outlier_iforest(list(x, y), return.score = TRUE)
+}
 
 }
