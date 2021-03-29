@@ -169,10 +169,21 @@ the argument <code>na.rm</code>.</p></td>
     <p>An ordered factor of test flags of same length as <code>x</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>fake.data</span> <span class='op'>=</span> <span class='fu'>map</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>0.2</span>, by <span class='op'>=</span> <span class='op'>-</span><span class='fl'>0.2</span><span class='op'>)</span>, <span class='op'>~</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>10</span>, sd <span class='op'>=</span> <span class='va'>.x</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/unlist.html'>unlist</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in map(seq(2, 0.2, by = -0.2), ~rnorm(10, sd = .x)) %&gt;% unlist(): could not find function "%&gt;%"</span></div><div class='input'><span class='fu'>rtqc_attenuation</span><span class='op'>(</span><span class='va'>fake.data</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.8</span>, <span class='fl'>0.4</span><span class='op'>)</span>, <span class='fl'>5</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in vec_is_vector(x): object 'fake.data' not found</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='va'>fake.data</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Trig.html'>sin</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>10</span>, by <span class='op'>=</span> <span class='fl'>0.1</span><span class='op'>)</span> <span class='op'>*</span> <span class='va'>pi</span><span class='op'>)</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>0</span>, by <span class='op'>=</span> <span class='op'>-</span><span class='fl'>0.1</span><span class='op'>)</span>
+<span class='fu'>rtqc_attenuation</span><span class='op'>(</span><span class='va'>fake.data</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>0.5</span><span class='op'>)</span>, <span class='fl'>10</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   [1] &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;   
+#&gt;  [10] pass    pass    pass    pass    pass    pass    pass    pass    pass   
+#&gt;  [19] pass    pass    pass    pass    pass    pass    pass    pass    pass   
+#&gt;  [28] pass    pass    pass    pass    pass    pass    pass    pass    pass   
+#&gt;  [37] pass    pass    pass    pass    pass    pass    pass    pass    pass   
+#&gt;  [46] pass    pass    pass    pass    pass    pass    pass    pass    pass   
+#&gt;  [55] pass    pass    pass    pass    pass    pass    pass    pass    pass   
+#&gt;  [64] pass    pass    pass    pass    pass    pass    pass    pass    pass   
+#&gt;  [73] pass    pass    pass    pass    pass    pass    pass    suspect suspect
+#&gt;  [82] pass    pass    pass    pass    pass    pass    suspect suspect suspect
+#&gt;  [91] suspect suspect suspect suspect suspect suspect suspect fail    fail   
+#&gt; [100] fail    fail   
+#&gt; Levels: pass &lt; not evaluated &lt; suspect &lt; fail</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
