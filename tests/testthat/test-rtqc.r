@@ -17,6 +17,11 @@ test_that("gap test works", {
   flag.ids = c(NA_integer_, rep(1L, 18))
   flags = ODWGtools:::.rtqc_factor(flag.ids)
   expect_identical(rtqc_gap(x, "31 mins", "less than"), flags)
+  expect_identical(rtqc_gap(x, "5 mins", "greater than"), flags)
+
+  flag.ids = c(NA_integer_, rep(4L, 18))
+  flags = ODWGtools:::.rtqc_factor(flag.ids)
+  expect_identical(rtqc_gap(x, "31 mins", "greater than"), flags)
 
 })
 
@@ -36,6 +41,32 @@ test_that("range test works", {
   flag.ids[x < 0] = 4L
   flags = ODWGtools:::.rtqc_factor(flag.ids)
   expect_identical(rtqc_range(x, c(2, 5), c(0, 7)), flags)
+
+})
+
+
+test_that("spike test works", {
+
+  x = rep(0, 20)
+  spike.locs = c(3, 7, 15)
+  spike.mags = c(10, 20, 30)
+  x[spike.locs] = spike.mags
+
+  base.vals = rowMeans(cbind(c(NA_real_, head(x, -1)),
+    c(tail(x, -1), NA_real_)))
+  diff.vals = abs(x - base.vals)
+
+  flag.ids = c(NA_integer_, rep(1L, 18), NA_integer_)
+  flag.ids[diff.vals > 9.5] = 3L
+  flag.ids[x > 19.5] = 4L
+  flags = ODWGtools:::.rtqc_factor(flag.ids)
+  expect_identical(rtqc_spike(x, c(9.5, 19.5)), flags)
+
+  flag.ids = c(NA_integer_, rep(1L, 18), NA_integer_)
+  flag.ids[diff.vals > 4.5] = 3L
+  flag.ids[x > 19.5] = 4L
+  flags = ODWGtools:::.rtqc_factor(flag.ids)
+  expect_identical(rtqc_spike(x, c(4.5, 19.5)), flags)
 
 })
 
@@ -78,9 +109,50 @@ test_that("alternate spike test works", {
   expect_identical(rtqc_spike_alt(x, c(40, 50)), flags)
 })
 
+
+test_that("rate test works", {
+
+  x = c(seq(0, 3, by = 1), seq(4, 8, by = 2), seq(10, 30, by = 5),
+    seq(40, 60, by = 10))
+
+  flag.ids = c(NA_integer_, rep(1L, length(x) - 1))
+  flag.ids[which(diff(x) > 1) + 1] = 3L
+  flags = ODWGtools:::.rtqc_factor(flag.ids)
+  expect_equal(rtqc_rate_alt(x, 1.5, 1), flags)
+
+
+
+})
+
+
 test_that("alternate rate test works", {
 
-  #rtqc_rate_alt
+  x = c(seq(0, 3, by = 1), seq(4, 8, by = 2), seq(10, 30, by = 5),
+    seq(40, 60, by = 10))
+
+  flag.ids = c(NA_integer_, rep(1L, length(x) - 1))
+  flag.ids[which(diff(x) > 1) + 1] = 3L
+  flags = ODWGtools:::.rtqc_factor(flag.ids)
+  expect_equal(rtqc_rate_alt(x, 1.5, 1), flags)
+
+  flag.ids = c(NA_integer_, rep(1L, length(x) - 1))
+  flag.ids[which(diff(x) > 2L) + 1] = 3L
+  flags = ODWGtools:::.rtqc_factor(flag.ids)
+  expect_equal(rtqc_rate_alt(x, 2.1, 1), flags)
+
+  flag.ids = c(rep(NA_integer_, 2), rep(1L, length(x) - 2))
+  diffs = slider::slide_dbl(x, ~ mean(diff(.x)), .before = 2,
+    .complete = TRUE)
+  flag.ids[diffs > 1.4] = 3L
+  flags = ODWGtools:::.rtqc_factor(flag.ids)
+  expect_equal(rtqc_rate_alt(x, 1.4, 2), flags)
+
+  flag.ids = c(rep(NA_integer_, 4), rep(1L, length(x) - 4))
+  diffs = slider::slide_dbl(x, ~ mean(diff(.x)), .before = 4,
+    .complete = TRUE)
+  flag.ids[diffs > 3] = 3L
+  flags = ODWGtools:::.rtqc_factor(flag.ids)
+  expect_equal(rtqc_rate_alt(x, 3, 4), flags)
 
 })
 
@@ -93,10 +165,7 @@ test_that("attenuation test works", {
   flag.ids[9:10] = 4L
   flags = ODWGtools:::.rtqc_factor(flag.ids)
 
-  expect_identical(
-    rtqc_attenuation(x, c(7, 3), 2),
-    flags
-  )
+  expect_identical(rtqc_attenuation(x, c(7, 3), 2), flags)
 
   x = c(rep(c(10, 20), 4), rep(c(10, 5), 4), rep(5, 4))
   flag.ids = rep(1L, length(x))
@@ -104,10 +173,7 @@ test_that("attenuation test works", {
   flag.ids[3:9] = 3L
   flag.ids[11:20] = 4L
   flags = ODWGtools:::.rtqc_factor(flag.ids)
-  expect_identical(
-    rtqc_attenuation(x, c(7, 3), 3),
-    flags
-  )
+  expect_identical(rtqc_attenuation(x, c(7, 3), 3), flags)
 
   x = c(rep(c(10, 20), 4), rep(c(10, 5), 4), rep(5, 4))
   flag.ids = rep(1L, length(x))
@@ -115,9 +181,6 @@ test_that("attenuation test works", {
   flag.ids[4:9] = 3L
   flag.ids[12:20] = 4L
   flags = ODWGtools:::.rtqc_factor(flag.ids)
-  expect_identical(
-    rtqc_attenuation(x, c(6, 3), 4),
-    flags
-  )
+  expect_identical(rtqc_attenuation(x, c(6, 3), 4), flags)
 
 })
