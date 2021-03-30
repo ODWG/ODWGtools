@@ -22,7 +22,8 @@ An ordered factor of test flags of same length as \code{x}.
 \description{
 Perform a rate of change test. This is a variant of \code{\link[=rtqc_flat]{rtqc_flat()}}
 which checks the absolute rate of change over a given number
-of observations.
+of observations (defined as the absolute value of the average of
+the rates of change between successive observations)
 }
 \examples{
 fake.data = c(rnorm(10,10), rnorm(10, 50), rnorm(10,10))

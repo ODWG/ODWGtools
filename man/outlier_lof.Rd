@@ -47,7 +47,7 @@ noise = rlnorm(length(x), meanlog = 1, sdlog = 3)
 y=sin(x) + noise
 mask = noise < 1
 
-if (require(dbscan)) {
+if (requireNamespace(dbscan, quietly = TRUE)) {
   outlier_lof(list(y))
   outlier_lof(list(x, y), mask)
   outlier_lof(list(x, y), mask, threshold = c(1, 2))

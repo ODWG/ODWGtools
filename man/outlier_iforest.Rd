@@ -48,7 +48,7 @@ noise = rlnorm(length(x), meanlog = 1, sdlog = 3)
 y = sin(x) + noise
 mask = noise < 1
 
-if (require(solitude)) {
+if (requireNamespace("solitude", quietly = TRUE)) {
   outlier_iforest(list(y))
   outlier_iforest(list(x, y))
   outlier_iforest(list(x, y), mask)
