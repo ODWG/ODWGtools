@@ -235,9 +235,10 @@ rtqc_rate = function(x, n.dev, n.prior, ...) {
 
 #' Rate Test (Alternate)
 #'
-#' Perform a rate of change test. This is a variant of [rtqc_flat()]
+#' Perform a rate of change test. This is a variant of [`rtqc_flat()`]
 #' which checks the absolute rate of change over a given number
-#' of observations.
+#' of observations (defined as the absolute value of the average of
+#' the rates of change between successive observations)
 #'
 #' @inheritParams rtqc_range
 #' @param threshold The absolute rate of change over a set of
@@ -256,12 +257,11 @@ rtqc_rate = function(x, n.dev, n.prior, ...) {
 #' @importFrom stats sd coef lm
 #' @export
 rtqc_rate_alt = function(x, threshold, n.prior) {
-  xy = data.frame(x = x, n = seq(length(x)))
-  xsd = slide_dbl(xy, ~ coef(lm(x ~ n, .x))["n"],
-    .before = n.prior, .after = 0, .complete = TRUE)
+  xdiff = slider::slide_dbl(x, ~ mean(diff(.x)), .before = n.prior,
+      .complete = TRUE)
   .rtqc_factor(case_when(
-    is.na(xsd) | is.na(x) ~ NA_integer_,
-    abs(xsd) > threshold ~ 3L,
+    is.na(xdiff) | is.na(x) ~ NA_integer_,
+    abs(xdiff) > threshold ~ 3L,
     TRUE ~ 1L
   ))
 }
@@ -350,22 +350,3 @@ rtqc_attenuation = function(x, threshold, n.obs, ...) {
     TRUE ~ 1L
   ))
 }
-
-
-#rtqc_control = function(x, n.dev, n.prior, ...) {
-#  xm = slide_dbl(x, mean, ..., .before = n.prior, .after = -1L,
-#    .complete = TRUE)
-#  xsd = slide_dbl(x, sd, ..., .before = n.prior, .after = -1L,
-#    .complete = TRUE)
-#
-#  d = tibble(n = seq(length(x)), x = x, m = xm, s = xsd)
-#
-#ggplot(d) + aes(x = n) +
-#  geom_step(aes(y = m), color = "blue") +
-#  geom_step(aes(y = m + s), color = "blue", linetype = "dashed") +
-#  geom_step(aes(y = m - s), color = "blue", linetype = "dashed") +
-#  geom_point(aes(y = x))
-#  
-#
-#
-#}
