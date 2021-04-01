@@ -4,7 +4,13 @@
 \alias{outlier_tukey}
 \title{Tukey's test for outliers}
 \usage{
-outlier_tukey(x, mask = !is.na(x), threshold = c(1.5, 3), return.score = FALSE)
+outlier_tukey(
+  x,
+  mask = !is.na(x),
+  threshold = c(1.5, 3),
+  return.score = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{A vector of data.}
@@ -21,6 +27,12 @@ thresholds for "mild" and "extreme" outliers.}
 If \code{FALSE}, return an ordered factor classifying the observations
 as one of "not outlier" (1), "mild outlier" (2), or
 "extreme outlier" (3).}
+
+\item{...}{
+  Arguments passed on to \code{\link[stats:quantile]{stats::quantile}}
+  \describe{
+    \item{\code{}}{}
+  }}
 }
 \value{
 A  vector the same length as \code{x} containing numeric

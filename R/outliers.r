@@ -38,6 +38,7 @@ list_outlier_flags = function() {
 #'   If `FALSE`, return an ordered factor classifying the observations
 #'   as one of "not outlier" (1), "mild outlier" (2), or
 #'   "extreme outlier" (3).
+#' @inheritDotParams stats::quantile
 #' @return A  vector the same length as `x` containing numeric
 #'   scores or ordered factors.
 #'
@@ -57,13 +58,13 @@ list_outlier_flags = function() {
 #' outlier_tukey(y, mask, threshold = c(2, 5))
 #' outlier_tukey(y, return.score = TRUE)
 #'
-#' @importFrom dplyr if_else between case_when
+#' @importFrom dplyr case_when
 #' @importFrom stats quantile
 #' @export
 outlier_tukey = function(x, mask = !is.na(x),
-  threshold = c(1.5, 3), return.score = FALSE) {
-  lowerq = quantile(x[mask])[2]
-  upperq = quantile(x[mask])[4]
+  threshold = c(1.5, 3), return.score = FALSE, ...) {
+  lowerq = quantile(x[mask], ...)[2]
+  upperq = quantile(x[mask], ...)[4]
   iqr = upperq - lowerq
   score = pmax(x - upperq, lowerq - x) / iqr
   if (return.score) {
@@ -104,20 +105,21 @@ outlier_tukey = function(x, mask = !is.na(x),
 #' outlier_tscore(y, mask, threshold = c(0.8, 0.9))
 #' outlier_tscore(y, return.score = TRUE)
 #'
-#' @importFrom dplyr if_else between case_when
-#' @importFrom stats qnorm sd
+#' @importFrom dplyr case_when
+#' @importFrom stats qt sd
 #' @export
 outlier_tscore = function(x, mask = !is.na(x),
   threshold = c(0.9, 0.95), return.score = FALSE) {
   n = length(x)
-  score = (x - mean(x[mask])) / (sd(x[mask]) / sqrt(n))
+  crit.value = abs(qt(threshold, n - 1))
+  score = (x - mean(x[mask])) / (sd(x[mask]))
   if (return.score) {
     score
   } else {
     .outlier_factor(case_when(
       is.na(x) ~ NA_integer_,
-      abs(score) > qt(threshold[2], n - 1) ~ 4L,
-      abs(score) > qt(threshold[1], n - 1) ~ 3L,
+      abs(score) > crit.value[2] ~ 4L,
+      abs(score) > crit.value[1] ~ 3L,
       TRUE ~ 1L
     ))
   }
@@ -146,7 +148,7 @@ outlier_tscore = function(x, mask = !is.na(x),
 #' outlier_chisq(y, mask, threshold = c(0.8, 0.9))
 #' outlier_chisq(y, return.score = TRUE)
 #'
-#' @importFrom dplyr if_else between case_when
+#' @importFrom dplyr case_when
 #' @importFrom stats qchisq var
 #' @export
 outlier_chisq = function(x, mask = !is.na(x),
@@ -191,7 +193,7 @@ outlier_chisq = function(x, mask = !is.na(x),
 #' outlier_mad(y, mask, threshold = c(1, 2))
 #' outlier_mad(y, return.score = TRUE)
 #'
-#' @importFrom dplyr if_else between case_when
+#' @importFrom dplyr case_when
 #' @importFrom stats median mad
 #' @export
 outlier_mad = function(x, mask = !is.na(x),
@@ -224,7 +226,7 @@ outlier_mad = function(x, mask = !is.na(x),
 #  dd[, mask] = NA
 #  sn = k * median(as.vector(apply(dd, 1L, median, na.rm = TRUE)),
 #    na.rm = TRUE)
-#  
+#
 #
 #  xx = x[!mask]
 #  d = expand.grid(xx, xx)
