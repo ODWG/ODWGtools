@@ -79,7 +79,7 @@ outlier_iforest = function(xs, mask = !Reduce("|", lapply(xs, is.na)),
 #' y=sin(x) + noise
 #' mask = noise < 1
 #'
-#' if (requireNamespace(dbscan, quietly = TRUE)) {
+#' if (requireNamespace("dbscan", quietly = TRUE)) {
 #'   outlier_lof(list(y))
 #'   outlier_lof(list(x, y), mask)
 #'   outlier_lof(list(x, y), mask, threshold = c(1, 2))
