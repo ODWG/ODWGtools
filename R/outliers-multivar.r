@@ -16,10 +16,10 @@ NULL
 #' y = sin(x) + noise
 #' mask = noise < 1
 #'
-#' moutlier_chisq(y)
-#' moutlier_chisq(y, mask)
-#' moutlier_chisq(y, mask, threshold = c(0.8, 0.9))
-#' moutlier_chisq(y, return.score = TRUE)
+#' moutlier_chisq(list(x, y))
+#' moutlier_chisq(list(x, y), mask)
+#' moutlier_chisq(list(x, y), mask, threshold = c(0.8, 0.9))
+#' moutlier_chisq(list(x, y), return.score = TRUE)
 #'
 #' @importFrom dplyr case_when
 #' @importFrom stats qchisq var
@@ -31,7 +31,8 @@ moutlier_chisq = function(xs, mask = !Reduce("|", lapply(xs, is.na)),
   p.omit = na.omit(p)
   na.mask = invwhich(as.vector(attr(p.omit, "na.action")), nrow(p))
   center = colMeans(p.omit)
-  score = mahalanobis(p.omit, center)
+  covmat = cov(p.omit)
+  score = mahalanobis(p, center, covmat)
   df = ncol(p.omit)
   if (return.score) {
     score

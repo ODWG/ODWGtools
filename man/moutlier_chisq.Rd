@@ -8,8 +8,7 @@ moutlier_chisq(
   xs,
   mask = !Reduce("|", lapply(xs, is.na)),
   threshold = c(0.9, 0.95),
-  return.score = FALSE,
-  ...
+  return.score = FALSE
 )
 }
 \arguments{
@@ -38,9 +37,9 @@ noise = rnorm(length(x), mean = 1, sd = 3)
 y = sin(x) + noise
 mask = noise < 1
 
-moutlier_chisq(y)
-moutlier_chisq(y, mask)
-moutlier_chisq(y, mask, threshold = c(0.8, 0.9))
-moutlier_chisq(y, return.score = TRUE)
+moutlier_chisq(list(x, y))
+moutlier_chisq(list(x, y), mask)
+moutlier_chisq(list(x, y), mask, threshold = c(0.8, 0.9))
+moutlier_chisq(list(x, y), return.score = TRUE)
 
 }
