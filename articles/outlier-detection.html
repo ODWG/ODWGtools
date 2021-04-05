@@ -78,7 +78,7 @@
       <h1 data-toc-skip>Outlier Detection</h1>
                         <h4 class="author">Michael Koohafkan</h4>
             
-            <h4 class="date">2021-04-01</h4>
+            <h4 class="date">2021-04-05</h4>
       
       
       <div class="hidden name"><code>outlier-detection.rmd</code></div>
@@ -107,7 +107,7 @@
 <li>
 <code><a href="../reference/outlier_tscore.html">outlier_tscore()</a></code>: outlier detection based on the one-sample t-test. Note that for sample sizes greater than 30, the t-test (t-distribution) approach is equivalent to the z-score (normal distribution) approach.</li>
 <li>
-<code><a href="../reference/outlier_chisq.html">outlier_chisq()</a></code>: outlier detection based on the <span class="math inline">\(\chi^2\)</span> distribution.</li>
+<code>outlier_chisq()</code>: outlier detection based on the <span class="math inline">\(\chi^2\)</span> distribution.</li>
 </ul>
 </div>
 <div id="non-parametric-approaches" class="section level2">
@@ -127,9 +127,9 @@
 <p><code>ODWGtools</code> provides the following additional functions for outlier detection:</p>
 <ul>
 <li>
-<code><a href="../reference/outlier_lof.html">outlier_lof()</a></code>: Local Outlier Factor (LOF) test for outliers.</li>
+<code>outlier_lof()</code>: Local Outlier Factor (LOF) test for outliers.</li>
 <li>
-<code><a href="../reference/outlier_iforest.html">outlier_iforest()</a></code>: outlier detection based on Isolation Forests.</li>
+<code>outlier_iforest()</code>: outlier detection based on Isolation Forests.</li>
 <li>
 <code>outlier_glosh()</code>: Global-Local Outlier Score from Hierarchies (GLOSH) test for outliers.</li>
 <li>
@@ -144,11 +144,11 @@
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">bdl</span><span class="op">)</span>
 
 <span class="va">bdl</span><span class="op">[</span><span class="st">"tscore"</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="../reference/outlier_tscore.html">outlier_tscore</a></span><span class="op">(</span><span class="va">bdl</span><span class="op">$</span><span class="va">value</span><span class="op">)</span>
-<span class="va">bdl</span><span class="op">[</span><span class="st">"chisq"</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="../reference/outlier_chisq.html">outlier_chisq</a></span><span class="op">(</span><span class="va">bdl</span><span class="op">$</span><span class="va">value</span><span class="op">)</span>
+<span class="va">bdl</span><span class="op">[</span><span class="st">"chisq"</span><span class="op">]</span> <span class="op">=</span> <span class="fu">outlier_chisq</span><span class="op">(</span><span class="va">bdl</span><span class="op">$</span><span class="va">value</span><span class="op">)</span>
 <span class="va">bdl</span><span class="op">[</span><span class="st">"tukey"</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="../reference/outlier_tukey.html">outlier_tukey</a></span><span class="op">(</span><span class="va">bdl</span><span class="op">$</span><span class="va">value</span><span class="op">)</span>
 <span class="va">bdl</span><span class="op">[</span><span class="st">"mad"</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="../reference/outlier_mad.html">outlier_mad</a></span><span class="op">(</span><span class="va">bdl</span><span class="op">$</span><span class="va">value</span><span class="op">)</span>
-<span class="va">bdl</span><span class="op">[</span><span class="st">"lof"</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="../reference/outlier_lof.html">outlier_lof</a></span><span class="op">(</span><span class="va">bdl</span><span class="op">$</span><span class="va">value</span><span class="op">)</span>
-<span class="va">bdl</span><span class="op">[</span><span class="st">"iforest"</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="../reference/outlier_iforest.html">outlier_iforest</a></span><span class="op">(</span><span class="va">bdl</span><span class="op">$</span><span class="va">value</span><span class="op">)</span>
+<span class="va">bdl</span><span class="op">[</span><span class="st">"lof"</span><span class="op">]</span> <span class="op">=</span> <span class="fu">outlier_lof</span><span class="op">(</span><span class="va">bdl</span><span class="op">$</span><span class="va">value</span><span class="op">)</span>
+<span class="va">bdl</span><span class="op">[</span><span class="st">"iforest"</span><span class="op">]</span> <span class="op">=</span> <span class="fu">outlier_iforest</span><span class="op">(</span><span class="va">bdl</span><span class="op">$</span><span class="va">value</span><span class="op">)</span>
 
 <span class="va">bdl</span><span class="op">[</span><span class="st">"tscore.window"</span><span class="op">]</span> <span class="op">=</span> <span class="fu">slide_chr</span><span class="op">(</span><span class="va">bdl</span><span class="op">$</span><span class="va">value</span>, <span class="op">~</span><span class="fu"><a href="../reference/outlier_tscore.html">outlier_tscore</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span><span class="op">[</span><span class="fl">49</span><span class="op">]</span>, 
   .before <span class="op">=</span> <span class="fl">48</span>, .after <span class="op">=</span> <span class="fl">48</span><span class="op">)</span>
@@ -156,7 +156,7 @@
 <span class="va">bdl</span><span class="op">[</span><span class="st">"mad.window"</span><span class="op">]</span> <span class="op">=</span> <span class="fu">slide_chr</span><span class="op">(</span><span class="va">bdl</span><span class="op">$</span><span class="va">value</span>, <span class="op">~</span> <span class="fu"><a href="../reference/outlier_mad.html">outlier_mad</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span><span class="op">[</span><span class="fl">25</span><span class="op">]</span>, 
   .before <span class="op">=</span> <span class="fl">24</span>, .after <span class="op">=</span> <span class="fl">24</span><span class="op">)</span>
 
-<span class="va">bdl</span><span class="op">[</span><span class="st">"lof.window"</span><span class="op">]</span> <span class="op">=</span> <span class="fu">slide_chr</span><span class="op">(</span><span class="va">bdl</span><span class="op">$</span><span class="va">value</span>, <span class="op">~</span> <span class="fu"><a href="../reference/outlier_lof.html">outlier_lof</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span><span class="op">[</span><span class="fl">1501</span><span class="op">]</span>, 
+<span class="va">bdl</span><span class="op">[</span><span class="st">"lof.window"</span><span class="op">]</span> <span class="op">=</span> <span class="fu">slide_chr</span><span class="op">(</span><span class="va">bdl</span><span class="op">$</span><span class="va">value</span>, <span class="op">~</span> <span class="fu">outlier_lof</span><span class="op">(</span><span class="va">.x</span><span class="op">)</span><span class="op">[</span><span class="fl">1501</span><span class="op">]</span>, 
   .before <span class="op">=</span> <span class="fl">1500</span>, .after <span class="op">=</span> <span class="fl">1500</span>, .complete <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 

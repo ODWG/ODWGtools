@@ -170,10 +170,10 @@ the argument <code>na.rm</code>.</p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>fake.data</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>10</span>,<span class='fl'>10</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>50</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>10</span>,<span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'>rtqc_rate</span><span class='op'>(</span><span class='va'>fake.data</span>, <span class='fl'>2</span>, <span class='fl'>5</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    suspect pass    pass    suspect
+</div><div class='output co'>#&gt;  [1] &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    pass    pass    suspect pass   
 #&gt; [10] pass    suspect pass    pass    pass    pass    pass    pass    pass   
-#&gt; [19] pass    pass    suspect pass    pass    pass    pass    pass    pass   
-#&gt; [28] pass    suspect pass   
+#&gt; [19] pass    pass    suspect pass    pass    pass    pass    suspect suspect
+#&gt; [28] pass    pass    pass   
 #&gt; Levels: pass &lt; not evaluated &lt; suspect &lt; fail</div><div class='input'>
 </div></pre>
   </div>

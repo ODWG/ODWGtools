@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>t-score test for outliers — outlier_tscore • ODWGtools</title>
+<title>Chi-squared test for multivariate outliers — moutlier_chisq • ODWGtools</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="t-score test for outliers — outlier_tscore" />
-<meta property="og:description" content="Performs a t-score test for outliers." />
+<meta property="og:title" content="Chi-squared test for multivariate outliers — moutlier_chisq" />
+<meta property="og:description" content="Performs a Chi-squared test for multivariate outliers." />
 
 
 
@@ -118,18 +118,18 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>t-score test for outliers</h1>
+    <h1>Chi-squared test for multivariate outliers</h1>
     
-    <div class="hidden name"><code>outlier_tscore.Rd</code></div>
+    <div class="hidden name"><code>moutlier_chisq.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Performs a t-score test for outliers.</p>
+    <p>Performs a Chi-squared test for multivariate outliers.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>outlier_tscore</span><span class='op'>(</span>
-  <span class='va'>x</span>,
-  mask <span class='op'>=</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>,
+    <pre class="usage"><span class='fu'>moutlier_chisq</span><span class='op'>(</span>
+  <span class='va'>xs</span>,
+  mask <span class='op'>=</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/funprog.html'>Reduce</a></span><span class='op'>(</span><span class='st'>"|"</span>, <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='va'>xs</span>, <span class='va'>is.na</span><span class='op'>)</span><span class='op'>)</span>,
   threshold <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.9</span>, <span class='fl'>0.95</span><span class='op'>)</span>,
   return.score <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
@@ -138,8 +138,9 @@
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>A vector of data.</p></td>
+      <th>xs</th>
+      <td><p>A dataframe or list of vectors
+(which will be coerced to a numeric matrix).</p></td>
     </tr>
     <tr>
       <th>mask</th>
@@ -162,14 +163,6 @@ as one of "not outlier" (1), "mild outlier" (2), or
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The values of <code>threshold</code> identify the quantiles of the
-t-distribution used to identify mild and extreme outliers.
-Default values are 0.9 for "mild" outliers and 0.95 for "extreme"
-outliers.</p>
-<p>The t-score is equivalent to the z-score for sample
-sizes greater than 30.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>x</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>34</span>, by <span class='op'>=</span> <span class='fl'>0.25</span><span class='op'>)</span><span class='op'>*</span><span class='va'>pi</span>
@@ -177,11 +170,33 @@ sizes greater than 30.</p>
 <span class='va'>y</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Trig.html'>sin</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>+</span> <span class='va'>noise</span>
 <span class='va'>mask</span> <span class='op'>=</span> <span class='va'>noise</span> <span class='op'>&lt;</span> <span class='fl'>1</span>
 
-<span class='fu'>outlier_tscore</span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in qt(threshold, df1): object 'df1' not found</span></div><div class='input'><span class='fu'>outlier_tscore</span><span class='op'>(</span><span class='va'>y</span>, <span class='va'>mask</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in qt(threshold, df1): object 'df1' not found</span></div><div class='input'><span class='fu'>outlier_tscore</span><span class='op'>(</span><span class='va'>y</span>, <span class='va'>mask</span>, threshold <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.8</span>, <span class='fl'>0.9</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in qt(threshold, df1): object 'df1' not found</span></div><div class='input'><span class='fu'>outlier_tscore</span><span class='op'>(</span><span class='va'>y</span>, return.score <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in qt(threshold, df1): object 'df1' not found</span></div><div class='input'>
+<span class='fu'>moutlier_chisq</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in eval_tidy(pair$lhs, env = default_env): object 'x' not found</span></div><div class='input'><span class='fu'>moutlier_chisq</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span><span class='op'>)</span>, <span class='va'>mask</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in eval_tidy(pair$lhs, env = default_env): object 'x' not found</span></div><div class='input'><span class='fu'>moutlier_chisq</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span><span class='op'>)</span>, <span class='va'>mask</span>, threshold <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.8</span>, <span class='fl'>0.9</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in eval_tidy(pair$lhs, env = default_env): object 'x' not found</span></div><div class='input'><span class='fu'>moutlier_chisq</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span><span class='op'>)</span>, return.score <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   [1]  2.97617269  6.88395062  2.91250498  3.08848180  2.64592125  3.13065873
+#&gt;   [7]  2.59912931  3.43408078  2.81067788  2.32201602  2.30984209  2.38930098
+#&gt;  [13]  6.63303761  4.42588430  2.45658642  2.37405917  1.72677863  2.30484677
+#&gt;  [19]  2.50031621  1.52575245  2.00697060  1.75655674  1.76140668  3.11978990
+#&gt;  [25]  1.59607033  1.91678663  2.50492092  6.15250049  5.18152383  0.97645388
+#&gt;  [31]  1.21131595  1.26519986  2.71358925  0.82025856  0.75223064  1.33059301
+#&gt;  [37]  0.84551126  0.87458389  1.84218287  1.34270524  1.06030614  0.83666731
+#&gt;  [43]  0.80876843  1.24331300  0.36656579  0.62147449  0.51268903  0.99690869
+#&gt;  [49]  1.80398832  1.14249372 10.03426189  0.20696615  0.29299038  0.28120101
+#&gt;  [55]  1.53025195  0.68224241  0.11536922  1.02792825  2.21322885  0.23965542
+#&gt;  [61]  0.05532429  0.17110830  0.11052534  0.17246677  0.37242805  0.14600946
+#&gt;  [67]  6.06364159  0.38380672  0.52904425  0.71905120  0.14312226  0.47716710
+#&gt;  [73]  0.13404584  0.64894838  1.36548732  0.92578062  0.35187650  0.05502217
+#&gt;  [79]  0.85536403  2.94174816  0.09150272  3.06265278  0.17523091  0.15195488
+#&gt;  [85]  0.55252565  0.56911473  0.33262610  0.45441299  0.65852578  0.51498540
+#&gt;  [91]  0.61898969  4.98326063  0.55454779  0.40692512  1.61795222  0.46583704
+#&gt;  [97]  0.56754466  4.54094417  0.62914531  1.45811741  0.65576740  4.36577724
+#&gt; [103]  2.18114467  9.03924254  1.78262141  1.03301378  1.00523674  1.72483061
+#&gt; [109]  1.07579948  2.11391895  3.84635057  2.17438126  1.55486153  2.62410431
+#&gt; [115]  1.87789445  6.12424697  2.16238840  1.56782770  2.14138293  2.14291350
+#&gt; [121]  1.71658613  6.78130347  2.20235774  2.38392834  4.39230816  2.45149824
+#&gt; [127]  3.01050734  2.30014451  2.48464494  5.89641590  2.44726450  2.59088893
+#&gt; [133]  2.84605720  3.53279778  2.90311572  3.38905606  3.01023661</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
