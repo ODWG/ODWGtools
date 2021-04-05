@@ -1,13 +1,56 @@
 #' @include outliers.r
 NULL
 
-#' Isolation Forest outlier detection
+
+#' Chi-squared test for multivariate outliers
 #'
-#' Performs outlier detection using an Isolation Forest.
+#' Performs a Chi-squared test for multivariate outliers.
 #'
 #' @param xs A dataframe or list of vectors
 #'   (which will be coerced to a numeric matrix).
 #' @inheritParams outlier_tukey
+#'
+#' @examples
+#' x = seq(0, 34, by = 0.25)*pi
+#' noise = rnorm(length(x), mean = 1, sd = 3)
+#' y = sin(x) + noise
+#' mask = noise < 1
+#'
+#' moutlier_chisq(y)
+#' moutlier_chisq(y, mask)
+#' moutlier_chisq(y, mask, threshold = c(0.8, 0.9))
+#' moutlier_chisq(y, return.score = TRUE)
+#'
+#' @importFrom dplyr case_when
+#' @importFrom stats qchisq var
+#' @export
+moutlier_chisq = function(xs, mask = !Reduce("|", lapply(xs, is.na)),
+  threshold = c(0.9, 0.95), return.score = FALSE) {
+  p = list_to_ndf(xs)
+  d = subset(p, mask)
+  p.omit = na.omit(p)
+  na.mask = invwhich(as.vector(attr(p.omit, "na.action")), nrow(p))
+  center = colMeans(p.omit)
+  score = mahalanobis(p.omit, center)
+  df = ncol(p.omit)
+  if (return.score) {
+    score
+  } else {
+    .outlier_factor(case_when(
+      is.na(x) ~ NA_integer_,
+      abs(score) > qchisq(threshold[2], df) ~ 4L,
+      abs(score) > qchisq(threshold[1], df) ~ 3L,
+      TRUE ~ 1L
+    ))
+  }
+}
+
+
+#' Isolation Forest multivariate outlier detection
+#'
+#' Performs outlier detection using an Isolation Forest.
+#'
+#' @inheritParams moutlier_chisq
 #' @param ... Additional arguments to `solitude::isolationForest$new()`.
 #'   note that the argument `sample_size` will be overwritten to use the
 #'   number of unmasked data points, i.e. `length(which(mask))`.
@@ -24,17 +67,17 @@ NULL
 #' mask = noise < 1
 #'
 #' if (requireNamespace("solitude", quietly = TRUE)) {
-#'   outlier_iforest(list(y))
-#'   outlier_iforest(list(x, y))
-#'   outlier_iforest(list(x, y), mask)
-#'   outlier_iforest(list(x, y), mask, threshold = c(1, 2))
-#'   outlier_iforest(list(x, y), return.score = TRUE)
+#'   moutlier_iforest(list(y))
+#'   moutlier_iforest(list(x, y))
+#'   moutlier_iforest(list(x, y), mask)
+#'   moutlier_iforest(list(x, y), mask, threshold = c(1, 2))
+#'   moutlier_iforest(list(x, y), return.score = TRUE)
 #' }
 #'
 #' @importFrom dplyr if_else between case_when
 #' @importFrom stats predict na.omit
 #' @export
-outlier_iforest = function(xs, mask = !Reduce("|", lapply(xs, is.na)),
+moutlier_iforest = function(xs, mask = !Reduce("|", lapply(xs, is.na)),
   threshold = c(0.8, 0.9), return.score = FALSE, ...) {
   if (!requireNamespace("solitude"))
     stop("Could not find package \"solitude\"")
@@ -62,9 +105,10 @@ outlier_iforest = function(xs, mask = !Reduce("|", lapply(xs, is.na)),
 
 #' LOF outlier detection
 #'
-#' Performs outlier detection using Local Outlier Factor algorithm.
+#' Performs multivariate outlier detection using Local Outlier Factor
+#' algorithm.
 #'
-#' @inheritParams outlier_iforest
+#' @inheritParams moutlier_chisq
 #' @param ... Additional arguments to `dbscan::lof`, namely
 #'   `k`.
 #'
@@ -80,15 +124,15 @@ outlier_iforest = function(xs, mask = !Reduce("|", lapply(xs, is.na)),
 #' mask = noise < 1
 #'
 #' if (requireNamespace("dbscan", quietly = TRUE)) {
-#'   outlier_lof(list(y))
-#'   outlier_lof(list(x, y), mask)
-#'   outlier_lof(list(x, y), mask, threshold = c(1, 2))
-#'   outlier_lof(list(x, y), return.score = TRUE)
+#'   moutlier_lof(list(y))
+#'   moutlier_lof(list(x, y), mask)
+#'   moutlier_lof(list(x, y), mask, threshold = c(1, 2))
+#'   moutlier_lof(list(x, y), return.score = TRUE)
 #' }
 #'
 #' @importFrom dplyr if_else between case_when
 #' @export
-outlier_lof = function(xs, mask = !Reduce("|", lapply(xs, is.na)),
+moutlier_lof = function(xs, mask = !Reduce("|", lapply(xs, is.na)),
   threshold = c(1.5, 2), return.score = FALSE, ...) {
   if (!requireNamespace("dbscan"))
     stop("Could not find package \"dbscan\"")
@@ -112,12 +156,12 @@ outlier_lof = function(xs, mask = !Reduce("|", lapply(xs, is.na)),
 
 
 
-outlier_glosh = function(x, mask) {
+moutlier_glosh = function(x, mask) {
   if (!requireNamespace("dbscan"))
     stop("Could not find package \"dbscan\"")
 }
 
 
-outlier_hdbscan = function(x, threshold = c(0.9, 0.95), ...) {
+moutlier_hdbscan = function(x, threshold = c(0.9, 0.95), ...) {
   # TODO
 }

@@ -110,8 +110,8 @@ outlier_tukey = function(x, mask = !is.na(x),
 #' @export
 outlier_tscore = function(x, mask = !is.na(x),
   threshold = c(0.9, 0.95), return.score = FALSE) {
-  n = length(x)
-  crit.value = abs(qt(threshold, n - 1))
+  df = length(x) - 1L
+  crit.value = abs(qt(threshold, df1))
   score = (x - mean(x[mask])) / (sd(x[mask]))
   if (return.score) {
     score
@@ -124,49 +124,6 @@ outlier_tscore = function(x, mask = !is.na(x),
     ))
   }
 }
-
-
-#' Chi-squared test for outliers
-#'
-#' Performs a Chi-squared test for outliers.
-#'
-#' @inheritParams outlier_tscore
-#'
-#' @details the values of `threshold` identify the quantiles of the
-#'   Chi-squared distribution used to identify mild and extreme
-#'   outliers. Default values are 0.9 for "mild" outliers and 0.95
-#'   for "extreme" outliers.
-#'
-#' @examples
-#' x = seq(0, 34, by = 0.25)*pi
-#' noise = rnorm(length(x), mean = 1, sd = 3)
-#' y = sin(x) + noise
-#' mask = noise < 1
-#'
-#' outlier_chisq(y)
-#' outlier_chisq(y, mask)
-#' outlier_chisq(y, mask, threshold = c(0.8, 0.9))
-#' outlier_chisq(y, return.score = TRUE)
-#'
-#' @importFrom dplyr case_when
-#' @importFrom stats qchisq var
-#' @export
-outlier_chisq = function(x, mask = !is.na(x),
-  threshold = c(0.9, 0.95), return.score = FALSE) {
-  df = length(x) - 1
-  score = (x - mean(x[mask])) ^ 2 / var(x[mask])
-  if (return.score) {
-    score
-  } else {
-    .outlier_factor(case_when(
-      is.na(x) ~ NA_integer_,
-      abs(score) > qchisq(threshold[2], df) ~ 4L,
-      abs(score) > qchisq(threshold[1], df) ~ 3L,
-      TRUE ~ 1L
-    ))
-  }
-}
-
 
 #' Median absolute deviation test for outliers
 #'
