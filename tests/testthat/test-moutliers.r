@@ -20,4 +20,3 @@ test_that("chi-squared outlier detection works", {
 #  expect_identical(outlier_tscore(x, mask), flags)
 
 })
-
