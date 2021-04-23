@@ -22,7 +22,7 @@ NULL
 #' moutlier_chisq(list(x, y), return.score = TRUE)
 #'
 #' @importFrom dplyr case_when
-#' @importFrom stats qchisq var
+#' @importFrom stats qchisq var cov mahalanobis qnorm
 #' @export
 moutlier_chisq = function(xs, mask = !Reduce("|", lapply(xs, is.na)),
   threshold = c(0.9, 0.95), return.score = FALSE) {
