@@ -178,10 +178,142 @@ sizes greater than 30.</p>
 <span class='va'>mask</span> <span class='op'>=</span> <span class='va'>noise</span> <span class='op'>&lt;</span> <span class='fl'>1</span>
 
 <span class='fu'>outlier_tscore</span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in qt(threshold, df1): object 'df1' not found</span></div><div class='input'><span class='fu'>outlier_tscore</span><span class='op'>(</span><span class='va'>y</span>, <span class='va'>mask</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in qt(threshold, df1): object 'df1' not found</span></div><div class='input'><span class='fu'>outlier_tscore</span><span class='op'>(</span><span class='va'>y</span>, <span class='va'>mask</span>, threshold <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.8</span>, <span class='fl'>0.9</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in qt(threshold, df1): object 'df1' not found</span></div><div class='input'><span class='fu'>outlier_tscore</span><span class='op'>(</span><span class='va'>y</span>, return.score <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in qt(threshold, df1): object 'df1' not found</span></div><div class='input'>
+</div><div class='output co'>#&gt;   [1] not outlier     not outlier     not outlier     not outlier    
+#&gt;   [5] not outlier     extreme outlier not outlier     not outlier    
+#&gt;   [9] extreme outlier extreme outlier not outlier     not outlier    
+#&gt;  [13] extreme outlier not outlier     not outlier     not outlier    
+#&gt;  [17] extreme outlier not outlier     not outlier     mild outlier   
+#&gt;  [21] not outlier     mild outlier    extreme outlier extreme outlier
+#&gt;  [25] not outlier     not outlier     mild outlier    not outlier    
+#&gt;  [29] not outlier     not outlier     not outlier     not outlier    
+#&gt;  [33] mild outlier    not outlier     not outlier     not outlier    
+#&gt;  [37] not outlier     not outlier     not outlier     not outlier    
+#&gt;  [41] not outlier     not outlier     not outlier     not outlier    
+#&gt;  [45] not outlier     not outlier     not outlier     not outlier    
+#&gt;  [49] not outlier     not outlier     not outlier     not outlier    
+#&gt;  [53] not outlier     not outlier     mild outlier    mild outlier   
+#&gt;  [57] not outlier     not outlier     not outlier     not outlier    
+#&gt;  [61] not outlier     not outlier     not outlier     not outlier    
+#&gt;  [65] not outlier     not outlier     not outlier     not outlier    
+#&gt;  [69] not outlier     not outlier     extreme outlier not outlier    
+#&gt;  [73] not outlier     not outlier     not outlier     not outlier    
+#&gt;  [77] not outlier     not outlier     not outlier     not outlier    
+#&gt;  [81] not outlier     not outlier     not outlier     not outlier    
+#&gt;  [85] mild outlier    not outlier     not outlier     not outlier    
+#&gt;  [89] not outlier     mild outlier    not outlier     extreme outlier
+#&gt;  [93] not outlier     not outlier     not outlier     extreme outlier
+#&gt;  [97] not outlier     not outlier     extreme outlier not outlier    
+#&gt; [101] not outlier     not outlier     not outlier     not outlier    
+#&gt; [105] not outlier     not outlier     extreme outlier not outlier    
+#&gt; [109] not outlier     not outlier     not outlier     not outlier    
+#&gt; [113] not outlier     not outlier     mild outlier    not outlier    
+#&gt; [117] mild outlier    not outlier     not outlier     not outlier    
+#&gt; [121] not outlier     not outlier     not outlier     not outlier    
+#&gt; [125] not outlier     not outlier     not outlier     not outlier    
+#&gt; [129] extreme outlier extreme outlier not outlier     not outlier    
+#&gt; [133] not outlier     not outlier     not outlier     not outlier    
+#&gt; [137] not outlier    
+#&gt; Levels: not outlier &lt; not evaluated &lt; mild outlier &lt; extreme outlier</div><div class='input'><span class='fu'>outlier_tscore</span><span class='op'>(</span><span class='va'>y</span>, <span class='va'>mask</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   [1] not outlier     not outlier     mild outlier    not outlier    
+#&gt;   [5] not outlier     extreme outlier not outlier     extreme outlier
+#&gt;   [9] extreme outlier extreme outlier mild outlier    extreme outlier
+#&gt;  [13] mild outlier    not outlier     not outlier     not outlier    
+#&gt;  [17] extreme outlier mild outlier    extreme outlier extreme outlier
+#&gt;  [21] extreme outlier mild outlier    mild outlier    extreme outlier
+#&gt;  [25] mild outlier    extreme outlier extreme outlier not outlier    
+#&gt;  [29] not outlier     not outlier     not outlier     not outlier    
+#&gt;  [33] not outlier     not outlier     not outlier     not outlier    
+#&gt;  [37] extreme outlier extreme outlier not outlier     extreme outlier
+#&gt;  [41] extreme outlier not outlier     extreme outlier not outlier    
+#&gt;  [45] extreme outlier not outlier     not outlier     not outlier    
+#&gt;  [49] extreme outlier extreme outlier extreme outlier not outlier    
+#&gt;  [53] mild outlier    not outlier     not outlier     extreme outlier
+#&gt;  [57] extreme outlier extreme outlier extreme outlier not outlier    
+#&gt;  [61] extreme outlier not outlier     not outlier     extreme outlier
+#&gt;  [65] not outlier     mild outlier    not outlier     not outlier    
+#&gt;  [69] not outlier     not outlier     extreme outlier not outlier    
+#&gt;  [73] not outlier     extreme outlier extreme outlier mild outlier   
+#&gt;  [77] mild outlier    not outlier     not outlier     extreme outlier
+#&gt;  [81] extreme outlier not outlier     not outlier     not outlier    
+#&gt;  [85] not outlier     extreme outlier not outlier     extreme outlier
+#&gt;  [89] extreme outlier not outlier     not outlier     extreme outlier
+#&gt;  [93] mild outlier    not outlier     not outlier     extreme outlier
+#&gt;  [97] not outlier     mild outlier    extreme outlier extreme outlier
+#&gt; [101] not outlier     extreme outlier not outlier     not outlier    
+#&gt; [105] mild outlier    mild outlier    extreme outlier extreme outlier
+#&gt; [109] not outlier     not outlier     not outlier     not outlier    
+#&gt; [113] not outlier     extreme outlier extreme outlier extreme outlier
+#&gt; [117] extreme outlier not outlier     extreme outlier not outlier    
+#&gt; [121] not outlier     not outlier     extreme outlier not outlier    
+#&gt; [125] extreme outlier not outlier     mild outlier    not outlier    
+#&gt; [129] extreme outlier extreme outlier not outlier     mild outlier   
+#&gt; [133] not outlier     not outlier     not outlier     not outlier    
+#&gt; [137] not outlier    
+#&gt; Levels: not outlier &lt; not evaluated &lt; mild outlier &lt; extreme outlier</div><div class='input'><span class='fu'>outlier_tscore</span><span class='op'>(</span><span class='va'>y</span>, <span class='va'>mask</span>, threshold <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.8</span>, <span class='fl'>0.9</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   [1] not outlier     mild outlier    extreme outlier not outlier    
+#&gt;   [5] not outlier     extreme outlier not outlier     extreme outlier
+#&gt;   [9] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [13] extreme outlier mild outlier    not outlier     not outlier    
+#&gt;  [17] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [21] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt;  [25] extreme outlier extreme outlier extreme outlier not outlier    
+#&gt;  [29] mild outlier    not outlier     not outlier     not outlier    
+#&gt;  [33] mild outlier    not outlier     not outlier     not outlier    
+#&gt;  [37] extreme outlier extreme outlier mild outlier    extreme outlier
+#&gt;  [41] extreme outlier mild outlier    extreme outlier not outlier    
+#&gt;  [45] extreme outlier not outlier     mild outlier    not outlier    
+#&gt;  [49] extreme outlier extreme outlier extreme outlier mild outlier   
+#&gt;  [53] extreme outlier not outlier     mild outlier    extreme outlier
+#&gt;  [57] extreme outlier extreme outlier extreme outlier mild outlier   
+#&gt;  [61] extreme outlier mild outlier    mild outlier    extreme outlier
+#&gt;  [65] not outlier     extreme outlier mild outlier    not outlier    
+#&gt;  [69] not outlier     not outlier     extreme outlier not outlier    
+#&gt;  [73] not outlier     extreme outlier extreme outlier extreme outlier
+#&gt;  [77] extreme outlier mild outlier    not outlier     extreme outlier
+#&gt;  [81] extreme outlier mild outlier    mild outlier    not outlier    
+#&gt;  [85] mild outlier    extreme outlier not outlier     extreme outlier
+#&gt;  [89] extreme outlier mild outlier    not outlier     extreme outlier
+#&gt;  [93] extreme outlier mild outlier    not outlier     extreme outlier
+#&gt;  [97] mild outlier    extreme outlier extreme outlier extreme outlier
+#&gt; [101] not outlier     extreme outlier mild outlier    not outlier    
+#&gt; [105] extreme outlier extreme outlier extreme outlier extreme outlier
+#&gt; [109] mild outlier    not outlier     not outlier     mild outlier   
+#&gt; [113] mild outlier    extreme outlier extreme outlier extreme outlier
+#&gt; [117] extreme outlier not outlier     extreme outlier mild outlier   
+#&gt; [121] not outlier     not outlier     extreme outlier not outlier    
+#&gt; [125] extreme outlier mild outlier    extreme outlier mild outlier   
+#&gt; [129] extreme outlier extreme outlier not outlier     extreme outlier
+#&gt; [133] not outlier     not outlier     not outlier     mild outlier   
+#&gt; [137] not outlier    
+#&gt; Levels: not outlier &lt; not evaluated &lt; mild outlier &lt; extreme outlier</div><div class='input'><span class='fu'>outlier_tscore</span><span class='op'>(</span><span class='va'>y</span>, return.score <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   [1] -1.140952676  0.022691422  0.143951656 -0.265653619 -0.445874704
+#&gt;   [6] -2.138440672 -0.769285373  0.532531909 -1.909879346  1.953943936
+#&gt;  [11]  0.201936664  0.766271696 -1.674214471  0.031470455 -0.676309621
+#&gt;  [16] -0.976519801 -2.378742962  0.130324197  0.516007070  1.397296769
+#&gt;  [21]  0.908375829 -1.628993395 -1.690461634 -2.269005279  0.197763869
+#&gt;  [26]  1.076663734  1.558001616 -1.094797353 -0.132002155 -0.334578176
+#&gt;  [31] -0.812464124 -1.084296116 -1.337210108 -0.728953111 -0.472397315
+#&gt;  [36] -1.165001185  0.669531641  0.498739358 -0.109867902  1.016220526
+#&gt;  [41]  1.271514813 -0.194879262  0.686706489 -0.530413149  0.952197554
+#&gt;  [46] -0.226546585  0.018043715 -0.476304734  0.948092229  0.396827774
+#&gt;  [51]  1.167785259 -0.003663835  0.215285183 -0.911874680 -1.579098418
+#&gt;  [56]  1.440528952  0.404290354  0.865829777  0.470175187 -0.091380259
+#&gt;  [61]  0.350865776  0.055543737 -0.009277496  1.286268603 -0.765996766
+#&gt;  [66]  0.129104098  0.015163991 -0.881862246 -0.725256600 -0.908981564
+#&gt;  [71] -2.093697197 -0.795487529 -1.218635765  0.607784186  1.085847599
+#&gt;  [76]  0.081721568  0.245174178  0.052904899 -0.226866612  0.532868504
+#&gt;  [81]  0.708374411  0.003869021 -0.032036631 -0.274875985 -1.427923191
+#&gt;  [86]  0.869891754 -0.318502770  1.157265449  1.018904244 -1.515246651
+#&gt;  [91] -0.538448499  2.439872780  0.235509875 -0.107867874 -0.854584441
+#&gt;  [96]  2.301082954 -0.182424671  0.150052396  1.668292438  0.923613877
+#&gt; [101] -1.225506475  1.170712580  0.008371573 -1.199896403  0.197371313
+#&gt; [106]  0.271918714  2.454374286  1.151023171 -0.092578867 -0.977203407
+#&gt; [111] -0.814232432  0.022235523 -0.029734444  0.400800854  1.446995965
+#&gt; [116]  0.417269945  1.378183310 -0.423044566  0.401309702  0.016597844
+#&gt; [121] -0.894774260 -0.975336013  0.683233173 -0.271688704  0.736092592
+#&gt; [126]  0.034536196  0.194100942 -0.079108365  2.388034624  2.365647290
+#&gt; [131] -1.236932233  0.185935753 -0.311668755 -0.951558672 -0.387693784
+#&gt; [136]  0.048727001 -0.353456439</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
