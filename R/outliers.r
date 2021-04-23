@@ -111,7 +111,7 @@ outlier_tukey = function(x, mask = !is.na(x),
 outlier_tscore = function(x, mask = !is.na(x),
   threshold = c(0.9, 0.95), return.score = FALSE) {
   df = length(x) - 1L
-  crit.value = abs(qt(threshold, df1))
+  crit.value = abs(qt(threshold, df))
   score = (x - mean(x[mask])) / (sd(x[mask]))
   if (return.score) {
     score
