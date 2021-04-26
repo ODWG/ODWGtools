@@ -38,7 +38,7 @@ moutlier_chisq = function(xs, mask = !Reduce("|", lapply(xs, is.na)),
     score
   } else {
     .outlier_factor(case_when(
-      is.na(x) ~ NA_integer_,
+      is.na(score) ~ NA_integer_,
       abs(score) > qchisq(threshold[2], df) ~ 4L,
       abs(score) > qchisq(threshold[1], df) ~ 3L,
       TRUE ~ 1L
