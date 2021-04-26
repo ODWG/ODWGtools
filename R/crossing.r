@@ -21,7 +21,7 @@ NULL
 #'
 #' @importFrom dplyr lag lead case_when
 #' @export
-multivariate_test = function(x, y, n.dev, n.prior) {
+crossing_rate = function(x, y, n.dev, n.prior) {
   n.dev = rep(n.dev, length.out = 2)
   n.prior = rep(n.prior, length.out = 2)
   xf = rtqc_rate(x, n.dev[1], n.prior[1])
@@ -46,7 +46,7 @@ multivariate_test = function(x, y, n.dev, n.prior) {
 #' @importFrom stats lm predict
 #' @importFrom graphics lines
 #' @export
-regional_regression = function(x, y, season = NULL, plot = FALSE) {
+crossing_regression = function(x, y, season = NULL, plot = FALSE) {
   d = data.frame(x = x, y = y)
   m = lm(y ~ x, d)
 
