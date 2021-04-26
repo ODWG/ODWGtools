@@ -15,9 +15,9 @@ NULL
 #' @examples
 #' fake.data1 = c(rnorm(10,10), rnorm(10, 50), rnorm(10, 10))
 #' fake.data2 = rep(10,30)
-#' multivariate_test(fake.data1, fake.data2, c(1.5, 3), 5)
-#' multivariate_test(fake.data2, fake.data1, c(1.5, 3), 5)
-#' multivariate_test(fake.data1, fake.data1, 1.5, 5)
+#' crossing_rate(fake.data1, fake.data2, c(1.5, 3), 5)
+#' crossing_rate(fake.data2, fake.data1, c(1.5, 3), 5)
+#' crossing_rate(fake.data1, fake.data1, 1.5, 5)
 #'
 #' @importFrom dplyr lag lead case_when
 #' @export
@@ -52,7 +52,7 @@ crossing_regression = function(x, y, season = NULL, plot = FALSE) {
 
   d["yhat"] = predict(m, data = d)
 
-  if(plot){
+  if (plot) {
     plot(d[c("x", "y")], type = "p")
     lines(d[c("x", "yhat")], col = "blue")
   }

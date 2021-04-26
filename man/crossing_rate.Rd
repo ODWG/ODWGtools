@@ -27,8 +27,8 @@ for more information.
 \examples{
 fake.data1 = c(rnorm(10,10), rnorm(10, 50), rnorm(10, 10))
 fake.data2 = rep(10,30)
-multivariate_test(fake.data1, fake.data2, c(1.5, 3), 5)
-multivariate_test(fake.data2, fake.data1, c(1.5, 3), 5)
-multivariate_test(fake.data1, fake.data1, 1.5, 5)
+crossing_rate(fake.data1, fake.data2, c(1.5, 3), 5)
+crossing_rate(fake.data2, fake.data1, c(1.5, 3), 5)
+crossing_rate(fake.data1, fake.data1, 1.5, 5)
 
 }
