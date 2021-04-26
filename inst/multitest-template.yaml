@@ -6,11 +6,11 @@ data_specifications:
 
 parameters:
   salinity:
-    gap_test:
+    rtqc_gap:
       x: DATETIME
       increment: 1 hours
       condition: is
-    range_test: 
+    rtqc_range: 
       x: VALUE
       sensor.range: [0, 1000]
       user.range: [10, 900]
