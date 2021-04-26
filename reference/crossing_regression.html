@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Rate Test — rtqc_rate • ODWGtools</title>
+<title>Regional Regression — crossing_regression • ODWGtools</title>
 
 
 <!-- jquery -->
@@ -39,13 +39,8 @@
 
 
 
-<meta property="og:title" content="Rate Test — rtqc_rate" />
-<meta property="og:description" content="Perform a rate of change test. For more information see
-U.S. Integrated Ocean Observing System, 2015. Manual for Real-Time
-Quality Control of In-situ Temperature and Salinity Data Version
-2.0: A Guide to Quality Control and Quality Assurance of In-situ
-Temperature and Salinity Observations. 56 pp.
-DOI: 10.7289/V5V40SD4." />
+<meta property="og:title" content="Regional Regression — crossing_regression" />
+<meta property="og:description" content="Perform regional regression of two stations." />
 
 
 
@@ -123,59 +118,36 @@ DOI: 10.7289/V5V40SD4." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Rate Test</h1>
+    <h1>Regional Regression</h1>
     
-    <div class="hidden name"><code>rtqc_rate.Rd</code></div>
+    <div class="hidden name"><code>crossing_regression.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Perform a rate of change test. For more information see
-U.S. Integrated Ocean Observing System, 2015. Manual for Real-Time
-Quality Control of In-situ Temperature and Salinity Data Version
-2.0: A Guide to Quality Control and Quality Assurance of In-situ
-Temperature and Salinity Observations. 56 pp.
-DOI: <a href='https://doi.org/10.7289/V5V40SD4'>10.7289/V5V40SD4</a>.</p>
+    <p>Perform regional regression of two stations.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>rtqc_rate</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>n.dev</span>, <span class='va'>n.prior</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>crossing_regression</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, season <span class='op'>=</span> <span class='cn'>NULL</span>, plot <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>A vector of values.</p></td>
+      <th>x, y</th>
+      <td><p>Vectors of station data used for regression.</p></td>
     </tr>
     <tr>
-      <th>n.dev</th>
-      <td><p>The number of standard deviations to test against.</p></td>
+      <th>season</th>
+      <td><p>Optional vector identifying specific
+seasons or periods</p></td>
     </tr>
     <tr>
-      <th>n.prior</th>
-      <td><p>the number of prior observations to use for computing
-the standard deviation. For example, to compute standard deviations
-over the previous 25 hours from 15-minute data use <code>n.prior = 100</code>.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Other arguments to pass to <code><a href='https://rdrr.io/r/stats/sd.html'>stats::sd()</a></code>, i.e.,
-the argument <code>na.rm</code>.</p></td>
+      <th>plot</th>
+      <td><p>If <code>TRUE</code>, print diagnostic plots.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An ordered factor of test flags of same length as <code>x</code>.</p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>fake.data</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>10</span>,<span class='fl'>10</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>50</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>10</span>,<span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>rtqc_rate</span><span class='op'>(</span><span class='va'>fake.data</span>, <span class='fl'>2</span>, <span class='fl'>5</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    suspect pass    pass    suspect
-#&gt; [10] pass    suspect pass    pass    pass    pass    pass    pass    pass   
-#&gt; [19] pass    pass    suspect pass    pass    pass    pass    pass    pass   
-#&gt; [28] pass    suspect pass   
-#&gt; Levels: pass &lt; not evaluated &lt; suspect &lt; fail</div><div class='input'>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
