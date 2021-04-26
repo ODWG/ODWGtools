@@ -53,5 +53,10 @@ gapfill_kalman = function(x, mask = is.na(x), ...) {
 
 #' @keywords internal
 gapfill_deep = function(d, mask) {
-  # TODO
+  # deep learning? forget what was intended here
+}
+
+#' @keywords internal
+gapfill_mice = function(d, mask) {
+  # use MICE, e.g., https://cran.r-project.org/package=mice
 }
