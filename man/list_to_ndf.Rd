@@ -14,5 +14,7 @@ A dataframe.
 }
 \description{
 Utility function to convert a list of vectors to a numeric dataframe.
+If list is not named, default names \code{"X1"}, \code{"X2"}, etc. will be
+assigned.
 }
 \keyword{internal}

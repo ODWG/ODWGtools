@@ -61,6 +61,8 @@ ec_to_psu <- function(ec) {
 #' List to Numeric Data Frame
 #'
 #' Utility function to convert a list of vectors to a numeric dataframe.
+#' If list is not named, default names `"X1"`, `"X2"`, etc. will be
+#' assigned.
 #'
 #' @param xs A list of equal-length vectors.
 #' @return A dataframe.
@@ -71,6 +73,10 @@ list_to_ndf = function(xs) {
     stop("\"xs\" must be a dataframe of list of vectors.")
   } else if (!Reduce(identical, lapply(xs, length))) {
     stop("Elements of \"xs\" must be equal length.")
+  }
+  # add default names if not included
+  if (is.null(names(xs))) {
+    names(xs) = paste0("X", seq_along(xs))
   }
   # check if elements are coercible
   nas = sapply(xs, function(x) sum(is.na(x)))
