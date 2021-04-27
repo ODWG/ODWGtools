@@ -5,18 +5,18 @@ NULL
 #'
 #' Identify contiguous periods of discrete values (i.e. QAQC Flags).
 #'
-#' @inheritParams aggregate_flags
-#' @return A vector of same length as `flags` where each
-#'   element is the size of the block that flag is a part of.
+#' @param x A vector of discrete values.
+#' @return A vector of same length as `x` where each
+#'   element is the size of the block that element is a part of.
 #'
 #' @examples
-#' flags = sample(c(1L,3L,4L), 10, replace = TRUE)
-#' blocksize(flags)
+#' values = sample(c(1L,3L,4L), 10, replace = TRUE)
+#' blocksize(values)
 #'
 #' @importFrom purrr map
 #' @export
-blocksize = function(flags) {
-  unlist(map(rle(flags)$lengths, ~ rep(.x, .x)))
+blocksize = function(x) {
+  unlist(map(rle(x)$lengths, ~ rep(.x, .x)))
 }
 
 #' ARIMIA and Kalman Filter Gap Fill

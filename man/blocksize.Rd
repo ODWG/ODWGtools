@@ -4,20 +4,20 @@
 \alias{blocksize}
 \title{Contiguous Blocks of Discrete Values}
 \usage{
-blocksize(flags)
+blocksize(x)
 }
 \arguments{
-\item{flags}{a vector of QAQC Flag codes.}
+\item{x}{A vector of discrete values.}
 }
 \value{
-A vector of same length as \code{flags} where each
-element is the size of the block that flag is a part of.
+A vector of same length as \code{x} where each
+element is the size of the block that element is a part of.
 }
 \description{
 Identify contiguous periods of discrete values (i.e. QAQC Flags).
 }
 \examples{
-flags = sample(c(1L,3L,4L), 10, replace = TRUE)
-blocksize(flags)
+values = sample(c(1L,3L,4L), 10, replace = TRUE)
+blocksize(values)
 
 }
