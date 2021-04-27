@@ -78,7 +78,7 @@
       <h1 data-toc-skip>Outlier Detection</h1>
                         <h4 class="author">Michael Koohafkan</h4>
             
-            <h4 class="date">2021-04-26</h4>
+            <h4 class="date">2021-04-27</h4>
       
       
       <div class="hidden name"><code>outlier-detection.rmd</code></div>
@@ -87,17 +87,17 @@
 
     
     
-<p>This vignette describes functions available for outlier detection, i.e., the detection of data values outside some specification based on the statistical or structural distribution of values.</p>
+<p>This vignette describes functions available for outlier detection, i.e., the detection of data Values outside some specification based on the statistical or structural distribution of Values.</p>
 <div id="general-structure-and-output" class="section level2">
 <h2 class="hasAnchor">
 <a href="#general-structure-and-output" class="anchor"></a>General structure and output</h2>
 <p>All outlier detection functions follow a similar template of inputs and outputs. All outlier detection functions accept the following arguments:</p>
 <ol style="list-style-type: decimal">
-<li>a vector of data values;</li>
+<li>a vector of data Values;</li>
 <li>a logical “mask” used to restrict the calculation of certain parameters to a subset of the data; and</li>
 <li>A specification of thresholds that discriminate between non-outliers, “mild” outliers, and “extreme” outliers.</li>
 </ol>
-<p>All functions return an ordered factor tagging each data value as a non-outlier (1), a mild outlier (2), or an extreme outlier (3). Some outlier detection functions can alternatively return the actual test statistic or score used to classify the data by specifying the argument <code>return.score = TRUE</code>.</p>
+<p>All functions return an ordered factor tagging each data Value as a non-outlier (1), a mild outlier (2), or an extreme outlier (3). Some outlier detection functions can alternatively return the actual test statistic or score used to classify the data by specifying the argument <code>return.score = TRUE</code>.</p>
 </div>
 <div id="parametric-approaches" class="section level2">
 <h2 class="hasAnchor">
@@ -139,46 +139,70 @@
 <div id="example-application" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example-application" class="anchor"></a>Example Application</h2>
-<p>We use the sample dataset <code>bdl</code> (Belden’s Landing salinity data) to demonstrate the outlier detection functions.</p>
+<p>We use the <a href="https://cran.r-project.org/package=cder">cder package</a> to download a sample of Belden’s Landing salinity data to demonstrate the outlier detection functions.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">bdl</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mkoohafkan/cder">cder</a></span><span class="op">)</span>
+<span class="va">bdl</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/cder/man/cdec_query.html">cdec_query</a></span><span class="op">(</span><span class="st">"BDL"</span>, <span class="fl">100L</span>, <span class="st">"E"</span>, <span class="st">"2018-07-01"</span>, <span class="st">"2018-08-01"</span><span class="op">)</span></code></pre></div>
+<p>Univariate outlier detection functions are predicated with <code>outlier_</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">ODWGtools</span><span class="op">)</span>
 
-<span class="va">bdl</span><span class="op">[</span><span class="st">"tscore"</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="../reference/outlier_tscore.html">outlier_tscore</a></span><span class="op">(</span><span class="va">bdl</span><span class="op">$</span><span class="va">value</span><span class="op">)</span>
-<span class="va">bdl</span><span class="op">[</span><span class="st">"chisq"</span><span class="op">]</span> <span class="op">=</span> <span class="fu">outlier_chisq</span><span class="op">(</span><span class="va">bdl</span><span class="op">$</span><span class="va">value</span><span class="op">)</span>
-<span class="va">bdl</span><span class="op">[</span><span class="st">"tukey"</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="../reference/outlier_tukey.html">outlier_tukey</a></span><span class="op">(</span><span class="va">bdl</span><span class="op">$</span><span class="va">value</span><span class="op">)</span>
-<span class="va">bdl</span><span class="op">[</span><span class="st">"mad"</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="../reference/outlier_mad.html">outlier_mad</a></span><span class="op">(</span><span class="va">bdl</span><span class="op">$</span><span class="va">value</span><span class="op">)</span>
-<span class="va">bdl</span><span class="op">[</span><span class="st">"lof"</span><span class="op">]</span> <span class="op">=</span> <span class="fu">outlier_lof</span><span class="op">(</span><span class="va">bdl</span><span class="op">$</span><span class="va">value</span><span class="op">)</span>
-<span class="va">bdl</span><span class="op">[</span><span class="st">"iforest"</span><span class="op">]</span> <span class="op">=</span> <span class="fu">outlier_iforest</span><span class="op">(</span><span class="va">bdl</span><span class="op">$</span><span class="va">value</span><span class="op">)</span>
+<span class="va">bdl</span><span class="op">[</span><span class="st">"tscore"</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="../reference/outlier_tscore.html">outlier_tscore</a></span><span class="op">(</span><span class="va">bdl</span><span class="op">$</span><span class="va">Value</span><span class="op">)</span>
+<span class="va">bdl</span><span class="op">[</span><span class="st">"tukey"</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="../reference/outlier_tukey.html">outlier_tukey</a></span><span class="op">(</span><span class="va">bdl</span><span class="op">$</span><span class="va">Value</span><span class="op">)</span>
+<span class="va">bdl</span><span class="op">[</span><span class="st">"mad"</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="../reference/outlier_mad.html">outlier_mad</a></span><span class="op">(</span><span class="va">bdl</span><span class="op">$</span><span class="va">Value</span><span class="op">)</span></code></pre></div>
+<p>Multivariate outlier detection methods are predicated with <code>moutlier_</code>.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">bdl</span><span class="op">[</span><span class="st">"chisq"</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="../reference/moutlier_chisq.html">moutlier_chisq</a></span><span class="op">(</span><span class="va">bdl</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"DateTime"</span>, <span class="st">"Value"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
 
-<span class="va">bdl</span><span class="op">[</span><span class="st">"tscore.window"</span><span class="op">]</span> <span class="op">=</span> <span class="fu">slide_chr</span><span class="op">(</span><span class="va">bdl</span><span class="op">$</span><span class="va">value</span>, <span class="op">~</span><span class="fu"><a href="../reference/outlier_tscore.html">outlier_tscore</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span><span class="op">[</span><span class="fl">49</span><span class="op">]</span>, 
-  .before <span class="op">=</span> <span class="fl">48</span>, .after <span class="op">=</span> <span class="fl">48</span><span class="op">)</span>
+<span class="va">bdl</span><span class="op">[</span><span class="st">"lof"</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="../reference/moutlier_lof.html">moutlier_lof</a></span><span class="op">(</span><span class="va">bdl</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"DateTime"</span>, <span class="st">"Value"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
+<pre><code>## Loading required namespace: dbscan</code></pre>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">bdl</span><span class="op">[</span><span class="st">"iforest"</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="../reference/moutlier_iforest.html">moutlier_iforest</a></span><span class="op">(</span><span class="va">bdl</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"DateTime"</span>, <span class="st">"Value"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
+<pre><code>## Loading required namespace: solitude</code></pre>
+<pre><code>## INFO  [19:09:05.384] Building Isolation Forest ...  
+## INFO  [19:09:06.533] done 
+## INFO  [19:09:06.543] Computing depth of terminal nodes ...  
+## INFO  [19:09:07.320] done 
+## INFO  [19:09:07.421] Completed growing isolation forest</code></pre>
+<p>The <a href="https://cran.r-project.org/package=slider"><code>slider</code></a> package can be used to apply <code>ODWGtools</code> functions to moving windows.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DavisVaughan/slider">slider</a></span><span class="op">)</span>
 
-<span class="va">bdl</span><span class="op">[</span><span class="st">"mad.window"</span><span class="op">]</span> <span class="op">=</span> <span class="fu">slide_chr</span><span class="op">(</span><span class="va">bdl</span><span class="op">$</span><span class="va">value</span>, <span class="op">~</span> <span class="fu"><a href="../reference/outlier_mad.html">outlier_mad</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span><span class="op">[</span><span class="fl">25</span><span class="op">]</span>, 
-  .before <span class="op">=</span> <span class="fl">24</span>, .after <span class="op">=</span> <span class="fl">24</span><span class="op">)</span>
+<span class="va">bdl</span><span class="op">[</span><span class="st">"tscore.window"</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/slider/man/slide.html">slide_chr</a></span><span class="op">(</span><span class="va">bdl</span><span class="op">$</span><span class="va">Value</span>, <span class="op">~</span><span class="fu"><a href="../reference/outlier_tscore.html">outlier_tscore</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span><span class="op">[</span><span class="fl">49</span><span class="op">]</span>, 
+  .before <span class="op">=</span> <span class="fl">48</span>, .after <span class="op">=</span> <span class="fl">48</span><span class="op">)</span></code></pre></div>
+<p><code>slider</code> performs row-wise iteration over dataframes, so the syntax for using sliding windows with the multivariate outlier detection functions is straightforward provided you pass a dataframe (rather than a list)).</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">bdl</span><span class="op">[</span><span class="st">"chisq.window"</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/slider/man/slide.html">slide_chr</a></span><span class="op">(</span><span class="va">bdl</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"DateTime"</span>, <span class="st">"Value"</span><span class="op">)</span><span class="op">]</span>,
+  <span class="op">~</span> <span class="fu"><a href="../reference/moutlier_chisq.html">moutlier_chisq</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span><span class="op">[</span><span class="fl">49</span><span class="op">]</span>,
+  .before <span class="op">=</span> <span class="fl">48</span>, .after <span class="op">=</span> <span class="fl">48</span>, .complete <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
-<span class="va">bdl</span><span class="op">[</span><span class="st">"lof.window"</span><span class="op">]</span> <span class="op">=</span> <span class="fu">slide_chr</span><span class="op">(</span><span class="va">bdl</span><span class="op">$</span><span class="va">value</span>, <span class="op">~</span> <span class="fu">outlier_lof</span><span class="op">(</span><span class="va">.x</span><span class="op">)</span><span class="op">[</span><span class="fl">1501</span><span class="op">]</span>, 
-  .before <span class="op">=</span> <span class="fl">1500</span>, .after <span class="op">=</span> <span class="fl">1500</span>, .complete <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="co"># this won't work</span>
+<span class="co"># bdl["chisq.window"] = slide_chr(as.list(bdl[c("DateTime", "Value")]),</span>
+<span class="co">#   ~ moutlier_chisq(.x)[49], </span>
+<span class="co">#   .before = 48, .after = 48, .complete = TRUE)</span></code></pre></div>
+<p>Finally, a vignette isn’t really complete without some plots.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
 
-
-<span class="fu">ggplot</span><span class="op">(</span><span class="va">bdl</span><span class="op">)</span> <span class="op">+</span> <span class="fu">theme_bw</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">time</span>, y <span class="op">=</span> <span class="va">value</span>, color <span class="op">=</span> <span class="va">lof.window</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span>
-
-
-<span class="fu">ggplot</span><span class="op">(</span><span class="va">bdl</span><span class="op">)</span> <span class="op">+</span> <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">time</span>, y <span class="op">=</span> <span class="va">value</span>, color <span class="op">=</span> <span class="va">lof</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span>
-
-<span class="va">bdl</span><span class="op">[</span><span class="st">"tukey"</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="fu">map</span><span class="op">(</span><span class="fu">block</span><span class="op">(</span><span class="va">bdl</span><span class="op">$</span><span class="va">value</span>, <span class="va">bdl</span><span class="op">$</span><span class="va">time</span>, <span class="st">"day"</span><span class="op">)</span>, 
-  <span class="va">outlier_tukey</span><span class="op">)</span><span class="op">)</span>
-<span class="va">bdl</span><span class="op">[</span><span class="st">"iforest"</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="fu">map</span><span class="op">(</span><span class="fu">block</span><span class="op">(</span><span class="va">bdl</span><span class="op">$</span><span class="va">value</span>, <span class="va">bdl</span><span class="op">$</span><span class="va">time</span>, <span class="st">"day"</span><span class="op">)</span>, 
-  <span class="va">outlier_iforest</span><span class="op">)</span><span class="op">)</span>
-
-
-
-<span class="fu">ggplot</span><span class="op">(</span><span class="va">bdl</span><span class="op">)</span> <span class="op">+</span> <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">time</span>, y <span class="op">=</span> <span class="va">value</span>, color <span class="op">=</span> <span class="va">chisq</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span>
-<span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">time</span>, y <span class="op">=</span> <span class="va">value</span>, color <span class="op">=</span> <span class="va">tukey</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span>
-<span class="fu">ggplot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">bdl</span>, <span class="fl">2000</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">time</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>color <span class="op">=</span> <span class="va">tukey</span><span class="op">)</span><span class="op">)</span>
-<span class="fu">ggplot</span><span class="op">(</span><span class="va">bdl</span><span class="op">)</span> <span class="op">+</span> <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">time</span>, y <span class="op">=</span> <span class="va">value</span>, color <span class="op">=</span> <span class="va">isofor</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">bdl</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">DateTime</span>, y <span class="op">=</span> <span class="va">Value</span>, color <span class="op">=</span> <span class="va">tscore</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<pre><code>## Warning: Removed 4 rows containing missing values (geom_point).</code></pre>
+<p><img src="outlier-detection_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">bdl</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">DateTime</span>, y <span class="op">=</span> <span class="va">Value</span>, color <span class="op">=</span> <span class="va">tscore.window</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<pre><code>## Warning: Removed 4 rows containing missing values (geom_point).</code></pre>
+<p><img src="outlier-detection_files/figure-html/unnamed-chunk-6-2.png" width="700"></p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">bdl</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">DateTime</span>, y <span class="op">=</span> <span class="va">Value</span>, color <span class="op">=</span> <span class="va">chisq</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<pre><code>## Warning: Removed 4 rows containing missing values (geom_point).</code></pre>
+<p><img src="outlier-detection_files/figure-html/unnamed-chunk-6-3.png" width="700"></p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">bdl</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">DateTime</span>, y <span class="op">=</span> <span class="va">Value</span>, color <span class="op">=</span> <span class="va">chisq.window</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<pre><code>## Warning: Removed 4 rows containing missing values (geom_point).</code></pre>
+<p><img src="outlier-detection_files/figure-html/unnamed-chunk-6-4.png" width="700"></p>
 </div>
   </div>
 
