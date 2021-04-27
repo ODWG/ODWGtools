@@ -43,14 +43,18 @@ and the "rate of change test" only returns "pass" or "suspect" flags.
 
 ## Example Application
 
-We use the sample dataset `bdl` (Belden's Landing salinity data) to
-demonstrate the outlier detection functions.
+We use the [cder package](https://cran.r-project.org/package=cder)
+to download a sample of Belden's Landing salinity data
+to demonstrate the real-time quality control functions.
 
-```{r eval = FALSE}
-data(bdl)
+```{r}
+library(cder)
+bdl = cdec_query("BDL", 100L, "E", "2018-07-01", "2018-08-01")
+```
 
-bdl["gap"] = rtqc_gap(bdl$time, "15 min", "is")
-bdl["flat.test"] = rtqc_flat(bdl$value, c(5, 10), 0.1)
+```{r}
+library(ODWGtools)
 
-
+bdl["gap"] = rtqc_gap(bdl$DateTime, "15 min", "is")
+bdl["flat.test"] = rtqc_flat(bdl$Value, c(5, 10), 0.1)
 ```

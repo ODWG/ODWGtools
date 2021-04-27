@@ -21,7 +21,8 @@ Suggests:
     ggplot2 (>= 3.1),
     knitr (>= 1.21),
     rmarkdown (>= 1.11),
-    testthat
+    cder (>= 0.2),
+    testthat (>= 3.0)
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
